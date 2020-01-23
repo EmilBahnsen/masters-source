@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow import linalg as la
+from tensorflow.keras import layers
 import math
 from typing import *
 import qutip as qt
@@ -285,6 +286,124 @@ def print_complex(*args):
     else:
         tf.print(string)
 
+
+# Keral Layers and Models
+class QFTULayer(layers.Layer):
+    def __init__(self, n_qubits=4):
+        super(QFTULayer, self).__init__()
+        self.n_qubits = None
+
+    def build(self, input_shape):
+        self.n_qubits = input_shape[-2].bit_length() - 1
+        theta_init = tf.random_uniform_initializer(0, 2*π)
+        n_thetas = sum(range(self.n_qubits))
+        self.thetas = tf.Variable(initial_value=theta_init(shape=(n_thetas,), dtype=float_type),
+                                 trainable=True, name='thetas')
+
+    def call(self, inputs, thetas=None):
+        self.qft_U = self.matrix(thetas)
+        return tf.matmul(self.qft_U, inputs)
+
+    def matrix(self, thetas=None):
+        if thetas:
+            return qft_U(self.n_qubits, I4, thetas)
+        else:
+            return qft_U(self.n_qubits, I4, self.thetas)
+
+
+# TEST
+# x = tf.ones((10000000, 2**4, 1), dtype=complex_type)
+# qft_u_layer = QFTULayer()
+# t = time.process_time()
+# qft_u_layer(x)
+# exit()
+
+
+class U3Layer(layers.Layer):
+    def __init__(self):
+        super(U3Layer, self).__init__()
+        self.U3 = None
+        self.thetas = None
+
+    def build(self, input_shape):
+        theta_init = tf.random_uniform_initializer(0, 2 * π)
+        n_qubits = input_shape[-2].bit_length() - 1
+        self.thetas = [tf.Variable(initial_value=theta_init(shape=(3,), dtype=float_type),
+                                   trainable=True,
+                                   dtype=float_type) for _ in range(n_qubits)]
+
+    def call(self, inputs, thetas=None):
+        self.U3 = self.matrix(thetas)
+        return self.U3 @ inputs
+
+    def matrix(self, thetas=None):
+        if thetas:
+            return U3(*thetas)
+        else:
+            return U3(*self.thetas)
+
+
+class IQFTLayer(layers.Layer):
+    def __init__(self):
+        super(IQFTLayer, self).__init__()
+        self.n_qubits = None
+
+    def build(self, input_shape):
+        self.n_qubits = input_shape[-2].bit_length() - 1
+
+    def call(self, inputs, **kwargs):
+        self.IQFT = iqft(self.n_qubits, I4)
+        return tf.matmul(self.IQFT, inputs)
+
+    def matrix(self):
+        return iqft(self.n_qubits, I4)
+
+
+# Models
+class PrePostQFTUIQFT(tf.keras.Model):
+    def __init__(self, nn=False):
+        super(PrePostQFTUIQFT, self).__init__()
+        if nn:
+            tf.keras.layers.Dense()
+        self.U3_in = U3Layer()
+        self.QFT_U = QFTULayer()
+        self.U3_out = U3Layer()
+        self.IQFT = IQFTLayer()
+
+    def call(self, inputs, training=None, mask=None):
+        x = self.U3_in(inputs)
+        x = self.QFT_U(x)
+        x = self.U3_out(x)
+        x = self.IQFT(x)
+        return x
+
+    def matrix(self):
+        return self.IQFT.matrix() @ self.U3_out.matrix() @ self.QFT_U.matrix() @ self.U3_in.matrix()
+
+
+class PrePostQFTUIQFT(tf.keras.Model):
+    pass
+
+# Losses
+class MeanNorm(tf.losses.Loss):
+    def call(self, y_true, y_pred):
+        # y_pred = tf.convert_to_tensor(y_pred)
+        diff = y_true - y_pred
+        norms = tf.cast(tf.norm(diff, axis=[-2, -1]), dtype=float_type)
+        mean_norm = tf.reduce_mean(norms)
+        return mean_norm
+
+
+class Mean1mFidelity(tf.losses.Loss):
+    def call(self, y_true, y_pred):
+        fidelies = tf.square(tf.abs(tf.reduce_sum(tf.multiply(y_true, y_pred), axis=[-2, -1])))
+        meanFilelity = tf.reduce_mean(fidelies)
+        return 1 - meanFilelity
+# TEST
+x = tf.constant([1/math.sqrt(3), 1/math.sqrt(3), 1/math.sqrt(3), 1/math.sqrt(2), 1/math.sqrt(2), 0], shape=(2,3,1), dtype=complex_type)
+y = tf.constant([1, 0, 0, 1, 0, 0], shape=(2,3,1), dtype=complex_type)
+assert round(Mean1mFidelity()(x, y).numpy(), 5) == round(1 - (1/3 + 1/2)/2, 5)
+# TEST END
 
 # TESTS
 # TODO: make unitary testes on all new matrices

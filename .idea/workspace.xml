@@ -2,213 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/QC_alg.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Shor/alg.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ + 0.70711|10⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ + 0.70711|10⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ + 0.70711|10⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ + 0.70711|10⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ - 0.70711|10⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ - 0.70711|10⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ - 0.70711|10⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U0.70711|01⟩ - 0.70711|10⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|00⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|00⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|00⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|00⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|01⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|01⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|01⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|01⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|10⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|10⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|10⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|10⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|11⟩_|00⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|11⟩_|01⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|11⟩_|10⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/U|11⟩_|11⟩.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/decomposed_U/U.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/decomposed_U/qcirc.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/decomposed_U/qutip_decomposed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/DiamondCircuit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/FFT.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/FFT.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/TEST.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/TEST.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/TEST_before.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/TEST_before.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/cnot15.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/cnot15.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/definitions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/gateLab.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/singleDiamondGates.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond/tmp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamondQiskit/DiamondBackend.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamondQiskit/U.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamondQiskit/U.qasm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamondQiskit/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamond_qutip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/FFT.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/diamond_diamond_cnot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/diamonds.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/diamonds_cnot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/diamonds_gui.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/double_diamond_circuit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/FFT.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/FFT0145.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_01_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_02_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_03_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_04_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_05_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_06_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_07_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_10_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_12_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_13_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_14_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_15_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_16_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_17_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_20_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_21_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_23.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_23_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_24_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_25_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_26_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_27_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_30_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_31_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_32_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_34_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_35_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_36_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_37_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_40_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_41_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_42_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_43_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_45_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_46_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_47_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_50_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_51_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_52_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_53_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_54_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_56_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_57_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_60_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_61_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_62_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_63_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_64_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_65_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_67_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_70_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_71_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_72_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_73_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_74_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_75_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/cnot_76_compact.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/rest.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_pdf/save.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/FFT.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/FFT0145.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_01_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_02_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_03_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_04_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_05_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_06_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_07_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_10_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_12_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_13_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_14_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_15_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_16_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_17_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_20_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_21_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_23.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_23_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_24_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_25_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_26_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_27_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_30_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_31_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_32_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_34_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_35_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_36_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_37_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_40_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_41_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_42_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_43_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_45_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_46_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_47_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_50_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_51_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_52_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_53_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_54_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_56_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_57_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_60_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_61_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_62_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_63_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_64_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_65_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_67_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_70_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_71_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_72_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_73_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_74_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_75_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/cnot_76_compact.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/rest.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/diamonds/gates_tex/save.tex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air-2.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air-3.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air-4.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air-5.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air-6.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig-EmilB’s MacBook Air.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig_c.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig_hinton-EmilB’s MacBook Air.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fig_hinton.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fock_0011.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fock_1100.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/gate_approximation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/pennylane_ArrayBox_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/pennylane_example.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/pennylane_gate_approx.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gates/decomposed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tf_qc/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transpilation/QFT_transpilation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transpilation/diamond_qiskit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_distance.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tf_qc/test___init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,6 +38,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
   <component name="ProjectId" id="1TYwBP1PqruJuBXanYig8XFLCwT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -247,6 +53,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
@@ -291,7 +98,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tf_approx_pre_post_process">
+  <component name="RunManager" selected="Python tests.Unittests for test___init__.TestMean1mFidelity">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -338,33 +145,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gates/decomposed.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="double_diamond_circuit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="QC_alg" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DAAL4PY" value="YES" />
-        <env name="OMP_NUM_THREADS" value="12" />
-        <env name="KMP_BLOCKTIME" value="30" />
-        <env name="KMP_SETTINGS" value="1" />
-        <env name="KMP_AFFINITY" value="granularity=fine,verbose,compact,1,0" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/diamonds" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/diamonds/double_diamond_circuit.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -444,7 +224,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -462,20 +242,35 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test___init__.TestMean1mFidelity" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="QC_alg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tf_qc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test___init__.TestMean1mFidelity&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.decomposed" />
-      <item itemvalue="Python.double_diamond_circuit" />
       <item itemvalue="Python.gate_approximation" />
       <item itemvalue="Python.tf_approx" />
       <item itemvalue="Python.tf_approx_pre_post_process" />
+      <item itemvalue="Python tests.Unittests for test___init__.TestMean1mFidelity" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests for test___init__.TestMean1mFidelity" />
         <item itemvalue="Python.tf_approx_pre_post_process" />
         <item itemvalue="Python.tf_approx" />
         <item itemvalue="Python.gate_approximation" />
         <item itemvalue="Python.decomposed" />
-        <item itemvalue="Python.double_diamond_circuit" />
       </list>
     </recent_temporary>
   </component>
@@ -564,12 +359,24 @@
       <workItem from="1579007736737" duration="8216000" />
       <workItem from="1579025302561" duration="31279000" />
       <workItem from="1579176503848" duration="1964000" />
-      <workItem from="1579183681419" duration="18540000" />
+      <workItem from="1579183681419" duration="25576000" />
     </task>
+    <task id="LOCAL-00001" summary="first commit">
+      <created>1579724174732</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1579724174732</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
   </component>
   <component name="WindowStateProjectService">
     <state x="302" y="144" width="762" height="513" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578971214295">
@@ -590,6 +397,10 @@
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="2019" y="24" width="697" height="760" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579099920134" />
+    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1579799074500">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1579799074500" />
     <state width="1920" height="438" key="DebuggerActiveHint" timestamp="1579102686648">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
@@ -604,37 +415,37 @@
     </state>
     <state x="411" y="-754" key="EnvironmentVariablesDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578938537035" />
     <state x="251" y="222" width="747" height="467" key="EnvironmentVariablesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578971213545" />
-    <state width="1878" height="287" key="GridCell.Tab.0.bottom" timestamp="1579103024752">
-      <screen x="1366" y="-179" width="1920" height="1080" />
+    <state width="580" height="669" key="GridCell.Tab.0.bottom" timestamp="1579793704405">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="1878" height="174" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962760" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091322" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228497" />
-    <state width="1324" height="274" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1578843254568" />
+    <state width="580" height="669" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1579793704405" />
     <state width="1878" height="287" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024751" />
-    <state width="1878" height="287" key="GridCell.Tab.0.center" timestamp="1579103024747">
-      <screen x="1366" y="-179" width="1920" height="1080" />
+    <state width="580" height="669" key="GridCell.Tab.0.center" timestamp="1579793704403">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="1878" height="174" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962754" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091318" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228482" />
-    <state width="1324" height="274" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1578843254563" />
+    <state width="580" height="669" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1579793704403" />
     <state width="1878" height="287" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024747" />
-    <state width="1878" height="287" key="GridCell.Tab.0.left" timestamp="1579103024745">
-      <screen x="1366" y="-179" width="1920" height="1080" />
+    <state width="580" height="669" key="GridCell.Tab.0.left" timestamp="1579793704402">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="1878" height="174" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962749" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091315" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228480" />
-    <state width="1324" height="274" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1578843254560" />
+    <state width="580" height="669" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1579793704402" />
     <state width="1878" height="287" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024745" />
-    <state width="1878" height="287" key="GridCell.Tab.0.right" timestamp="1579103024750">
-      <screen x="1366" y="-179" width="1920" height="1080" />
+    <state width="580" height="669" key="GridCell.Tab.0.right" timestamp="1579793704404">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="1878" height="174" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962757" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091320" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228494" />
-    <state width="1324" height="274" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1578843254567" />
+    <state width="580" height="669" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1579793704404" />
     <state width="1878" height="287" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024750" />
     <state width="1878" height="287" key="GridCell.Tab.1.bottom" timestamp="1579103024759">
       <screen x="1366" y="-179" width="1920" height="1080" />
@@ -762,6 +573,7 @@
     <SUITE FILE_PATH="coverage/QC_alg$DiamondCircuit.coverage" NAME="DiamondCircuit Coverage Results" MODIFIED="1571671957065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamond" />
     <SUITE FILE_PATH="coverage/QC_alg$gateLab.coverage" NAME="gateLab Coverage Results" MODIFIED="1572451377464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamond" />
     <SUITE FILE_PATH="coverage/QC_alg$tf_approx.coverage" NAME="tf_approx Coverage Results" MODIFIED="1578451751152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
+    <SUITE FILE_PATH="coverage/QC_alg$Unittests_for_test___init___TestMean1mFidelity.coverage" NAME="Unittests for test___init__.TestMean1mFidelity Coverage Results" MODIFIED="1579731185922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tf_qc" />
     <SUITE FILE_PATH="coverage/QC_alg$diamond_qiskit.coverage" NAME="diamond_qiskit Coverage Results" MODIFIED="1573207108127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/QC_alg$diamonds_cnot.coverage" NAME="diamonds_cnot Coverage Results" MODIFIED="1570640757974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamonds" />
     <SUITE FILE_PATH="coverage/QC_alg$pennylane_gate_approx.coverage" NAME="pennylane_gate_approx Coverage Results" MODIFIED="1576033336291" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
