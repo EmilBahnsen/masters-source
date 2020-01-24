@@ -381,8 +381,8 @@ class PrePostQFTUIQFT(tf.keras.Model):
         return self.IQFT.matrix() @ self.U3_out.matrix() @ self.QFT_U.matrix() @ self.U3_in.matrix()
 
 
-class PrePostQFTUIQFT(tf.keras.Model):
-    pass
+# class PrePostQFTUIQFT(tf.keras.Model):
+#     pass
 
 # Losses
 class MeanNorm(tf.losses.Loss):
@@ -396,7 +396,8 @@ class MeanNorm(tf.losses.Loss):
 
 class Mean1mFidelity(tf.losses.Loss):
     def call(self, y_true, y_pred):
-        fidelies = tf.square(tf.abs(tf.reduce_sum(tf.multiply(y_true, y_pred), axis=[-2, -1])))
+        norm_squares = tf.transpose(y_true, perm=[0,2,1]) @ y_pred
+        fidelies = tf.square(tf.abs(norm_squares))
         meanFilelity = tf.reduce_mean(fidelies)
         return 1 - meanFilelity
 # TEST
@@ -404,6 +405,27 @@ x = tf.constant([1/math.sqrt(3), 1/math.sqrt(3), 1/math.sqrt(3), 1/math.sqrt(2),
 y = tf.constant([1, 0, 0, 1, 0, 0], shape=(2,3,1), dtype=complex_type)
 assert round(Mean1mFidelity()(x, y).numpy(), 5) == round(1 - (1/3 + 1/2)/2, 5)
 # TEST END
+
+
+# Utils
+def random_unifrom_complex(shape: Any,
+                           minval: int = 0,
+                           maxval: Any = None,
+                           dtype: tf.dtypes.DType = tf.dtypes.float64,
+                           seed: Any = None,
+                           name: Any = None):
+    return tf.complex(tf.random.uniform(shape, minval, maxval, dtype, seed),
+                      tf.random.uniform(shape, minval, maxval, dtype, seed),
+                      name=name)
+
+def normalize_state_vectors(state_vectors: tf.Tensor):
+    '''
+    Normalize state vectors
+    :param state_vectors with shape (n_vectors, length, 1)
+    :return:
+    '''
+    root_sum_norm_squares = tf.sqrt(tf.reduce_sum(tf.square(tf.abs(state_vectors)), axis=1, keepdims=True))
+    return tf.math.xdivy(state_vectors, tf.cast(root_sum_norm_squares, state_vectors.dtype))
 
 # TESTS
 # TODO: make unitary testes on all new matrices

@@ -9,27 +9,31 @@ import itertools
 # TEST END
 
 
-# Data is just all the kinds of vectors that we might get |...0110...>, |...0111...>, |...1000...>, ... all normalized
 N = 4
-vectors = list(map(list, list(itertools.product([0, 1], repeat=2**N))))[1:]  # Skip the zero-vector as it creates problems
-vectors = tf.constant(vectors, dtype=complex_type, shape=(len(vectors), 2**N, 1))
-# normalize
-vectors = tf.math.xdivy(vectors, tf.sqrt(tf.reduce_sum(vectors, axis=1, keepdims=True)))
+# Data is just all the kinds of vectors that we might get |...0110...>, |...0111...>, |...1000...>, ... all normalized
+# vectors = list(map(list, list(itertools.product([0, 1], repeat=2**N))))[1:]  # Skip the zero-vector as it creates problems
+# vectors = tf.constant(vectors, dtype=complex_type, shape=(len(vectors), 2**N, 1))
 
-input = tf.constant(vectors, dtype=complex_type, shape=(len(vectors), 2**N, 1))
+# Random vectors
+n_datapoints = 1000000
+vectors = random_unifrom_complex((n_datapoints, 2**N, 1))
+# normalize
+vectors = normalize_state_vectors(vectors)
+
+input = tf.cast(vectors, complex_type)
 output = input
 
 # model, optimizer and loss
 pre_post_model = PrePostQFTUIQFT()
-optimizer = tf.optimizers.Adagrad(0.025)
+optimizer = tf.optimizers.Adam()
 loss = Mean1mFidelity()
 pre_post_model.compile(optimizer, loss=loss)
 
 # Fitting
 current_time = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
-log_path = './logs/tf_approx_pre_post_process/' + current_time
+log_path = './logs/tf_approx_pre_post_process_rnd_input/' + current_time
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_path, histogram_freq=1, profile_batch=0)
-pre_post_model.fit(input, output, batch_size=1024, epochs=1000, callbacks=[tensorboard_callback])
+pre_post_model.fit(input, output, batch_size=512, epochs=1000, callbacks=[tensorboard_callback])
 print(*pre_post_model.variables, sep='\n')
 print(pre_post_model.summary())
 
