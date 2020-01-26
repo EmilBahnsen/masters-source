@@ -3,7 +3,7 @@ from tensorflow.keras import layers
 from abc import ABCMeta, abstractmethod
 
 from . import float_type
-from .qc import *
+from .qc import qft_U, I4, π, U3, iqft, qft
 
 
 class QCLayer(layers.Layer, metaclass=ABCMeta):

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/models.py" afterDir="false" />
     </list>
@@ -357,7 +356,7 @@
       <workItem from="1579007736737" duration="8216000" />
       <workItem from="1579025302561" duration="31279000" />
       <workItem from="1579176503848" duration="1964000" />
-      <workItem from="1579183681419" duration="45905000" />
+      <workItem from="1579183681419" duration="46257000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1579724174732</created>
@@ -387,7 +386,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579998070183</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Refactoring of tf_qc.models">
+      <created>1580004516380</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1580004516380</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -397,7 +403,8 @@
     <MESSAGE value="first commit" />
     <MESSAGE value="proper fidelety mean for complex vectors" />
     <MESSAGE value="Refactoring of tf_qc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring of tf_qc" />
+    <MESSAGE value="Refactoring of tf_qc.models" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring of tf_qc.models" />
   </component>
   <component name="WindowStateProjectService">
     <state x="302" y="144" width="762" height="513" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578971214295">
@@ -419,10 +426,10 @@
     </state>
     <state x="465" y="144" key="#xdebugger.evaluate/0.0.1366.768@0.0.1366.768" timestamp="1580004117759" />
     <state x="2019" y="24" width="697" height="760" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579099920134" />
-    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1579998069179">
+    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1580004515886">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1579998069179" />
+    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1580004515886" />
     <state width="1366" height="312" key="DebuggerActiveHint" timestamp="1580004023025">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

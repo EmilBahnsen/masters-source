@@ -17,4 +17,4 @@ from .losses import *
 from .utils import *
 
 # TESTS
-# TODO: make unitary testes on all new matrices
+# TODO: make unitary testes on all new matrices/layers

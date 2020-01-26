@@ -1,5 +1,6 @@
 import os
 
+from tf_qc.layers import QFTLayer
 from txtutils import *
 from tf_qc import *
 import datetime

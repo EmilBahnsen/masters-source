@@ -1,13 +1,13 @@
 import tensorflow as tf
-from .layers import *
 from typing import *
-from abc import ABCMeta, abstractmethod
 from functools import reduce
+
+from tf_qc.layers import QCLayer, U3Layer, QFTULayer, IQFTLayer
 
 
 class QCModel(tf.keras.Sequential):
     def matrix(self):
-        # Either a is a layer OR it's the tensor from the previous eval
+        # Either 'a' is a layer OR it's the tensor from the previous eval
         def reduction(a: Union[QCLayer, tf.Tensor], b: QCLayer):
             return b.matrix() @ (a.matrix() if isinstance(a, QCLayer) else a)
         return reduce(reduction, self.layers)  # Note order of matmul
