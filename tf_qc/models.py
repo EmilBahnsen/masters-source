@@ -1,28 +1,41 @@
 import tensorflow as tf
 from .layers import *
 from typing import *
+from abc import ABCMeta, abstractmethod
+from functools import reduce
 
-class PrePostQFTUIQFT(tf.keras.Model):
-    def __init__(self):
-        super(PrePostQFTUIQFT, self).__init__()
-        self.U3_in = U3Layer()
-        self.QFT_U = QFTULayer()
-        self.U3_out = U3Layer()
-        self.IQFT = IQFTLayer()
 
-    def call(self, inputs, training=None, mask=None):
-        x = self.U3_in(inputs)
-        x = self.QFT_U(x)
-        x = self.U3_out(x)
-        x = self.IQFT(x)
-        return x
-
+class QCModel(tf.keras.Sequential):
     def matrix(self):
-        return self.IQFT.matrix() @ self.U3_out.matrix() @ self.QFT_U.matrix() @ self.U3_in.matrix()
+        # Either a is a layer OR it's the tensor from the previous eval
+        def reduction(a: Union[QCLayer, tf.Tensor], b: QCLayer):
+            return b.matrix() @ (a.matrix() if isinstance(a, QCLayer) else a)
+        return reduce(reduction, self.layers)  # Note order of matmul
 
 
-class ApproxUsingInverse(tf.keras.Model):
-    def __init__(self, model_class: Callable[..., tf.keras.Model], target_class: Callable[..., tf.keras.Model]):
+class ApproxUsingInverse(QCModel):
+    def __init__(self, model_class: QCModel, target_inv_class: QCModel):
         super(ApproxUsingInverse, self).__init__()
+        self.model = model_class
+        self.target_inv = target_inv_class
+        self.add(self.model)
+        self.add(self.target_inv)
+
+    def target_inv_matirx(self):
+        return self.target_inv.matrix()
+
+    def model_matrix(self):
+        return self.model.matrix()
 
 
+class PrePostQFTUIQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            QFTULayer(),
+            U3Layer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(PrePostQFTUIQFT, self).__init__(model, target)

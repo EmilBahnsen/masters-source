@@ -1,10 +1,18 @@
 import tensorflow as tf
 from tensorflow.keras import layers
+from abc import ABCMeta, abstractmethod
 
 from . import float_type
 from .qc import *
 
-class QFTULayer(layers.Layer):
+
+class QCLayer(layers.Layer, metaclass=ABCMeta):
+    @abstractmethod
+    def matrix(self) -> tf.Tensor:
+        pass
+
+
+class QFTULayer(QCLayer):
     def __init__(self, n_qubits=4):
         super(QFTULayer, self).__init__()
         self.n_qubits = None
@@ -34,7 +42,7 @@ class QFTULayer(layers.Layer):
 # exit()
 
 
-class U3Layer(layers.Layer):
+class U3Layer(QCLayer):
     def __init__(self):
         super(U3Layer, self).__init__()
         self.U3 = None
@@ -58,7 +66,7 @@ class U3Layer(layers.Layer):
             return U3(*self.thetas)
 
 
-class QFTLayer(layers.Layer):
+class QFTLayer(QCLayer):
     def __init__(self):
         super(QFTLayer, self).__init__()
         self.n_qubits = None
@@ -74,7 +82,7 @@ class QFTLayer(layers.Layer):
         return qft(self.n_qubits, I4)
 
 
-class IQFTLayer(layers.Layer):
+class IQFTLayer(QCLayer):
     def __init__(self):
         super(IQFTLayer, self).__init__()
         self.n_qubits = None
