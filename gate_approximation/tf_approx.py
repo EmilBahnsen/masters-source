@@ -1,12 +1,12 @@
 import time
 from typing import *
-from utils import *
+from txtutils import *
 from tf_qc import *
 
 N = 4
 qft_tensor = qft(N, I[N])
 print(ndtotext(qft_tensor.numpy()))
-qft_U_tensor = qft_U(N, I[N], tf.convert_to_tensor(sum(range(N)) * [π/2]))
+qft_U_tensor = qft_U(N, I[N], tf.convert_to_tensor((N-1) * [π/2]))
 print(ndtotext(qft_U_tensor.numpy()))
 
 N = 4

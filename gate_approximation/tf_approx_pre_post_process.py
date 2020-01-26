@@ -1,18 +1,10 @@
-from utils import *
+import os
+
+from txtutils import *
 from tf_qc import *
 import datetime
-import itertools
-
-# TEST
-# x = tf.constant([1,2,3,4], shape=(2,2,1), dtype=complex_type)
-# assert round(MeanNorm()(x, 2*x).numpy(), 5) == 3.61803
-# TEST END
-
 
 N = 4
-# Data is just all the kinds of vectors that we might get |...0110...>, |...0111...>, |...1000...>, ... all normalized
-# vectors = list(map(list, list(itertools.product([0, 1], repeat=2**N))))[1:]  # Skip the zero-vector as it creates problems
-# vectors = tf.constant(vectors, dtype=complex_type, shape=(len(vectors), 2**N, 1))
 
 # Random vectors
 n_datapoints = 1000000
@@ -30,12 +22,21 @@ loss = Mean1mFidelity()
 pre_post_model.compile(optimizer, loss=loss)
 
 # Fitting
-current_time = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
-log_path = './logs/tf_approx_pre_post_process_rnd_input/' + current_time
+current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
+filename = os.path.basename(__file__).rstrip('.py')
+log_path = './logs/' + filename + '/' + current_time
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_path, histogram_freq=1, profile_batch=0)
-pre_post_model.fit(input, output, batch_size=512, epochs=1000, callbacks=[tensorboard_callback])
+pre_post_model.fit(input, output, validation_split=0.2, batch_size=512, epochs=300, callbacks=[tensorboard_callback])
 print(*pre_post_model.variables, sep='\n')
 print(pre_post_model.summary())
 
 result = pre_post_model.U3_out.matrix() @ pre_post_model.QFT_U.matrix() @ pre_post_model.U3_in.matrix()
 print(ndtotext(result.numpy()))
+
+# Sanity check: test the QFT_U against QFT on all data
+qft_layer = QFTLayer()
+real_output = qft_layer(input)
+model_output = result @ input
+print('Sanity check loss:', loss(real_output, model_output).numpy())
+std_loss = StdFidelity()
+print('Sanity check loss std:', std_loss(real_output, model_output).numpy())
