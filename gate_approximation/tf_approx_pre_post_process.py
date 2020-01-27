@@ -27,7 +27,12 @@ current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
 filename = os.path.basename(__file__).rstrip('.py')
 log_path = './logs/' + filename + '/' + current_time
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_path, histogram_freq=1, profile_batch=0)
-pre_post_model.fit(input, output, validation_split=0.2, batch_size=512, epochs=10, callbacks=[tensorboard_callback])
+pre_post_model.fit(input,
+                   output,
+                   validation_split=0.2,
+                   batch_size=512,
+                   epochs=10,
+                   callbacks=[tensorboard_callback])
 print(*pre_post_model.variables, sep='\n')
 print(pre_post_model.summary())
 
