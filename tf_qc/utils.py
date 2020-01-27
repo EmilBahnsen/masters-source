@@ -1,14 +1,17 @@
 from typing import *
 import tensorflow as tf
+import math
 
 def random_unifrom_complex(shape: Any,
                            minval: int = 0,
-                           maxval: Any = None,
+                           maxval: Any = 1,
                            dtype: tf.dtypes.DType = tf.dtypes.float64,
                            seed: Any = None,
                            name: Any = None):
-    return tf.complex(tf.random.uniform(shape, minval, maxval, dtype, seed),
-                      tf.random.uniform(shape, minval, maxval, dtype, seed),
+    r = tf.random.uniform(shape, minval, maxval, dtype, seed)
+    theta = tf.random.uniform(shape, 0, 2*math.pi, dtype, seed)
+    return tf.complex(r*tf.cos(theta),
+                      r*tf.sin(theta),
                       name=name)
 
 def normalize_state_vectors(state_vectors: tf.Tensor):
