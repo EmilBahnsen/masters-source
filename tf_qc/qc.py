@@ -54,6 +54,7 @@ def tensor(tensors: List[tf.Tensor]):
 
 # Also QuTiP
 def gate_expand_1toN(U: tf.Tensor, N: int, target: int):
+    assert target < N, 'target exceeds N: {target} vs {N}'.format(target=target, N=N)
     return tensor([I1] * target + [U] + [I1] * (N - target - 1))
 
 
@@ -135,19 +136,6 @@ def U(t):
         [0, 0, 0, 1.]
     ])
 
-    # tf.print('t')
-    # print_complex(t)
-    # tf.print('tf.exp(-it)')
-    # print_complex(tf.exp(-it))
-    # tf.print('tf.exp(-it) + 1')
-    # print_complex(tf.exp(-it) + 1)
-    # tf.print('tf.exp(-it) - 1')
-    # print_complex(tf.exp(-it) - 1)
-    # tf.print('tf.exp(-it) + -1')
-    # print_complex(tf.exp(-it) + -1)
-    # print_matrix(U00)
-    # print_unitary_test(U00)
-
     return tensor([o0000, U00]) + \
            tensor([o1111, U11]) + \
            tensor([opp, Up]) + \
@@ -184,7 +172,7 @@ def make_gate(N: int,
         raise NotImplementedError('Literal gates > 2**3 not implemented.')
 
 
-def qft_U(N: int, oper: tf.Tensor, params: tf.Variable) -> tf.Tensor:
+def qft_U(N: int, oper: tf.Tensor, params: List[tf.Variable]) -> tf.Tensor:
     # # Execute QFT
     # tf.print('\n')
     # print_non_zero_unitary_test(oper)
@@ -195,10 +183,10 @@ def qft_U(N: int, oper: tf.Tensor, params: tf.Variable) -> tf.Tensor:
         hadamard_gate = make_gate(N, 'h', i)
         oper = hadamard_gate @ oper
         if i != N-1:
-            U_gate = U(params[n_param])
+            U_gate = U(params[n_param][0])
             oper = U_gate @ oper
             n_param += 1
-    assert n_param == params.shape[0]
+    assert n_param == len(params)
     # Final swaps
     for n in range(N // 2):
         swap_gate = make_gate(N, 'swap', [n, N - n - 1])
