@@ -73,7 +73,7 @@ class U3Layer(QCLayer):
         self.thetas = None
 
     def build(self, input_shape: tf.TensorShape):
-        theta_init = tf.random_uniform_initializer(0, 2*π)  # Only start with small angles
+        theta_init = tf.random_uniform_initializer(0, 2*π)  # It's an angle
         n_qubits = utils.intlog2(input_shape[-2])
         self.thetas = [tf.Variable(initial_value=theta_init(shape=(3,), dtype=float_type),
                                    trainable=True,
@@ -90,27 +90,45 @@ class U3Layer(QCLayer):
 
 
 class ISWAPLayer(QCLayer):
-    def __init__(self, targets):
-        super(ISWAPLayer, self).__init__()
+    def __init__(self, targets, parameterized=False):
+        super(ISWAPLayer, self).__init__(name='iSWAP_' + str(targets[0]) + '_' + str(targets[1]))
         self.targets = targets
         self._matrix = None
+        self.parameterized = parameterized
 
     def build(self, input_shape):
-        n_qubits = utils.intlog2(input_shape[-2])
+        self.n_qubits = utils.intlog2(input_shape[-2])
         mi = tf.complex(0., -1.)
-        i_swap = tf.convert_to_tensor([
-            [1,  0,  0, 0],
-            [0,  0, mi, 0],
-            [0, mi,  0, 0],
-            [0,  0,  0, 1]
-        ], complex_type)
-        self._matrix = gate_expand_2toN(i_swap, n_qubits, targets=self.targets)
+        if self.parameterized:
+            theta_init = tf.random_uniform_initializer(0, 2 * π)
+            self.t = tf.Variable(initial_value=theta_init((1,), dtype=float_type),
+                                 trainable=True,
+                                 dtype=float_type)
+        else:
+            i_swap = tf.convert_to_tensor([
+                [1,  0,  0, 0],
+                [0,  0, mi, 0],
+                [0, mi,  0, 0],
+                [0,  0,  0, 1]
+            ], complex_type)
+            self._matrix = gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
 
     def call(self, inputs, **kwargs):
-        return self._matrix @ inputs
+        return self.matrix() @ inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
-        return self._matrix
+        if self.parameterized:
+            t = self.t[0]
+            mi = tf.complex(0., -1.)
+            i_swap = tf.convert_to_tensor([
+                [1, 0, 0, 0],
+                [0, tf.cos(t), mi * tf.cast(tf.sin(t), tf.complex64), 0],
+                [0, mi * tf.cast(tf.sin(t), tf.complex64), tf.cos(t), 0],
+                [0, 0, 0, 1]
+            ], complex_type)
+            return gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
+        else:
+            return self._matrix
 
 
 class SWAPLayer(QCLayer):

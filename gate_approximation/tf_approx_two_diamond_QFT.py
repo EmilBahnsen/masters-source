@@ -8,7 +8,7 @@ import datetime
 N = 8
 
 # Random vectors
-n_datapoints = 10000
+n_datapoints = 2000
 vectors = random_state_vectors(n_datapoints, N, 0)
 
 input = tf.cast(vectors, complex_type)
@@ -16,7 +16,9 @@ output = input
 
 # model, optimizer and loss
 model = TwoDiamondQFT()
-optimizer = tf.optimizers.Adam(0.002)
+lr = 0.001
+print('Learning rate:', lr)
+optimizer = tf.optimizers.Adam(lr)
 loss = Mean1mFidelity()
 model.compile(optimizer, loss=loss)
 
@@ -24,15 +26,16 @@ model.compile(optimizer, loss=loss)
 current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
 filename = os.path.basename(__file__).rstrip('.py')
 log_path = './logs/' + filename + '/' + current_time
+print('logs:', log_path)
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_path, histogram_freq=1, profile_batch=0)
 model.fit(input,
           output,
           validation_split=0.2,
-          batch_size=128,
+          batch_size=32,
           epochs=100,
           callbacks=[tensorboard_callback])
 print(*model.variables, sep='\n')
-print(model.summary())
+model.summary()
 
 result = model.model_matrix()
 print(ndtotext(result.numpy()))

@@ -3,6 +3,7 @@ import tensorflow as tf
 import math
 import numpy as np
 
+
 # Random number of the unit disk
 def random_unifrom_complex(shape: Any,
                            radius: int = 1,
@@ -16,6 +17,7 @@ def random_unifrom_complex(shape: Any,
     sample_point = np.vectorize(sample_point)
     x, y = np.fromfunction(sample_point, shape)
     return tf.complex(x, y, name=name)
+
 
 def normalize_state_vectors(state_vectors: tf.Tensor):
     '''
@@ -33,5 +35,3 @@ def random_state_vectors(n_vectors, n_qubits, seed = None):
 
 def intlog2(x: int):
     return x.bit_length() - 1
-
-

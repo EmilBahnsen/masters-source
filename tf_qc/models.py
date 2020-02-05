@@ -2,7 +2,7 @@ import tensorflow as tf
 from typing import *
 from functools import reduce
 
-from tf_qc.layers import QCLayer, U3Layer, QFTULayer, IQFTLayer, HLayer, ULayer, ISWAPLayer, ILayer, QFTCrossSwapLayer
+from .layers import QCLayer, U3Layer, QFTULayer, IQFTLayer, HLayer, ULayer, ISWAPLayer, ILayer, QFTCrossSwapLayer
 
 
 class QCModel(tf.keras.Sequential):
@@ -41,6 +41,15 @@ class ApproxUsingInverse(QCModel):
     def model_matrix(self):
         return self.model.matrix()
 
+    def summary(self, line_length=None, positions=None, print_fn=None):
+        if print_fn is None:
+            print_fn = print
+        print('--- ApproxUsingInverse ---')
+        print_fn('Model:')
+        self.model.summary(line_length, positions, print_fn)
+        print_fn('Target inverse:')
+        self.target_inv.summary(line_length, positions, print_fn)
+
 
 class PrePostQFTUIQFT(ApproxUsingInverse):
     def __init__(self):
@@ -57,26 +66,29 @@ class PrePostQFTUIQFT(ApproxUsingInverse):
 
 class OneDiamondQFT(ApproxUsingInverse):
     def __init__(self):
+        def all_swaps():
+            return [
+                ISWAPLayer([0, 2], parameterized=True),
+                ISWAPLayer([0, 3], parameterized=True),
+                ISWAPLayer([1, 2], parameterized=True),
+                ISWAPLayer([1, 3], parameterized=True)
+            ]
         model = QCModel(layers=[
             U3Layer(),
             HLayer(0),
-
-            # U3Layer(),
-            ULayer(),
-            # U3Layer(),
-
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ULayer(),  # This U must couple 0 with {1,2,3}
+            ISWAPLayer([0, 3], parameterized=True),
+            ISWAPLayer([0, 2], parameterized=True),
             HLayer(1),
-
-            # U3Layer(),
-            ULayer(),
-            # U3Layer(),
-
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ULayer(),  # This U must couple 1 with {2,3}
+            ISWAPLayer([1, 3], parameterized=True),
+            ISWAPLayer([1, 2], parameterized=True),
             HLayer(2),
-
-            # U3Layer(),
-            ULayer(),
-            # U3Layer(),
-
+            ULayer(),  # This U must couple 2 with 3
             HLayer(3),
             U3Layer(),
             QFTCrossSwapLayer()
@@ -87,10 +99,11 @@ class OneDiamondQFT(ApproxUsingInverse):
         super(OneDiamondQFT, self).__init__(model, target)
 
 
+
 class TwoDiamondQFT(ApproxUsingInverse):
     def __init__(self):
         def u_iswap34_u_h(h_target):
-            return [ULayer(), ISWAPLayer([3, 4]), ULayer(), HLayer(h_target)]
+            return [ULayer(), ISWAPLayer([3, 4]), ULayer(), ISWAPLayer([3, 4]), HLayer(h_target)]
         model = QCModel(layers=[
             U3Layer(),
             HLayer(0),

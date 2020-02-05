@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="Refactoring of tf_qc.models">
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tf_qc/test_random_unifrom_complex.py" afterDir="false" />
+    <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/tf_qc/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QC_alg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QC_alg.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_pre_post_process.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tf_qc/qc.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/qc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +45,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/tf_qc/utils.py" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tf_qc/utils.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -213,7 +214,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="tmp2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="tf_approx_two_diamond_QFT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -231,7 +232,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gate_approximation/tmp2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -266,18 +267,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.tf_approx_one_diamond_QFT" />
-      <item itemvalue="Python.tmp2" />
       <item itemvalue="Python.test_random_unifrom_complex" />
       <item itemvalue="Python.tf_approx_one_diamond_QFT_oper_fid" />
+      <item itemvalue="Python.tf_approx_two_diamond_QFT" />
       <item itemvalue="Python tests.Unittests in tf_qc" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.tf_approx_one_diamond_QFT" />
         <item itemvalue="Python.tf_approx_one_diamond_QFT_oper_fid" />
+        <item itemvalue="Python.tf_approx_two_diamond_QFT" />
         <item itemvalue="Python.test_random_unifrom_complex" />
         <item itemvalue="Python tests.Unittests in tf_qc" />
-        <item itemvalue="Python.tmp2" />
       </list>
     </recent_temporary>
   </component>
@@ -371,7 +372,9 @@
       <workItem from="1580244314117" duration="24546000" />
       <workItem from="1580337774348" duration="1505000" />
       <workItem from="1580339554771" duration="10955000" />
-      <workItem from="1580352385355" duration="4462000" />
+      <workItem from="1580352385355" duration="12418000" />
+      <workItem from="1580612619206" duration="37214000" />
+      <workItem from="1580819496150" duration="19093000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1579724174732</created>
@@ -422,7 +425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580139300967</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="tf two diamand QFT.&#10;tf one diamond QFT.">
+      <created>1580357925986</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1580357925987</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -434,15 +444,18 @@
     <MESSAGE value="Refactoring of tf_qc" />
     <MESSAGE value="Refactoring of tf_qc.models" />
     <MESSAGE value="Random state vector fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Random state vector fix" />
+    <MESSAGE value="tf two diamand QFT.&#10;tf one diamond QFT." />
+    <option name="LAST_COMMIT_MESSAGE" value="tf two diamand QFT.&#10;tf one diamond QFT." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="302" y="64" width="870" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580351994963">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="1790" y="-89" width="870" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580828575579">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state x="-1496" y="-222" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580745070743" />
     <state x="121" y="-877" width="1071" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578950202229" />
     <state x="121" y="-877" key="#com.intellij.execution.impl.EditConfigurationsDialog/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578950345660" />
-    <state x="302" y="64" width="870" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1580351994963" />
+    <state x="302" y="64" width="870" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1580693420786" />
+    <state x="1790" y="-89" key="#com.intellij.execution.impl.EditConfigurationsDialog/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580828575579" />
     <state x="352" y="-730" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578512474177">
       <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
@@ -456,13 +469,14 @@
     </state>
     <state x="465" y="144" key="#xdebugger.evaluate/0.0.1366.768@0.0.1366.768" timestamp="1580182152063" />
     <state x="2019" y="24" width="697" height="760" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579099920134" />
-    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1580139300455">
+    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1580357925333">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1580139300455" />
-    <state width="1366" height="312" key="DebuggerActiveHint" timestamp="1580181815769">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1580357925333" />
+    <state width="1920" height="439" key="DebuggerActiveHint" timestamp="1580743379394">
+      <screen x="-1920" y="-312" width="1920" height="1080" />
     </state>
+    <state width="1920" height="439" key="DebuggerActiveHint/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743379394" />
     <state width="1920" height="438" key="DebuggerActiveHint/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579015864473" />
     <state width="1366" height="312" key="DebuggerActiveHint/0.0.1366.768@0.0.1366.768" timestamp="1580181815769" />
     <state width="1920" height="438" key="DebuggerActiveHint/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579102686648" />
@@ -475,74 +489,82 @@
     </state>
     <state x="411" y="-754" key="EnvironmentVariablesDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578938537035" />
     <state x="251" y="222" width="747" height="467" key="EnvironmentVariablesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578971213545" />
-    <state width="1324" height="233" key="GridCell.Tab.0.bottom" timestamp="1580354256107">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1878" height="276" key="GridCell.Tab.0.bottom" timestamp="1580819451277">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.0.bottom/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345297" />
     <state width="1878" height="174" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962760" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091322" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228497" />
-    <state width="1324" height="233" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1580354256107" />
-    <state width="1878" height="287" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024751" />
+    <state width="1324" height="233" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1580612585750" />
+    <state width="1878" height="276" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451277" />
     <state width="1324" height="233" key="GridCell.Tab.0.bottom/53.23.1313.745@53.23.1313.745" timestamp="1580182055695" />
-    <state width="1324" height="233" key="GridCell.Tab.0.center" timestamp="1580354256105">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1878" height="276" key="GridCell.Tab.0.center" timestamp="1580819451274">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.0.center/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345294" />
     <state width="1878" height="174" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962754" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091318" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228482" />
-    <state width="1324" height="233" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1580354256105" />
-    <state width="1878" height="287" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024747" />
+    <state width="1324" height="233" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1580612585747" />
+    <state width="1878" height="276" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451274" />
     <state width="1324" height="233" key="GridCell.Tab.0.center/53.23.1313.745@53.23.1313.745" timestamp="1580182055639" />
-    <state width="1324" height="233" key="GridCell.Tab.0.left" timestamp="1580354256104">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1878" height="276" key="GridCell.Tab.0.left" timestamp="1580819451272">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.0.left/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345292" />
     <state width="1878" height="174" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962749" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091315" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228480" />
-    <state width="1324" height="233" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1580354256104" />
-    <state width="1878" height="287" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024745" />
+    <state width="1324" height="233" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1580612585746" />
+    <state width="1878" height="276" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451272" />
     <state width="1324" height="233" key="GridCell.Tab.0.left/53.23.1313.745@53.23.1313.745" timestamp="1580182055637" />
-    <state width="1324" height="233" key="GridCell.Tab.0.right" timestamp="1580354256106">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1878" height="276" key="GridCell.Tab.0.right" timestamp="1580819451276">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.0.right/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345296" />
     <state width="1878" height="174" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962757" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091320" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228494" />
-    <state width="1324" height="233" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1580354256106" />
-    <state width="1878" height="287" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024750" />
+    <state width="1324" height="233" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1580612585749" />
+    <state width="1878" height="276" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451276" />
     <state width="1324" height="233" key="GridCell.Tab.0.right/53.23.1313.745@53.23.1313.745" timestamp="1580182055681" />
-    <state width="1324" height="233" key="GridCell.Tab.1.bottom" timestamp="1580354256111">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1878" height="276" key="GridCell.Tab.1.bottom" timestamp="1580819451283">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.1.bottom/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345303" />
     <state width="1878" height="174" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962769" />
     <state width="1878" height="256" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091330" />
     <state width="1878" height="256" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233413" />
-    <state width="1324" height="233" key="GridCell.Tab.1.bottom/0.0.1366.768@0.0.1366.768" timestamp="1580354256111" />
-    <state width="1878" height="287" key="GridCell.Tab.1.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024759" />
-    <state width="1324" height="233" key="GridCell.Tab.1.center" timestamp="1580354256109">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1324" height="233" key="GridCell.Tab.1.bottom/0.0.1366.768@0.0.1366.768" timestamp="1580612585755" />
+    <state width="1878" height="276" key="GridCell.Tab.1.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451283" />
+    <state width="1878" height="276" key="GridCell.Tab.1.center" timestamp="1580819451280">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.1.center/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345300" />
     <state width="1878" height="174" key="GridCell.Tab.1.center/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962764" />
     <state width="1878" height="256" key="GridCell.Tab.1.center/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091326" />
     <state width="1878" height="256" key="GridCell.Tab.1.center/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233409" />
-    <state width="1324" height="233" key="GridCell.Tab.1.center/0.0.1366.768@0.0.1366.768" timestamp="1580354256109" />
-    <state width="1878" height="287" key="GridCell.Tab.1.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024756" />
-    <state width="1324" height="233" key="GridCell.Tab.1.left" timestamp="1580354256108">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1324" height="233" key="GridCell.Tab.1.center/0.0.1366.768@0.0.1366.768" timestamp="1580612585753" />
+    <state width="1878" height="276" key="GridCell.Tab.1.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451280" />
+    <state width="1878" height="276" key="GridCell.Tab.1.left" timestamp="1580819451279">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.1.left/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345299" />
     <state width="1878" height="174" key="GridCell.Tab.1.left/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962762" />
     <state width="1878" height="256" key="GridCell.Tab.1.left/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091324" />
     <state width="1878" height="256" key="GridCell.Tab.1.left/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233408" />
-    <state width="1324" height="233" key="GridCell.Tab.1.left/0.0.1366.768@0.0.1366.768" timestamp="1580354256108" />
-    <state width="1878" height="287" key="GridCell.Tab.1.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024754" />
-    <state width="1324" height="233" key="GridCell.Tab.1.right" timestamp="1580354256110">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="1324" height="233" key="GridCell.Tab.1.left/0.0.1366.768@0.0.1366.768" timestamp="1580612585751" />
+    <state width="1878" height="276" key="GridCell.Tab.1.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451279" />
+    <state width="1878" height="276" key="GridCell.Tab.1.right" timestamp="1580819451282">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
+    <state width="1878" height="349" key="GridCell.Tab.1.right/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345301" />
     <state width="1878" height="174" key="GridCell.Tab.1.right/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962767" />
     <state width="1878" height="256" key="GridCell.Tab.1.right/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091328" />
     <state width="1878" height="256" key="GridCell.Tab.1.right/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233411" />
-    <state width="1324" height="233" key="GridCell.Tab.1.right/0.0.1366.768@0.0.1366.768" timestamp="1580354256110" />
-    <state width="1878" height="287" key="GridCell.Tab.1.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579103024758" />
+    <state width="1324" height="233" key="GridCell.Tab.1.right/0.0.1366.768@0.0.1366.768" timestamp="1580612585754" />
+    <state width="1878" height="276" key="GridCell.Tab.1.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1580819451282" />
     <state x="137" y="66" key="MergeDialog" timestamp="1580139329172">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -555,12 +577,13 @@
       <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state x="194" y="-800" key="PyMappingSimpleResolveDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578516116851" />
-    <state x="162" y="46" key="SettingsEditor" timestamp="1580353742662">
+    <state x="162" y="46" key="SettingsEditor" timestamp="1580868653214">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="-1692" y="-247" key="SettingsEditor/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580750085253" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578408970009" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578094665157" />
-    <state x="162" y="46" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1580353742662" />
+    <state x="162" y="46" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1580868653214" />
     <state x="283" y="125" key="Vcs.Push.Dialog.v2" timestamp="1580357869962">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -583,6 +606,10 @@
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="2003" y="125" width="645" height="472" key="find.popup/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579094283579" />
+    <state x="544" y="147" key="ftp.server.browser" timestamp="1580674679946">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="544" y="147" key="ftp.server.browser/0.0.1366.768@0.0.1366.768" timestamp="1580674679946" />
     <state width="600" height="424" key="javadoc.popup" timestamp="1580355791626">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
@@ -646,7 +673,7 @@
     <SUITE FILE_PATH="coverage/QC_alg$QFT_transpilation.coverage" NAME="QFT_transpilation Coverage Results" MODIFIED="1573479109377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/transpilation" />
     <SUITE FILE_PATH="coverage/QC_alg$diamond_qutip.coverage" NAME="diamond_qutip Coverage Results" MODIFIED="1570445261786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/QC_alg$gateLab.coverage" NAME="gateLab Coverage Results" MODIFIED="1572451377464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamond" />
-    <SUITE FILE_PATH="coverage/QC_alg$tf_approx_one_diamond_QFT.coverage" NAME="tf_approx_one_diamond_QFT Coverage Results" MODIFIED="1580274786620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
+    <SUITE FILE_PATH="coverage/QC_alg$tf_approx_one_diamond_QFT.coverage" NAME="tf_approx_one_diamond_QFT Coverage Results" MODIFIED="1580743108356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
     <SUITE FILE_PATH="coverage/QC_alg$diamonds_cnot.coverage" NAME="diamonds_cnot Coverage Results" MODIFIED="1570640757974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamonds" />
     <SUITE FILE_PATH="coverage/QC_alg$DiamondBackend.coverage" NAME="DiamondBackend Coverage Results" MODIFIED="1574079819193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamondQiskit" />
     <SUITE FILE_PATH="coverage/QC_alg$diamonds.coverage" NAME="diamonds Coverage Results" MODIFIED="1570467183507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamonds" />
