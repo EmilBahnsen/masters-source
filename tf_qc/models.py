@@ -75,21 +75,14 @@ class OneDiamondQFT(ApproxUsingInverse):
             ]
         model = QCModel(layers=[
             U3Layer(),
-            HLayer(0),
-            ISWAPLayer([0, 2], parameterized=True),
-            ISWAPLayer([0, 3], parameterized=True),
-            ULayer(),  # This U must couple 0 with {1,2,3}
-            ISWAPLayer([0, 3], parameterized=True),
-            ISWAPLayer([0, 2], parameterized=True),
-            HLayer(1),
-            ISWAPLayer([1, 2], parameterized=True),
-            ISWAPLayer([1, 3], parameterized=True),
-            ULayer(),  # This U must couple 1 with {2,3}
-            ISWAPLayer([1, 3], parameterized=True),
-            ISWAPLayer([1, 2], parameterized=True),
-            HLayer(2),
-            ULayer(),  # This U must couple 2 with 3
-            HLayer(3),
+            *all_swaps(),
+            ULayer(),
+            U3Layer(),
+            *all_swaps(),
+            ULayer(),
+            U3Layer(),
+            *all_swaps(),
+            ULayer(),
             U3Layer(),
             QFTCrossSwapLayer()
         ])

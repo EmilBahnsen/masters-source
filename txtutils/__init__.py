@@ -4,7 +4,7 @@ LOWER_LEFT = u'\u2514'
 LOWER_RIGHT = u'\u2518'
 HORIZONTAL = u'\u2500'
 VERTICAL = u'\u2502'
-
+import tensorflow as tf
 
 def upper_line(width):
     return UPPER_LEFT + HORIZONTAL * width + UPPER_RIGHT
@@ -30,6 +30,8 @@ def ndtotext(A, w=None, h=None):
 
     Describe `w` and `h`.
     """
+    if isinstance(A, tf.Tensor):
+        A = A.numpy()
     def num2str(num: complex, precision = 4):
         real = round(num.real, precision)
         imag = 1j*round(num.imag, precision)
@@ -61,3 +63,7 @@ def ndtotext(A, w=None, h=None):
         strings.append(right_line(h))
         return '\n'.join(''.join(pair) for pair in zip(*map(str.splitlines, strings)))
     raise NotImplementedError("Currently only 1 - 3 dimensions are supported")
+
+
+def ndtotext_print(A, w=None, h=None):
+    print(ndtotext(A, w, h))

@@ -2,18 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tf_qc/training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/QC_alg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QC_alg.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tf_qc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/test_random_unifrom_complex.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/test_random_unifrom_complex.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/training.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/txtutils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/txtutils/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +103,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tf_approx_one_diamond_QFT">
+  <component name="RunManager" selected="Python.layers">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -135,12 +131,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_random_unifrom_complex" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="layers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DAAL4PY" value="YES" />
         <env name="OMP_NUM_THREADS" value="12" />
         <env name="KMP_BLOCKTIME" value="30" />
@@ -153,7 +148,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tf_qc/test_random_unifrom_complex.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tf_qc/layers.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -193,6 +188,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DAAL4PY" value="YES" />
         <env name="OMP_NUM_THREADS" value="12" />
         <env name="KMP_BLOCKTIME" value="30" />
@@ -241,6 +237,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QC_alg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="DAAL4PY" value="YES" />
+        <env name="OMP_NUM_THREADS" value="12" />
+        <env name="KMP_BLOCKTIME" value="30" />
+        <env name="KMP_SETTINGS" value="1" />
+        <env name="KMP_AFFINITY" value="granularity=fine,noverbose,compact,1,0" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://emil@bahnsen.asuscomm.com:47/home/emil/miniconda3/envs/QC/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tf_qc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tf_qc/utils.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="js.build_tools.gulp">
       <node-interpreter>project</node-interpreter>
       <node-options />
@@ -250,35 +272,20 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests in tf_qc" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="QC_alg" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tf_qc" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tf_qc&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.tf_approx_one_diamond_QFT" />
-      <item itemvalue="Python.test_random_unifrom_complex" />
       <item itemvalue="Python.tf_approx_one_diamond_QFT_oper_fid" />
       <item itemvalue="Python.tf_approx_two_diamond_QFT" />
-      <item itemvalue="Python tests.Unittests in tf_qc" />
+      <item itemvalue="Python.utils" />
+      <item itemvalue="Python.layers" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.layers" />
         <item itemvalue="Python.tf_approx_one_diamond_QFT" />
+        <item itemvalue="Python.utils" />
         <item itemvalue="Python.tf_approx_one_diamond_QFT_oper_fid" />
         <item itemvalue="Python.tf_approx_two_diamond_QFT" />
-        <item itemvalue="Python.test_random_unifrom_complex" />
-        <item itemvalue="Python tests.Unittests in tf_qc" />
       </list>
     </recent_temporary>
   </component>
@@ -374,7 +381,8 @@
       <workItem from="1580339554771" duration="10955000" />
       <workItem from="1580352385355" duration="12418000" />
       <workItem from="1580612619206" duration="37214000" />
-      <workItem from="1580819496150" duration="19093000" />
+      <workItem from="1580819496150" duration="45378000" />
+      <workItem from="1581437725315" duration="20331000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1579724174732</created>
@@ -432,7 +440,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580357925987</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="train file improvements">
+      <created>1580944468521</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1580944468521</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -445,7 +460,8 @@
     <MESSAGE value="Refactoring of tf_qc.models" />
     <MESSAGE value="Random state vector fix" />
     <MESSAGE value="tf two diamand QFT.&#10;tf one diamond QFT." />
-    <option name="LAST_COMMIT_MESSAGE" value="tf two diamand QFT.&#10;tf one diamond QFT." />
+    <MESSAGE value="train file improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="train file improvements" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1790" y="-89" width="870" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580828575579">
@@ -469,10 +485,10 @@
     </state>
     <state x="465" y="144" key="#xdebugger.evaluate/0.0.1366.768@0.0.1366.768" timestamp="1580182152063" />
     <state x="2019" y="24" width="697" height="760" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579099920134" />
-    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1580357925333">
+    <state x="268" y="0" key="CommitChangelistDialog2" timestamp="1580944467961">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1580357925333" />
+    <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1580944467961" />
     <state width="1920" height="439" key="DebuggerActiveHint" timestamp="1580743379394">
       <screen x="-1920" y="-312" width="1920" height="1080" />
     </state>
@@ -577,17 +593,18 @@
       <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state x="194" y="-800" key="PyMappingSimpleResolveDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578516116851" />
-    <state x="162" y="46" key="SettingsEditor" timestamp="1580868653214">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="1594" y="-114" key="SettingsEditor" timestamp="1581437762808">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="-1692" y="-247" key="SettingsEditor/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580750085253" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578408970009" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578094665157" />
     <state x="162" y="46" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1580868653214" />
-    <state x="283" y="125" key="Vcs.Push.Dialog.v2" timestamp="1580357869962">
+    <state x="1594" y="-114" key="SettingsEditor/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581437762808" />
+    <state x="283" y="125" key="Vcs.Push.Dialog.v2" timestamp="1580944486032">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="283" y="125" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1580357869962" />
+    <state x="283" y="125" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1580944486032" />
     <state width="683" height="384" key="XDebugger.FullValuePopup" timestamp="1580004107461">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

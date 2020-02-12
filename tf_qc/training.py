@@ -27,9 +27,11 @@ def train(model: tf.keras.Model,
     print('logs:', log_path)
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_path, histogram_freq=1, profile_batch=0)
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(os.path.join(log_path, 'checkpoint'), save_best_only=True)
-    early_stopping_callback = tf.keras.callbacks.EarlyStopping(min_delta=0.0001, patience=30)
+    early_stopping_callback = tf.keras.callbacks.EarlyStopping(min_delta=0.0001, patience=100)
     early_stopping_high_loss_callback = tf.keras.callbacks.EarlyStopping(patience=20, baseline=0.8)
+    early_stopping_high_loss_callback2 = tf.keras.callbacks.EarlyStopping(patience=45, baseline=0.7)
     cvs_logger_callback = tf.keras.callbacks.CSVLogger(os.path.join(log_path, 'log.cvs'), append=True)
+    plateau_callback = tf.keras.callbacks.ReduceLROnPlateau()
     model.fit(input,
               output,
               validation_split=0.2,
@@ -37,10 +39,11 @@ def train(model: tf.keras.Model,
               epochs=epochs,
               callbacks=[tensorboard_callback,
                          model_checkpoint_callback,
-                         early_stopping_callback,
+                         # early_stopping_callback,
                          early_stopping_high_loss_callback,
-                         cvs_logger_callback],
-              verbose=2)
+                         early_stopping_high_loss_callback2,
+                         cvs_logger_callback,
+                         plateau_callback])
     print(*model.variables, sep='\n')
     # Write the summary to the log dir (so that we can reconstruct the model later on with the Variables
     with open(os.path.join(log_path, 'summary.txt'), 'w') as f:

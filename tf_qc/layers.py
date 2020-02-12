@@ -3,9 +3,9 @@ from tensorflow.keras import layers
 from abc import ABCMeta, abstractmethod
 from functools import reduce
 
-from . import float_type, utils, complex_type
+from tf_qc import float_type, utils, complex_type
 import tf_qc.qc as qc
-from .qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, tensor
+from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, tensor
 
 
 class QCLayer(layers.Layer, metaclass=ABCMeta):
@@ -75,9 +75,10 @@ class U3Layer(QCLayer):
     def build(self, input_shape: tf.TensorShape):
         theta_init = tf.random_uniform_initializer(0, 2*π)  # It's an angle
         n_qubits = utils.intlog2(input_shape[-2])
-        self.thetas = [tf.Variable(initial_value=theta_init(shape=(3,), dtype=float_type),
-                                   trainable=True,
-                                   dtype=float_type) for _ in range(n_qubits)]
+        self.thetas = [[tf.Variable(initial_value=theta_init(shape=(1,), dtype=float_type),
+                                    trainable=True,
+                                    dtype=float_type,
+                                    name=f'var_{i}_{j}') for i in range(3)] for j in range(n_qubits)]
 
     def call(self, inputs, thetas=None):
         return self.matrix(thetas) @ inputs
@@ -237,3 +238,16 @@ class ILayer(QCLayer):
 
     def matrix(self, **kwargs) -> tf.Tensor:
         return self._matrix
+
+
+if __name__ == '__main__':
+    from tf_qc.utils import random_pure_states
+    from txtutils import ndtotext_print
+    data = random_pure_states((2, 2**2, 1))
+    l_u3 = U3Layer()
+    l_u3(data)
+    print(*l_u3.variables, sep='\n')
+    ndtotext_print(l_u3.matrix())
+    l_u3.variables[0].assign([0])
+    print(*l_u3.variables, sep='\n')
+    ndtotext_print(l_u3.matrix())
