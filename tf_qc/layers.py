@@ -2,10 +2,14 @@ import tensorflow as tf
 from tensorflow.keras import layers
 from abc import ABCMeta, abstractmethod
 from functools import reduce
+from typing import *
 
 from tf_qc import float_type, utils, complex_type
 import tf_qc.qc as qc
 from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, tensor
+
+_uniform_theta = tf.random_uniform_initializer(0, 2*π)
+_normal_theta = tf.random_normal_initializer(0, π/4)
 
 
 class QCLayer(layers.Layer, metaclass=ABCMeta):
@@ -73,15 +77,15 @@ class U3Layer(QCLayer):
         self.thetas = None
 
     def build(self, input_shape: tf.TensorShape):
-        theta_init = tf.random_uniform_initializer(0, 2*π)  # It's an angle
         n_qubits = utils.intlog2(input_shape[-2])
-        self.thetas = [[tf.Variable(initial_value=theta_init(shape=(1,), dtype=float_type),
+        self.thetas = [[tf.Variable(initial_value=_uniform_theta(shape=(1,), dtype=float_type),
                                     trainable=True,
                                     dtype=float_type,
                                     name=f'var_{i}_{j}') for i in range(3)] for j in range(n_qubits)]
 
     def call(self, inputs, thetas=None):
-        return self.matrix(thetas) @ inputs
+        m = self.matrix(thetas)
+        return m @ inputs
 
     def matrix(self, thetas=None):
         if thetas:
@@ -101,8 +105,7 @@ class ISWAPLayer(QCLayer):
         self.n_qubits = utils.intlog2(input_shape[-2])
         mi = tf.complex(0., -1.)
         if self.parameterized:
-            theta_init = tf.random_uniform_initializer(0, 2 * π)
-            self.t = tf.Variable(initial_value=theta_init((1,), dtype=float_type),
+            self.t = tf.Variable(initial_value=_uniform_theta((1,), dtype=float_type),
                                  trainable=True,
                                  dtype=float_type)
         else:
@@ -156,17 +159,25 @@ class SWAPLayer(QCLayer):
 
 
 class ULayer(QCLayer):
-    def __init__(self):
+    def __init__(self, targets: Union[List[int], List[List[int]], None] = None):
         super(ULayer, self).__init__()
-        self.thetas: tf.Variable = None
-        self.n_qubits = None
+        self.thetas: tf.Variable
+        self.n_qubits: int
+        if targets:
+            if targets != sorted(targets):
+                raise Exception('ULayer targets must be sorted')
+            if type(targets[0]) == int:  # Pad with list if other syntax is used
+                targets = [targets]
+        self.targets = targets
 
     def build(self, input_shape: tf.TensorShape):
-        self.n_qubits = utils.intlog2(input_shape[-2])
+        if self.targets:
+            self.n_qubits = len(self.targets)*4
+        else:
+            self.n_qubits = utils.intlog2(input_shape[-2])
         assert self.n_qubits % 4 == 0, \
             'Input tensor is not a multiple of 4, i.e. cannot apply diamond U-gate (TODO: specify what qubits to apply to)'
-        theta_init = tf.random_uniform_initializer(0, 2 * π)
-        self.thetas = tf.Variable(initial_value=theta_init(shape=(self.n_qubits//4,), dtype=float_type),
+        self.thetas = tf.Variable(initial_value=_uniform_theta(shape=(self.n_qubits//4,), dtype=float_type),
                                   trainable=True,
                                   dtype=float_type)
 
@@ -174,10 +185,27 @@ class ULayer(QCLayer):
         return self.matrix() @ inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
+        print('call', self.thetas)
         Us = []
         for i in range(self.thetas.shape[0]):
-            Us.append(U(self.thetas[i]))
-        return tensor(Us)
+            Us.append(qc.U(self.thetas[i]))
+        if self.targets:
+            tensor_list = []
+            last_u_qubit = -1
+            for targets, U in zip(self.targets, Us):
+                # Must pad with eyes before each U-operation if necessary
+                if targets[0] != 0 and targets[0]-1 != last_u_qubit:
+                    eye_qubits_number = targets[0] - last_u_qubit
+                    tensor_list.append(tf.eye(2**eye_qubits_number))
+                tensor_list.append(U)
+                last_u_qubit = targets[3]  # Keep track of which qubit we acted on last
+            # Padding at the end
+            if last_u_qubit != self.n_qubits-1:
+                eye_qubits_number = self.n_qubits-1 - last_u_qubit
+                tensor_list.append(tf.eye(2 ** eye_qubits_number))
+            return tensor(tensor_list)
+        else:
+            return tensor(Us)
 
 
 class QFTLayer(QCLayer):
@@ -246,8 +274,20 @@ if __name__ == '__main__':
     data = random_pure_states((2, 2**2, 1))
     l_u3 = U3Layer()
     l_u3(data)
-    print(*l_u3.variables, sep='\n')
-    ndtotext_print(l_u3.matrix())
     l_u3.variables[0].assign([0])
+    l_u3.variables[1].assign([0])
+    l_u3.variables[2].assign([0])
+    l_u3.variables[3].assign([0])
+    l_u3.variables[4].assign([π/2])
+    l_u3.variables[5].assign([π])
     print(*l_u3.variables, sep='\n')
     ndtotext_print(l_u3.matrix())
+
+    data_data = tf.keras.layers.Input((2**8, 1), batch_size=2, dtype=complex_type)
+    data = random_pure_states((2, 2**8, 1))
+    l1 = ULayer()
+    l2 = ULayer([[0,1,2,3], [4,5,6,7]])
+    l1(data)
+    l2(data)
+    l1.thetas = l2.thetas
+    assert tf.reduce_all(l1.matrix() == l2.matrix())

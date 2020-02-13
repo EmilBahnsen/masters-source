@@ -3,6 +3,7 @@ from typing import *
 from functools import reduce
 
 from .layers import QCLayer, U3Layer, QFTULayer, IQFTLayer, HLayer, ULayer, ISWAPLayer, ILayer, QFTCrossSwapLayer
+from abc import abstractmethod
 
 
 class QCModel(tf.keras.Sequential):
@@ -28,8 +29,8 @@ class QCModel(tf.keras.Sequential):
 
 
 class ApproxUsingInverse(QCModel):
-    def __init__(self, model: QCModel, target_inv_model: QCModel):
-        super(ApproxUsingInverse, self).__init__()
+    def __init__(self, model: QCModel, target_inv_model: QCModel, name=None):
+        super(ApproxUsingInverse, self).__init__(name=name)
         self.model = model
         self.target_inv = target_inv_model
         self.add(self.model)
@@ -61,7 +62,7 @@ class PrePostQFTUIQFT(ApproxUsingInverse):
         target = QCModel(layers=[
             IQFTLayer()
         ])
-        super(PrePostQFTUIQFT, self).__init__(model, target)
+        super(PrePostQFTUIQFT, self).__init__(model, target, 'PrePostQFTUIQFT')
 
 
 class OneDiamondQFT(ApproxUsingInverse):
@@ -76,21 +77,20 @@ class OneDiamondQFT(ApproxUsingInverse):
         model = QCModel(layers=[
             U3Layer(),
             *all_swaps(),
-            ULayer(),
+            #ULayer(),
             U3Layer(),
             *all_swaps(),
-            ULayer(),
+            #ULayer(),
             U3Layer(),
             *all_swaps(),
-            ULayer(),
+            #ULayer(),
             U3Layer(),
             QFTCrossSwapLayer()
         ])
         target = QCModel(layers=[
             IQFTLayer()
         ])
-        super(OneDiamondQFT, self).__init__(model, target)
-
+        super(OneDiamondQFT, self).__init__(model, target, 'model_f_ux')
 
 
 class TwoDiamondQFT(ApproxUsingInverse):
@@ -112,4 +112,17 @@ class TwoDiamondQFT(ApproxUsingInverse):
         target = QCModel(layers=[
             IQFTLayer()
         ])
-        super(TwoDiamondQFT, self).__init__(model, target)
+        super(TwoDiamondQFT, self).__init__(model, target, 'model_a')
+
+
+class OneDiamondISWAP(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            ULayer(),
+            U3Layer()
+        ])
+        target = QCModel(layers=[
+            ISWAPLayer([0, 1])  # It's its own inverse
+        ])
+        super(OneDiamondISWAP, self).__init__(model, target, 'model_01_a')
