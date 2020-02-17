@@ -4,6 +4,7 @@ from tensorflow import linalg as la
 from typing import *
 from tf_qc import complex_type, float_type
 import qutip as qt
+from functools import reduce
 
 # Basic QC-definitions (including that for the diamond)
 
@@ -52,6 +53,10 @@ def tensor(tensors: List[tf.Tensor]):
     return tensor(tensors + [result]) if len(tensors) > 0 else result
 
 
+def product(tensors: List[tf.Tensor]):
+    return reduce(lambda U1, U2: U1 @ U2, tensors)
+
+
 # Also QuTiP
 def gate_expand_1toN(U: tf.Tensor, N: int, target: int):
     assert target < N, 'target exceeds N: {target} vs {N}'.format(target=target, N=N)
@@ -82,6 +87,31 @@ def gate_expand_2toN(U: tf.Tensor, N: int, control: int = None, target: int = No
     if target is not None and target is not 1:
         gate = SWAP[N][1][target] @ gate @ SWAP[N][1][target]
     return gate
+
+
+def gate_expand_toN(U: tf.Tensor, N: int, targets: List[int]):
+    assert targets[-1] - targets[0] == len(targets)-1, 'Target qubits must be consecutive'
+    tensor_list = []
+    add_eye = lambda n: tensor_list.append(tf.eye(2 ** n, dtype=complex_type)) if n != 0 else None
+    add_eye(targets[0])
+    tensor_list.append(U)
+    add_eye(N - 1 - targets[-1])
+    return tensor(tensor_list)
+
+
+def gates_expand_toN(U: Union[List[tf.Tensor], tf.Tensor], N: int, targets: Union[List[List[int]], List[int]]):
+    """
+    Tensor one or more tensors with eye. padding in-between
+    :param U: List of or tensor to tensor
+    :param N: Total number of qubits
+    :param targets: List of or list of consecutive target qubits
+    :return: Final tensor product
+    """
+    # TODO: Fast. This is slow but correct solution.
+    if isinstance(U[0], list):
+        return product([gate_expand_toN(_U, N, _targets) for _U, _targets in zip(U, targets)])
+    else:
+        return gate_expand_toN(U, N, targets)
 
 
 I2 = tensor([I1] * 2)

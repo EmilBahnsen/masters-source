@@ -1,0 +1,203 @@
+model_a:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            HLayer(0),
+            ULayer(),
+            HLayer(1),
+            ULayer(),
+            HLayer(2),
+            ULayer(),
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_a0:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            HLayer(0),
+            ULayer(),
+            HLayer(1),
+            ULayer(),
+            HLayer(2),
+            ULayer(),
+            HLayer(3),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+
+model_b (swap what pair of qubits that shonud couple in each instance):
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            HLayer(0),
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ULayer(),  # This U must couple 0 with {1,2,3}
+            ISWAPLayer([0, 3], parameterized=True),
+            ISWAPLayer([0, 2], parameterized=True),
+            HLayer(1),
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ULayer(),  # This U must couple 1 with {2,3}
+            ISWAPLayer([1, 3], parameterized=True),
+            ISWAPLayer([1, 2], parameterized=True),
+            HLayer(2),
+            ULayer(),  # This U must couple 2 with 3
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_c:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            HLayer(0),
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ULayer(),  # This U must couple 0 with {1,2,3}
+            ISWAPLayer([0, 3], parameterized=True),
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ISWAPLayer([0, 2], parameterized=True),
+            HLayer(1),
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ULayer(),  # This U must couple 1 with {2,3}
+            ISWAPLayer([1, 3], parameterized=True),
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ISWAPLayer([1, 2], parameterized=True),
+            HLayer(2),
+            ULayer(),  # This U must couple 2 with 3
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_d:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+
+            HLayer(0),
+            ULayer(),  # This U must couple 0 with {1,2,3}
+            ISWAPLayer([0, 2], parameterized=True),
+            ULayer(),
+            ISWAPLayer([0, 2], parameterized=True),
+            ISWAPLayer([0, 3], parameterized=True),
+            ULayer(),
+            ISWAPLayer([0, 3], parameterized=True),
+
+            HLayer(1),
+            ISWAPLayer([1, 2], parameterized=True),
+            ULayer(),  # This U must couple 1 with {2,3}
+            ISWAPLayer([1, 2], parameterized=True),
+            ISWAPLayer([1, 3], parameterized=True),
+            ULayer(),
+            ISWAPLayer([1, 3], parameterized=True),
+
+            HLayer(2),
+            ULayer(),  # This U must couple 2 with 3
+
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_e:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_e4:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)
+
+model_f:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        def all_swaps():
+            return [
+                ISWAPLayer([0, 2], parameterized=True),
+                ISWAPLayer([0, 3], parameterized=True),
+                ISWAPLayer([1, 2], parameterized=True),
+                ISWAPLayer([1, 3], parameterized=True)
+            ]
+        model = QCModel(layers=[
+            U3Layer(),
+            *all_swaps(),
+            ULayer(),
+            U3Layer(),
+            *all_swaps(),
+            ULayer(),
+            U3Layer(),
+            *all_swaps(),
+            ULayer(),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target)

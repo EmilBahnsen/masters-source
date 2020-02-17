@@ -1,21 +1,23 @@
 import tensorflow as tf
-from tensorflow.keras import layers
-from abc import ABCMeta, abstractmethod
 from functools import reduce
 from typing import *
+from abc import ABCMeta, abstractmethod
 
 from tf_qc import float_type, utils, complex_type
 import tf_qc.qc as qc
-from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, tensor
+from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, gate_expand_toN, gates_expand_toN, tensor
 
 _uniform_theta = tf.random_uniform_initializer(0, 2*π)
 _normal_theta = tf.random_normal_initializer(0, π/4)
 
 
-class QCLayer(layers.Layer, metaclass=ABCMeta):
+class QCLayer(tf.keras.layers.Layer, metaclass=ABCMeta):
     @abstractmethod
     def matrix(self, **kwargs) -> tf.Tensor:
         pass
+
+    def build(self, input_shape):
+        self.n_qubits = utils.intlog2(input_shape[-2])
 
 
 class QFTULayer(QCLayer):
@@ -25,7 +27,7 @@ class QFTULayer(QCLayer):
         self.thetas = None
 
     def build(self, input_shape):
-        self.n_qubits = utils.intlog2(input_shape[-2])
+        super().build(input_shape)
         theta_init = tf.random_uniform_initializer(0, 2*π)
         self.thetas = [tf.Variable(initial_value=theta_init(shape=(1,), dtype=float_type),
                                    trainable=True,
@@ -60,8 +62,8 @@ class HLayer(QCLayer):
         self._matrix = None
 
     def build(self, input_shape: tf.TensorShape):
-        n_qubits = utils.intlog2(input_shape[-2])
-        self._matrix = gate_expand_1toN(H, n_qubits, self.target)
+        super().build(input_shape)
+        self._matrix = gate_expand_1toN(H, self.n_qubits, self.target)
 
     def call(self, inputs, **kwargs):
         return self._matrix @ inputs
@@ -71,38 +73,48 @@ class HLayer(QCLayer):
 
 
 class U3Layer(QCLayer):
-    def __init__(self):
+    def __init__(self, targets: Optional[List[Union[List[int], int]]] = None):
         super(U3Layer, self).__init__()
         self.U3 = None
         self.thetas = None
+        # Make sure that we have Optional[List[List[int]]] no matter what
+        self.targets = targets if targets is not None else []
+        for t in targets:
+            if isinstance(t, int):
+                self.targets.append([t])
 
     def build(self, input_shape: tf.TensorShape):
-        n_qubits = utils.intlog2(input_shape[-2])
+        super().build(input_shape)
+        n_thetas = len(self.targets) if self.targets is not None else self.n_qubits
         self.thetas = [[tf.Variable(initial_value=_uniform_theta(shape=(1,), dtype=float_type),
                                     trainable=True,
                                     dtype=float_type,
-                                    name=f'var_{i}_{j}') for i in range(3)] for j in range(n_qubits)]
+                                    name=f'var_{i}_{j}') for i in range(3)] for j in range(n_thetas)]
 
-    def call(self, inputs, thetas=None):
-        m = self.matrix(thetas)
+    def call(self, inputs, **kwargs):
+        m = self.matrix()
         return m @ inputs
 
-    def matrix(self, thetas=None):
-        if thetas:
-            return U3(*thetas)
+    def matrix(self):
+        if self.targets is not None:
+            U3s = [U3(t) for t in self.thetas]
+            return gates_expand_toN(U3s, self.n_qubits, self.targets)
         else:
             return U3(*self.thetas)
 
 
 class ISWAPLayer(QCLayer):
+    number = 0
+
     def __init__(self, targets, parameterized=False):
-        super(ISWAPLayer, self).__init__(name='iSWAP_' + str(targets[0]) + '_' + str(targets[1]))
+        super(ISWAPLayer, self).__init__(name=f'iSWAP_{targets[0]}_{targets[1]}_{ISWAPLayer.number}')
+        ISWAPLayer.number += 1
         self.targets = targets
         self._matrix = None
         self.parameterized = parameterized
 
     def build(self, input_shape):
-        self.n_qubits = utils.intlog2(input_shape[-2])
+        super().build(input_shape)
         mi = tf.complex(0., -1.)
         if self.parameterized:
             self.t = tf.Variable(initial_value=_uniform_theta((1,), dtype=float_type),
@@ -142,14 +154,14 @@ class SWAPLayer(QCLayer):
         self._matrix = None
 
     def build(self, input_shape):
-        n_qubits = utils.intlog2(input_shape[-2])
+        super().build(input_shape)
         i_swap = tf.convert_to_tensor([
             [1,  0,  0, 0],
             [0,  0, 1, 0],
             [0, 1,  0, 0],
             [0,  0,  0, 1]
         ], complex_type)
-        self._matrix = gate_expand_2toN(i_swap, n_qubits, targets=self.targets)
+        self._matrix = gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
 
     def call(self, inputs, **kwargs):
         return self._matrix @ inputs
@@ -171,13 +183,9 @@ class ULayer(QCLayer):
         self.targets = targets
 
     def build(self, input_shape: tf.TensorShape):
-        if self.targets:
-            self.n_qubits = len(self.targets)*4
-        else:
-            self.n_qubits = utils.intlog2(input_shape[-2])
-        assert self.n_qubits % 4 == 0, \
-            'Input tensor is not a multiple of 4, i.e. cannot apply diamond U-gate (TODO: specify what qubits to apply to)'
-        self.thetas = tf.Variable(initial_value=_uniform_theta(shape=(self.n_qubits//4,), dtype=float_type),
+        super().build(input_shape)
+        n_thetas = len(self.targets) if self.targets else self.n_qubits//4
+        self.thetas = tf.Variable(initial_value=_uniform_theta(shape=(n_thetas,), dtype=float_type),
                                   trainable=True,
                                   dtype=float_type)
 
@@ -185,24 +193,20 @@ class ULayer(QCLayer):
         return self.matrix() @ inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
-        print('call', self.thetas)
         Us = []
         for i in range(self.thetas.shape[0]):
             Us.append(qc.U(self.thetas[i]))
         if self.targets:
             tensor_list = []
-            last_u_qubit = -1
-            for targets, U in zip(self.targets, Us):
-                # Must pad with eyes before each U-operation if necessary
-                if targets[0] != 0 and targets[0]-1 != last_u_qubit:
-                    eye_qubits_number = targets[0] - last_u_qubit
-                    tensor_list.append(tf.eye(2**eye_qubits_number))
-                tensor_list.append(U)
-                last_u_qubit = targets[3]  # Keep track of which qubit we acted on last
-            # Padding at the end
-            if last_u_qubit != self.n_qubits-1:
-                eye_qubits_number = self.n_qubits-1 - last_u_qubit
-                tensor_list.append(tf.eye(2 ** eye_qubits_number))
+            def add_eye(n):
+                if n != 0:
+                    tensor_list.append(tf.eye(2**n, dtype=complex_type))
+            add_eye(self.targets[0][0])
+            tensor_list.append(Us[0])
+            for i, (lt, rt) in enumerate(zip(self.targets, self.targets[1:])):
+                add_eye(rt[0] - lt[-1] - 1)
+                tensor_list.append(Us[i+1])
+            add_eye(self.n_qubits-1 - self.targets[-1][-1])
             return tensor(tensor_list)
         else:
             return tensor(Us)
@@ -214,7 +218,7 @@ class QFTLayer(QCLayer):
         self.n_qubits = None
 
     def build(self, input_shape):
-        self.n_qubits = input_shape[-2].bit_length() - 1
+        super().build(input_shape)
 
     def call(self, inputs, **kwargs):
         return qft(self.n_qubits, inputs)
@@ -228,9 +232,9 @@ class QFTCrossSwapLayer(QCLayer):
         super(QFTCrossSwapLayer, self).__init__()
 
     def build(self, input_shape):
-        n_qubits = utils.intlog2(input_shape[-2])
-        self._matrix = reduce(lambda a,b: a@b, [qc.SWAP[n_qubits][n][(n_qubits - 1) - n]
-                                                for n in range(n_qubits//2)])
+        super().build(input_shape)
+        self._matrix = reduce(lambda a,b: a@b, [qc.SWAP[self.n_qubits][n][(self.n_qubits - 1) - n]
+                                                for n in range(self.n_qubits//2)])
 
     def call(self, inputs, **kwargs):
         return self._matrix @ inputs
@@ -240,18 +244,23 @@ class QFTCrossSwapLayer(QCLayer):
 
 
 class IQFTLayer(QCLayer):
-    def __init__(self):
+    def __init__(self, targets: List[int] = None):
         super(IQFTLayer, self).__init__()
-        self.n_qubits = None
+        self.targets = targets
 
     def build(self, input_shape):
-        self.n_qubits = input_shape[-2].bit_length() - 1
+        super().build(input_shape)
+        # if no target specified, then just act on all qubits
+        if not self.targets:
+            self.targets = list(range(self.n_qubits))
 
     def call(self, inputs, **kwargs):
-        return iqft(self.n_qubits, inputs)
+        return self.matrix() @ inputs
 
     def matrix(self):
-        return iqft(self.n_qubits, I4)
+        n_qft = len(self.targets)
+        I = tf.eye(2**n_qft, dtype=complex_type)
+        return gate_expand_toN(iqft(n_qft, I), self.n_qubits, self.targets)
 
 
 class ILayer(QCLayer):
@@ -262,7 +271,7 @@ class ILayer(QCLayer):
         self._matrix = tf.eye(input_shape[-2], dtype=complex_type)
 
     def call(self, inputs, **kwargs):
-        return self._matrix @ inputs
+        return inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
         return self._matrix
@@ -281,13 +290,44 @@ if __name__ == '__main__':
     l_u3.variables[4].assign([π/2])
     l_u3.variables[5].assign([π])
     print(*l_u3.variables, sep='\n')
-    ndtotext_print(l_u3.matrix())
+    ndtotext_print(l_u3.matrix)
 
-    data_data = tf.keras.layers.Input((2**8, 1), batch_size=2, dtype=complex_type)
-    data = random_pure_states((2, 2**8, 1))
+    data_data = lambda N: tf.keras.layers.Input((2**N, 1), batch_size=2, dtype=complex_type)
+    data = lambda N: random_pure_states((2, 2**N, 1))
     l1 = ULayer()
     l2 = ULayer([[0,1,2,3], [4,5,6,7]])
-    l1(data)
-    l2(data)
+    l1(data(8))
+    l2(data(8))
     l1.thetas = l2.thetas
     assert tf.reduce_all(l1.matrix() == l2.matrix())
+
+    l1 = ULayer()
+    l_I1 = ILayer()
+    l2 = ULayer([[0, 1, 2, 3], [4, 5, 6, 7]])
+    l1(data(8))
+    l_I1(data(1))
+    l2(data(9))
+    l1.thetas = l2.thetas
+    assert tf.reduce_all(tensor([l1.matrix(), l_I1.matrix()]) == l2.matrix())
+
+    l1 = ULayer()
+    l_I1 = ILayer()
+    l2 = ULayer([[1, 2, 3, 4], [5, 6, 7, 8]])
+    l1(data(8))
+    l_I1(data(1))
+    l2(data(10))
+    l1.thetas = l2.thetas
+    assert tf.reduce_all(tensor([l_I1.matrix(), l1.matrix(), l_I1.matrix()]) == l2.matrix())
+
+    l1 = ULayer()
+    l_I2 = ILayer()
+    l2 = ULayer([0, 1, 2, 3])
+    l1(data(4))
+    l_I2(data(2))
+    l2(data(6))
+    l1.thetas = l2.thetas
+    assert tf.reduce_all(tensor([l1.matrix(), l_I2.matrix()]) == l2.matrix())
+
+    l1 = IQFTLayer([1,2,3,4])
+    l1(data(5))
+    ndtotext_print(l1.matrix())

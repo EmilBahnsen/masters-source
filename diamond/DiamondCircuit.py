@@ -2,6 +2,7 @@ from diamond.definitions import *
 from qutip.qip.circuit_latex import _latex_compile
 from functools import reduce
 import math
+from collections import defaultdict
 
 def intersection(list1, list2):
     if list1 is None or list2 is None:
@@ -54,6 +55,13 @@ class ReducibleCircuit(QubitCircuit):
             return self.reduce(True)
         else:
             return self
+
+    def gate_count_dict(self):
+        result = defaultdict(int)
+        for g in self.gates:
+            result[g.name] += 1
+        return result
+
 
 
 # --- Circuit ---

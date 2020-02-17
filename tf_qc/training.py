@@ -5,9 +5,12 @@ import tensorflow as tf
 from .losses import Mean1mFidelity, StdFidelity
 from .layers import QFTLayer, IQFTLayer
 from txtutils import ndtotext
+from tf_qc.models import ApproxUsingInverse
+from tf_qc.metrics import OperatorFidelity
+import datetime
 
 
-def train(model: tf.keras.Model,
+def train(model: ApproxUsingInverse,
           input,
           output,
           optimizer: tf.optimizers.Optimizer,
@@ -16,12 +19,17 @@ def train(model: tf.keras.Model,
           epochs: int,
           batch_size=32):
 
-    if isinstance(log_path, list):
-        log_path = os.path.join(*log_path)
+    if isinstance(log_path, str):
+        log_path = [log_path]
+    current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
+    log_path.append(model.name)
+    log_path.append(current_time)
+    log_path = os.path.join(*log_path)
     os.makedirs(log_path, exist_ok=True)
 
     # Compile model
-    model.compile(optimizer, loss=loss)
+    oper_fid_metric = OperatorFidelity(model)
+    model.compile(optimizer, loss=loss)#, metrics=[oper_fid_metric])
 
     # Fitting
     print('logs:', log_path)
@@ -40,8 +48,8 @@ def train(model: tf.keras.Model,
               callbacks=[tensorboard_callback,
                          model_checkpoint_callback,
                          # early_stopping_callback,
-                         early_stopping_high_loss_callback,
-                         early_stopping_high_loss_callback2,
+                         # early_stopping_high_loss_callback,
+                         # early_stopping_high_loss_callback2,
                          cvs_logger_callback,
                          plateau_callback])
     print(*model.variables, sep='\n')

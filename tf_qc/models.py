@@ -3,7 +3,9 @@ from typing import *
 from functools import reduce
 
 from .layers import QCLayer, U3Layer, QFTULayer, IQFTLayer, HLayer, ULayer, ISWAPLayer, ILayer, QFTCrossSwapLayer
+from tensorflow.keras.layers import InputLayer
 from abc import abstractmethod
+from tf_qc import complex_type
 
 
 class QCModel(tf.keras.Sequential):
@@ -17,7 +19,7 @@ class QCModel(tf.keras.Sequential):
         if len(self.layers) == 0:
             raise Exception('No layers to "matricify".')
         elif len(self.layers) == 1:
-            return self.layers[0].matrix()
+            return self.layers[0].matrix
         else:
             return reduce(reduction, self.layers)  # Note order of matmul
 
@@ -25,7 +27,7 @@ class QCModel(tf.keras.Sequential):
         if isinstance(other, tf.Tensor):
             return self.matrix() @ other
         else:
-            return self.matrix() @ other.matrix()
+            return self.matrix() @ other.matrix
 
 
 class ApproxUsingInverse(QCModel):
@@ -67,30 +69,22 @@ class PrePostQFTUIQFT(ApproxUsingInverse):
 
 class OneDiamondQFT(ApproxUsingInverse):
     def __init__(self):
-        def all_swaps():
-            return [
-                ISWAPLayer([0, 2], parameterized=True),
-                ISWAPLayer([0, 3], parameterized=True),
-                ISWAPLayer([1, 2], parameterized=True),
-                ISWAPLayer([1, 3], parameterized=True)
-            ]
         model = QCModel(layers=[
             U3Layer(),
-            *all_swaps(),
-            #ULayer(),
-            U3Layer(),
-            *all_swaps(),
-            #ULayer(),
-            U3Layer(),
-            *all_swaps(),
-            #ULayer(),
+            HLayer(0),
+            ULayer(),
+            HLayer(1),
+            ULayer(),
+            HLayer(2),
+            ULayer(),
+            HLayer(3),
             U3Layer(),
             QFTCrossSwapLayer()
         ])
         target = QCModel(layers=[
             IQFTLayer()
         ])
-        super(OneDiamondQFT, self).__init__(model, target, 'model_f_ux')
+        super(OneDiamondQFT, self).__init__(model, target, 'model_a')
 
 
 class TwoDiamondQFT(ApproxUsingInverse):
@@ -126,3 +120,39 @@ class OneDiamondISWAP(ApproxUsingInverse):
             ISWAPLayer([0, 1])  # It's its own inverse
         ])
         super(OneDiamondISWAP, self).__init__(model, target, 'model_01_a')
+
+
+class OneMemoryDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        targets = [0, 1, 2, 3]  # These are the qubits of the diamond
+        ancilla_swap0 = lambda: ISWAPLayer([0, 4])
+        ancilla_swap1 = lambda: ISWAPLayer([1, 5])
+        model = QCModel(layers=[
+            InputLayer((2**6, 1), dtype=complex_type, name='input_state'),
+            U3Layer(),
+            HLayer(0),
+            ancilla_swap0(),
+            ancilla_swap1(),
+            ULayer(targets),
+            ancilla_swap1(),
+            ancilla_swap0(),
+            HLayer(1),
+            ancilla_swap0(),
+            ancilla_swap1(),
+            ULayer(targets),
+            ancilla_swap1(),
+            ancilla_swap0(),
+            HLayer(2),
+            ancilla_swap0(),
+            ancilla_swap1(),
+            ULayer(targets),
+            ancilla_swap1(),
+            ancilla_swap0(),
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer(targets)
+        ])
+        super(OneMemoryDiamondQFT, self).__init__(model, target, 'model_b')

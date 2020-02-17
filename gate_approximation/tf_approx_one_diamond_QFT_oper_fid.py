@@ -21,7 +21,7 @@ phony_data = random_state_vectors(1, 4)
 @tf.function
 def loss(variable_layer):
     d = 2**4
-    return 1 - tf.abs(tf.linalg.trace(iqft_layer.matrix() @ variable_layer.matrix()) / d) ** 2
+    return 1 - tf.abs(tf.linalg.trace(iqft_layer.matrix() @ variable_layer.matrix) / d) ** 2
 
 
 # def eval_func(*args):

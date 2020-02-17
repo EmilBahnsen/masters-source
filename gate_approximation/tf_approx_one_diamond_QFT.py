@@ -32,7 +32,7 @@ for _ in range(100):
     # Fitting
     current_time = datetime.datetime.now().replace(microsecond=0).isoformat()
     filename = os.path.basename(__file__).rstrip('.py')
-    log_path = ['./logs', filename, 'model_f_ux', current_time]
+    log_path = ['./logs', filename]
 
     from tf_qc.training import train  # Reimport so that we don't have to reset the run
     train(model, input, output, optimizer, loss, log_path, epochs=10000)
