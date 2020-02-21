@@ -10,7 +10,7 @@ from tf_qc import complex_type
 N = 4
 
 # Random normalized vectors
-n_datapoints = 100000
+n_datapoints = 1000000
 
 # vectors = random_state_vectors(n_datapoints, N, 0)
 vectors = random_pure_states((n_datapoints, 2**N, 1))
@@ -19,7 +19,7 @@ input = tf.cast(vectors, complex_type)
 output = input
 
 # Optimizer and loss
-lr = 0.001
+lr = 0.01
 print('Learning rate:', lr)
 optimizer = tf.optimizers.Adam(lr)
 loss = Mean1mFidelity()
@@ -35,4 +35,5 @@ for _ in range(100):
     log_path = ['./logs', filename]
 
     from tf_qc.training import train  # Reimport so that we don't have to reset the run
-    train(model, input, output, optimizer, loss, log_path, epochs=10000)
+    # with tf.device('cpu'):
+    train(model, input, output, optimizer, loss, log_path, epochs=10000, batch_size=2048)

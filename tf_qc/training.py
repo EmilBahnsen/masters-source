@@ -69,6 +69,8 @@ def train(model: ApproxUsingInverse,
     print('Sanity check loss:', loss(real_output, model_output).numpy())
     std_loss = StdFidelity()
     print('Sanity check loss std:', std_loss(real_output, model_output).numpy())
+    hs_norm = OperatorFidelity(model)
+    print('Hilbert–Schmidt/Frobenius norm:', hs_norm())
     # and check if it's the real inverse!
     iqft_layer = IQFTLayer()
     iqft_layer(input)

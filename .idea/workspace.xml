@@ -2,21 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e03800e-d9e9-439f-a586-7b9772e76870" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_mem_diamond_QFT.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tf_qc/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/EmilB.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gate_approximation/tm3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models_memory.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QC_alg.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QC_alg.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diamond/DiamondCircuit.py" beforeDir="false" afterPath="$PROJECT_DIR$/diamond/DiamondCircuit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diamonds/FFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/diamonds/FFT.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_QFT_oper_fid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_iswap.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_diamond_iswap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_two_diamond_QFT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gate_approximation/tf_approx_one_mem_diamond_QFT.py" beforeDir="false" afterPath="$PROJECT_DIR$/gate_approximation/tf_approx_one_mem_diamond_QFT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/layers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/losses.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/qc.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/qc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tf_qc/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tf_qc/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tf_qc/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +48,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/tf_qc/qc.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tf_qc/utils.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IgnoredFileRootStore">
@@ -84,14 +85,15 @@
     <property name="nodejs.protractor.protractor_package" value="" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="web.server" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
-      <console-settings module-name="QC_alg" is-module-sdk="true">
+      <console-settings custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;import tensorflow as tf&#10;import numpy as np&#10;tf.config.threading.set_intra_op_parallelism_threads(12)&#10;tf.config.threading.set_inter_op_parallelism_threads(2)&#10;tf.config.set_soft_device_placement(True)" module-name="QC_alg" is-module-sdk="true">
         <envs>
           <env key="DISPLAY" value="localhost:10.0" />
         </envs>
+        <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;import tensorflow as tf&#10;import numpy as np&#10;tf.config.threading.set_intra_op_parallelism_threads(12)&#10;tf.config.threading.set_inter_op_parallelism_threads(2)&#10;tf.config.set_soft_device_placement(True)" />
         <option name="myUseModuleSdk" value="true" />
         <option name="myModuleName" value="QC_alg" />
         <option name="myEnvs">
@@ -111,33 +113,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.tf_approx_one_mem_diamond_QFT">
-    <configuration name="FFT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="QC_alg" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DAAL4PY" value="YES" />
-        <env name="OMP_NUM_THREADS" value="12" />
-        <env name="KMP_BLOCKTIME" value="30" />
-        <env name="KMP_SETTINGS" value="1" />
-        <env name="KMP_AFFINITY" value="granularity=fine,noverbose,compact,1,0" />
-      </envs>
-      <option name="SDK_HOME" value="sftp://emil@bahnsen.asuscomm.com:47/home/emil/miniconda3/envs/QC/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/diamonds" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/diamonds/FFT.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -157,33 +132,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="diamonds_cnot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="QC_alg" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DAAL4PY" value="YES" />
-        <env name="OMP_NUM_THREADS" value="12" />
-        <env name="KMP_BLOCKTIME" value="30" />
-        <env name="KMP_SETTINGS" value="1" />
-        <env name="KMP_AFFINITY" value="granularity=fine,noverbose,compact,1,0" />
-      </envs>
-      <option name="SDK_HOME" value="sftp://emil@bahnsen.asuscomm.com:47/home/emil/miniconda3/envs/QC/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/diamonds" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/diamonds/diamonds_cnot.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -219,12 +167,37 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="losses" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QC_alg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="DAAL4PY" value="YES" />
+        <env name="OMP_NUM_THREADS" value="12" />
+        <env name="KMP_BLOCKTIME" value="30" />
+        <env name="KMP_SETTINGS" value="1" />
+        <env name="KMP_AFFINITY" value="granularity=fine,noverbose,compact,1,0" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://emil@bahnsen.asuscomm.com:47/home/emil/miniconda3/envs/QC/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tf_qc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tf_qc/losses.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="tf_approx_one_diamond_QFT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="QC_alg" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DAAL4PY" value="YES" />
         <env name="OMP_NUM_THREADS" value="12" />
         <env name="KMP_BLOCKTIME" value="30" />
@@ -272,6 +245,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="tm3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="QC_alg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DAAL4PY" value="YES" />
+        <env name="OMP_NUM_THREADS" value="12" />
+        <env name="KMP_BLOCKTIME" value="30" />
+        <env name="KMP_SETTINGS" value="1" />
+        <env name="KMP_AFFINITY" value="granularity=fine,noverbose,compact,1,0" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://emil@bahnsen.asuscomm.com:47/home/emil/miniconda3/envs/QC/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gate_approximation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gate_approximation/tm3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="js.build_tools.gulp">
       <node-interpreter>project</node-interpreter>
       <node-options />
@@ -283,18 +283,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.layers" />
-      <item itemvalue="Python.diamonds_cnot" />
-      <item itemvalue="Python.FFT" />
       <item itemvalue="Python.tf_approx_one_mem_diamond_QFT" />
       <item itemvalue="Python.tf_approx_one_diamond_QFT" />
+      <item itemvalue="Python.tm3" />
+      <item itemvalue="Python.losses" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.tf_approx_one_mem_diamond_QFT" />
         <item itemvalue="Python.tf_approx_one_diamond_QFT" />
+        <item itemvalue="Python.losses" />
+        <item itemvalue="Python.tm3" />
         <item itemvalue="Python.layers" />
-        <item itemvalue="Python.FFT" />
-        <item itemvalue="Python.diamonds_cnot" />
       </list>
     </recent_temporary>
   </component>
@@ -394,7 +394,8 @@
       <workItem from="1581437725315" duration="29951000" />
       <workItem from="1581606339926" duration="23833000" />
       <workItem from="1581818032884" duration="1348000" />
-      <workItem from="1581944373171" duration="3756000" />
+      <workItem from="1581944373171" duration="62874000" />
+      <workItem from="1582216784872" duration="3686000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1579724174732</created>
@@ -473,7 +474,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581613620389</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="helper function.&#10;targeting of U3Layer.&#10;Oper. fidelity metric.">
+      <created>1581948211840</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1581948211841</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -489,7 +497,8 @@
     <MESSAGE value="train file improvements" />
     <MESSAGE value="better rand. states with simplex" />
     <MESSAGE value="iSWAP tests, multi U-layer" />
-    <option name="LAST_COMMIT_MESSAGE" value="iSWAP tests, multi U-layer" />
+    <MESSAGE value="helper function.&#10;targeting of U3Layer.&#10;Oper. fidelity metric." />
+    <option name="LAST_COMMIT_MESSAGE" value="helper function.&#10;targeting of U3Layer.&#10;Oper. fidelity metric." />
   </component>
   <component name="WindowStateProjectService">
     <state x="1926" y="39" key="#Updates" timestamp="1581613680319">
@@ -513,23 +522,28 @@
       <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
     <state x="316" y="-856" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579035335075" />
-    <state x="2589" y="17" width="697" height="760" key="#xdebugger.evaluate" timestamp="1581691442703">
+    <state x="1745" y="249" width="687" height="317" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1582215410675">
+      <screen x="1366" y="-179" width="1920" height="1080" />
+    </state>
+    <state x="1745" y="249" width="687" height="317" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582215410675" />
+    <state x="2163" y="33" width="1123" height="634" key="#xdebugger.evaluate" timestamp="1582214578026">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="465" y="144" key="#xdebugger.evaluate/0.0.1366.768@0.0.1366.768" timestamp="1580182152063" />
-    <state x="2589" y="17" width="697" height="760" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581691442703" />
-    <state x="1743" y="-179" key="CommitChangelistDialog2" timestamp="1581613619561">
+    <state x="2163" y="33" width="1123" height="634" key="#xdebugger.evaluate/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582214578026" />
+    <state x="2253" y="40" key="#xdebugger.evaluate/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208412564" />
+    <state x="1743" y="-179" key="CommitChangelistDialog2" timestamp="1581948211102">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="268" y="0" key="CommitChangelistDialog2/0.0.1366.768@0.0.1366.768" timestamp="1581530608673" />
-    <state x="1743" y="-179" key="CommitChangelistDialog2/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581613619561" />
-    <state width="1920" height="438" key="DebuggerActiveHint" timestamp="1581690686491">
+    <state x="1743" y="-179" key="CommitChangelistDialog2/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581948211102" />
+    <state width="1920" height="438" key="DebuggerActiveHint" timestamp="1582218760084">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1920" height="439" key="DebuggerActiveHint/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743379394" />
     <state width="1920" height="438" key="DebuggerActiveHint/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579015864473" />
     <state width="1366" height="312" key="DebuggerActiveHint/0.0.1366.768@0.0.1366.768" timestamp="1581532990721" />
-    <state width="1920" height="438" key="DebuggerActiveHint/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581690686491" />
+    <state width="1920" height="438" key="DebuggerActiveHint/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582218760084" />
     <state x="1466" y="-79" width="1720" height="880" key="DirDiffDialog" timestamp="1579184126870">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
@@ -539,89 +553,97 @@
     </state>
     <state x="411" y="-754" key="EnvironmentVariablesDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578938537035" />
     <state x="251" y="222" width="747" height="467" key="EnvironmentVariablesDialog/0.0.1366.768@0.0.1366.768" timestamp="1578971213545" />
-    <state width="1878" height="347" key="GridCell.Tab.0.bottom" timestamp="1581815708958">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.0.bottom" timestamp="1582219558551">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.0.bottom/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345297" />
     <state width="1878" height="174" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962760" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091322" />
     <state width="1878" height="256" key="GridCell.Tab.0.bottom/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228497" />
     <state width="1324" height="181" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1581534932734" />
-    <state width="1878" height="347" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455691" />
+    <state width="1878" height="347" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558551" />
+    <state width="1878" height="347" key="GridCell.Tab.0.bottom/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208689983" />
     <state width="1878" height="347" key="GridCell.Tab.0.bottom/47.23.1319.745@47.23.1319.745" timestamp="1581815708958" />
     <state width="1324" height="233" key="GridCell.Tab.0.bottom/53.23.1313.745@53.23.1313.745" timestamp="1580182055695" />
-    <state width="1878" height="347" key="GridCell.Tab.0.center" timestamp="1581815708957">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.0.center" timestamp="1582219558548">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.0.center/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345294" />
     <state width="1878" height="174" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962754" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091318" />
     <state width="1878" height="256" key="GridCell.Tab.0.center/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228482" />
     <state width="1324" height="181" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1581534932731" />
-    <state width="1878" height="347" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455688" />
+    <state width="1878" height="347" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558548" />
+    <state width="1878" height="347" key="GridCell.Tab.0.center/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208689981" />
     <state width="1878" height="347" key="GridCell.Tab.0.center/47.23.1319.745@47.23.1319.745" timestamp="1581815708957" />
     <state width="1324" height="233" key="GridCell.Tab.0.center/53.23.1313.745@53.23.1313.745" timestamp="1580182055639" />
-    <state width="1878" height="347" key="GridCell.Tab.0.left" timestamp="1581815708955">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.0.left" timestamp="1582219558547">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.0.left/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345292" />
     <state width="1878" height="174" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962749" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091315" />
     <state width="1878" height="256" key="GridCell.Tab.0.left/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228480" />
     <state width="1324" height="181" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1581534932730" />
-    <state width="1878" height="347" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455687" />
+    <state width="1878" height="347" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558547" />
+    <state width="1878" height="347" key="GridCell.Tab.0.left/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208689979" />
     <state width="1878" height="347" key="GridCell.Tab.0.left/47.23.1319.745@47.23.1319.745" timestamp="1581815708955" />
     <state width="1324" height="233" key="GridCell.Tab.0.left/53.23.1313.745@53.23.1313.745" timestamp="1580182055637" />
-    <state width="1878" height="347" key="GridCell.Tab.0.right" timestamp="1581815708958">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.0.right" timestamp="1582219558550">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.0.right/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345296" />
     <state width="1878" height="174" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962757" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091320" />
     <state width="1878" height="256" key="GridCell.Tab.0.right/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419228494" />
     <state width="1324" height="181" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1581534932732" />
-    <state width="1878" height="347" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455690" />
+    <state width="1878" height="347" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558550" />
+    <state width="1878" height="347" key="GridCell.Tab.0.right/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208689982" />
     <state width="1878" height="347" key="GridCell.Tab.0.right/47.23.1319.745@47.23.1319.745" timestamp="1581815708958" />
     <state width="1324" height="233" key="GridCell.Tab.0.right/53.23.1313.745@53.23.1313.745" timestamp="1580182055681" />
-    <state width="1878" height="347" key="GridCell.Tab.1.bottom" timestamp="1581815708964">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.1.bottom" timestamp="1582219558556">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.1.bottom/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345303" />
     <state width="1878" height="174" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962769" />
     <state width="1878" height="256" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091330" />
     <state width="1878" height="256" key="GridCell.Tab.1.bottom/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233413" />
     <state width="1324" height="181" key="GridCell.Tab.1.bottom/0.0.1366.768@0.0.1366.768" timestamp="1581534932739" />
-    <state width="1878" height="347" key="GridCell.Tab.1.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455697" />
+    <state width="1878" height="347" key="GridCell.Tab.1.bottom/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558556" />
+    <state width="1878" height="347" key="GridCell.Tab.1.bottom/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208719911" />
     <state width="1878" height="347" key="GridCell.Tab.1.bottom/47.23.1319.745@47.23.1319.745" timestamp="1581815708964" />
-    <state width="1878" height="347" key="GridCell.Tab.1.center" timestamp="1581815708962">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.1.center" timestamp="1582219558554">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.1.center/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345300" />
     <state width="1878" height="174" key="GridCell.Tab.1.center/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962764" />
     <state width="1878" height="256" key="GridCell.Tab.1.center/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091326" />
     <state width="1878" height="256" key="GridCell.Tab.1.center/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233409" />
     <state width="1324" height="181" key="GridCell.Tab.1.center/0.0.1366.768@0.0.1366.768" timestamp="1581534932736" />
-    <state width="1878" height="347" key="GridCell.Tab.1.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455695" />
+    <state width="1878" height="347" key="GridCell.Tab.1.center/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558554" />
+    <state width="1878" height="347" key="GridCell.Tab.1.center/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208719909" />
     <state width="1878" height="347" key="GridCell.Tab.1.center/47.23.1319.745@47.23.1319.745" timestamp="1581815708962" />
-    <state width="1878" height="347" key="GridCell.Tab.1.left" timestamp="1581815708961">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.1.left" timestamp="1582219558552">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.1.left/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345299" />
     <state width="1878" height="174" key="GridCell.Tab.1.left/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962762" />
     <state width="1878" height="256" key="GridCell.Tab.1.left/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091324" />
     <state width="1878" height="256" key="GridCell.Tab.1.left/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233408" />
     <state width="1324" height="181" key="GridCell.Tab.1.left/0.0.1366.768@0.0.1366.768" timestamp="1581534932735" />
-    <state width="1878" height="347" key="GridCell.Tab.1.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455693" />
+    <state width="1878" height="347" key="GridCell.Tab.1.left/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558552" />
+    <state width="1878" height="347" key="GridCell.Tab.1.left/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208719907" />
     <state width="1878" height="347" key="GridCell.Tab.1.left/47.23.1319.745@47.23.1319.745" timestamp="1581815708961" />
-    <state width="1878" height="347" key="GridCell.Tab.1.right" timestamp="1581815708963">
-      <screen x="47" y="23" width="1319" height="745" />
+    <state width="1878" height="347" key="GridCell.Tab.1.right" timestamp="1582219558555">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="1878" height="349" key="GridCell.Tab.1.right/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580743345301" />
     <state width="1878" height="174" key="GridCell.Tab.1.right/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1579042962767" />
     <state width="1878" height="256" key="GridCell.Tab.1.right/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578447091328" />
     <state width="1878" height="256" key="GridCell.Tab.1.right/-303.-1080.1920.1080/53.23.1313.745@-303.-1080.1920.1080" timestamp="1578419233411" />
     <state width="1324" height="181" key="GridCell.Tab.1.right/0.0.1366.768@0.0.1366.768" timestamp="1581534932738" />
-    <state width="1878" height="347" key="GridCell.Tab.1.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581696455696" />
+    <state width="1878" height="347" key="GridCell.Tab.1.right/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582219558555" />
+    <state width="1878" height="347" key="GridCell.Tab.1.right/1366.-179.1920.1080/0.23.1366.745@1366.-179.1920.1080" timestamp="1582208719910" />
     <state width="1878" height="347" key="GridCell.Tab.1.right/47.23.1319.745@47.23.1319.745" timestamp="1581815708963" />
     <state x="137" y="66" key="MergeDialog" timestamp="1580139329172">
       <screen x="0" y="0" width="1366" height="768" />
@@ -631,29 +653,32 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="399" y="108" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1580139329225" />
-    <state x="194" y="-800" key="PyMappingSimpleResolveDialog" timestamp="1578516116851">
-      <screen x="-303" y="-1080" width="1920" height="1080" />
+    <state x="1863" y="101" key="PyMappingSimpleResolveDialog" timestamp="1582111653029">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="194" y="-800" key="PyMappingSimpleResolveDialog/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578516116851" />
-    <state x="1594" y="-114" key="SettingsEditor" timestamp="1581944518433">
+    <state x="1863" y="101" key="PyMappingSimpleResolveDialog/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582111653029" />
+    <state x="1594" y="-114" key="SettingsEditor" timestamp="1582218448760">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="-1692" y="-247" key="SettingsEditor/-1920.-312.1920.1080/0.0.1366.768@-1920.-312.1920.1080" timestamp="1580750085253" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578408970009" />
     <state x="-75" y="-918" key="SettingsEditor/-303.-1080.1920.1080/0.23.1366.745@-303.-1080.1920.1080" timestamp="1578094665157" />
     <state x="162" y="46" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1580868653214" />
-    <state x="1594" y="-114" key="SettingsEditor/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581944518433" />
+    <state x="1594" y="-114" key="SettingsEditor/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582218448760" />
+    <state x="1594" y="-114" key="SettingsEditor/1366.-179.1920.1080/53.23.1313.745@1366.-179.1920.1080" timestamp="1582036576476" />
     <state x="1764" y="-3" key="Vcs.Push.Dialog.v2" timestamp="1581948156898">
       <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state x="283" y="125" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1580944486032" />
     <state x="1764" y="-3" key="Vcs.Push.Dialog.v2/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1581948156898" />
-    <state width="683" height="384" key="XDebugger.FullValuePopup" timestamp="1580004107461">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state width="960" height="540" key="XDebugger.FullValuePopup" timestamp="1582218522920">
+      <screen x="1366" y="-179" width="1920" height="1080" />
     </state>
     <state width="960" height="540" key="XDebugger.FullValuePopup/-303.-1080.1920.1080/0.0.1366.768@-303.-1080.1920.1080" timestamp="1578450930882" />
     <state width="683" height="384" key="XDebugger.FullValuePopup/0.0.1366.768@0.0.1366.768" timestamp="1580004107461" />
-    <state width="960" height="540" key="XDebugger.FullValuePopup/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1579102413279" />
+    <state width="960" height="540" key="XDebugger.FullValuePopup/1366.-179.1920.1080/0.0.1366.768@1366.-179.1920.1080" timestamp="1582218522920" />
+    <state width="960" height="540" key="XDebugger.FullValuePopup/1366.-179.1920.1080/47.23.1319.745@1366.-179.1920.1080" timestamp="1582214615145" />
     <state x="142" y="-827" key="com.intellij.execution.console.ConsoleHistoryController$MyBrowseAction$1" timestamp="1579008956365">
       <screen x="-303" y="-1080" width="1920" height="1080" />
     </state>
@@ -724,6 +749,26 @@
           <line>390</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tf_qc/losses.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tf_qc/layers.py</url>
+          <line>104</line>
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tf_qc/layers.py</url>
+          <line>92</line>
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tf_qc/layers.py</url>
+          <line>98</line>
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -733,7 +778,7 @@
     <SUITE FILE_PATH="coverage/QC_alg$QFT_transpilation.coverage" NAME="QFT_transpilation Coverage Results" MODIFIED="1573479109377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/transpilation" />
     <SUITE FILE_PATH="coverage/QC_alg$diamond_qutip.coverage" NAME="diamond_qutip Coverage Results" MODIFIED="1570445261786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/QC_alg$gateLab.coverage" NAME="gateLab Coverage Results" MODIFIED="1572451377464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamond" />
-    <SUITE FILE_PATH="coverage/QC_alg$tf_approx_one_diamond_QFT.coverage" NAME="tf_approx_one_diamond_QFT Coverage Results" MODIFIED="1580743108356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
+    <SUITE FILE_PATH="coverage/QC_alg$tf_approx_one_diamond_QFT.coverage" NAME="tf_approx_one_diamond_QFT Coverage Results" MODIFIED="1582218352907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gate_approximation" />
     <SUITE FILE_PATH="coverage/QC_alg$diamonds_cnot.coverage" NAME="diamonds_cnot Coverage Results" MODIFIED="1570640757974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamonds" />
     <SUITE FILE_PATH="coverage/QC_alg$DiamondBackend.coverage" NAME="DiamondBackend Coverage Results" MODIFIED="1574079819193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamondQiskit" />
     <SUITE FILE_PATH="coverage/QC_alg$diamonds.coverage" NAME="diamonds Coverage Results" MODIFIED="1570467183507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/diamonds" />

@@ -3,6 +3,7 @@ from functools import reduce
 from typing import *
 from abc import ABCMeta, abstractmethod
 
+import tf_qc.qc
 from tf_qc import float_type, utils, complex_type
 import tf_qc.qc as qc
 from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_expand_2toN, gate_expand_toN, gates_expand_toN, tensor
@@ -12,12 +13,16 @@ _normal_theta = tf.random_normal_initializer(0, π/4)
 
 
 class QCLayer(tf.keras.layers.Layer, metaclass=ABCMeta):
+    def __init__(self, *args, init_nearly_eye=False, **kwargs):
+        super(QCLayer, self).__init__(*args, **kwargs)
+        self.init_nearly_eye = init_nearly_eye
+
     @abstractmethod
     def matrix(self, **kwargs) -> tf.Tensor:
         pass
 
     def build(self, input_shape):
-        self.n_qubits = utils.intlog2(input_shape[-2])
+        self.n_qubits = tf_qc.qc.intlog2(input_shape[-2])
 
 
 class QFTULayer(QCLayer):
@@ -78,18 +83,17 @@ class U3Layer(QCLayer):
         self.U3 = None
         self.thetas = None
         # Make sure that we have Optional[List[List[int]]] no matter what
-        self.targets = targets if targets is not None else []
-        for t in targets:
-            if isinstance(t, int):
-                self.targets.append([t])
+        self.targets = targets
+        if self.targets is not None:
+            self.targets = list(map(lambda t: [t] if isinstance(t, int) else t, self.targets))
 
     def build(self, input_shape: tf.TensorShape):
         super().build(input_shape)
         n_thetas = len(self.targets) if self.targets is not None else self.n_qubits
-        self.thetas = [[tf.Variable(initial_value=_uniform_theta(shape=(1,), dtype=float_type),
-                                    trainable=True,
-                                    dtype=float_type,
-                                    name=f'var_{i}_{j}') for i in range(3)] for j in range(n_thetas)]
+        self.thetas = [tf.Variable(initial_value=_uniform_theta(shape=(3,), dtype=float_type),
+                                   trainable=True,
+                                   dtype=float_type,
+                                   name=f'var_{j}') for j in range(n_thetas)]
 
     def call(self, inputs, **kwargs):
         m = self.matrix()
@@ -228,13 +232,16 @@ class QFTLayer(QCLayer):
 
 
 class QFTCrossSwapLayer(QCLayer):
-    def __init__(self):
+    def __init__(self, targets=None):
         super(QFTCrossSwapLayer, self).__init__()
+        self.targets = targets
 
     def build(self, input_shape):
         super().build(input_shape)
-        self._matrix = reduce(lambda a,b: a@b, [qc.SWAP[self.n_qubits][n][(self.n_qubits - 1) - n]
-                                                for n in range(self.n_qubits//2)])
+        n_targets = len(self.targets) if self.targets is not None else self.n_qubits
+        self._matrix = reduce(lambda a,b: a@b, [qc.SWAP[n_targets][n][(n_targets - 1) - n]
+                                                for n in range(n_targets//2)])
+        self._matrix = gate_expand_toN(tf.cast(self._matrix, complex_type), self.n_qubits, self.targets)
 
     def call(self, inputs, **kwargs):
         return self._matrix @ inputs

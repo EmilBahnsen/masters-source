@@ -26,6 +26,7 @@ H = tf.convert_to_tensor([
 sigmaz = tf.convert_to_tensor(qt.sigmaz().full(), dtype=complex_type)
 
 # SWAP matrices: SWAP[N][target1][target2]
+# TODO: Don't use these, make swaps from scratch in SWAPLayer
 SWAP = []
 for N in range(10):
     if N < 2:
@@ -46,9 +47,9 @@ def tensor(tensors: List[tf.Tensor]):
     a = tensors.pop()
     result = \
         tf.reshape(
-            tf.reshape(a, [a.shape[0], 1, a.shape[1], 1]) *
-            tf.reshape(b, [1, b.shape[0], 1, b.shape[1]]),
-            [a.shape[0] * b.shape[0], a.shape[1] * b.shape[1]]
+            tf.reshape(a, [-1, a.shape[-2], 1, a.shape[-1], 1]) *
+            tf.reshape(b, [-1, 1, b.shape[-2], 1, b.shape[-1]]),
+            [-1, a.shape[-2] * b.shape[-2], a.shape[-1] * b.shape[-1]]
         )
     return tensor(tensors + [result]) if len(tensors) > 0 else result
 
@@ -90,6 +91,8 @@ def gate_expand_2toN(U: tf.Tensor, N: int, control: int = None, target: int = No
 
 
 def gate_expand_toN(U: tf.Tensor, N: int, targets: List[int]):
+    if targets is None or len(targets) == 0:
+        return U
     assert targets[-1] - targets[0] == len(targets)-1, 'Target qubits must be consecutive'
     tensor_list = []
     add_eye = lambda n: tensor_list.append(tf.eye(2 ** n, dtype=complex_type)) if n != 0 else None
@@ -107,11 +110,20 @@ def gates_expand_toN(U: Union[List[tf.Tensor], tf.Tensor], N: int, targets: Unio
     :param targets: List of or list of consecutive target qubits
     :return: Final tensor product
     """
+    targets = list(map(lambda t: [t] if isinstance(t, int) else t, targets))
     # TODO: Fast. This is slow but correct solution.
-    if isinstance(U[0], list):
+    if isinstance(U, list):
         return product([gate_expand_toN(_U, N, _targets) for _U, _targets in zip(U, targets)])
     else:
         return gate_expand_toN(U, N, targets)
+
+
+def append_zeros(states: tf.Tensor, n: int):
+    return tensor([states] + [s0] * n)
+
+
+def intlog2(x: int):
+    return x.bit_length() - 1
 
 
 I2 = tensor([I1] * 2)
@@ -270,3 +282,5 @@ def U3(t_xyz: Union[tf.Tensor, tf.Variable], *args) -> tf.Tensor:
         return gate
     else:
         return tensor([gate, U3(*args)])
+
+
