@@ -5,7 +5,7 @@ import txtutils
 from scipy.optimize import basinhopping
 
 # tf.compat.v1.enable_eager_execution()
-from tf_qc.losses import Mean1mFidelity
+from tf_qc.losses import Mean1mFidelity, Mean1mTraceDistance
 from tf_qc.models import OneDiamondQFT
 from tf_qc.utils import random_state_vectors
 
@@ -36,6 +36,7 @@ def loss(variable_layer):
 # basinhopping(eval_func, qftu_layer.trainable_variables)
 
 
+# loss = Mean1mTraceDistance()
 opt = tf.keras.optimizers.Adam(0.005)
 best_model = None
 best_loss = 1

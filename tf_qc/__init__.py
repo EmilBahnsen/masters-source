@@ -1,5 +1,6 @@
 import tensorflow as tf
 import os
+from typing import *
 
 # if 'TF_SET' not in os.environ:
 #     print(os.environ)
@@ -11,8 +12,14 @@ import os
 physical_devices = tf.config.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
-float_type = tf.float64
-complex_type = tf.complex128
+float_type = tf.float32
+complex_type = tf.complex64
+
+# TODO: Use custom type of this kind?
+QubitState = tf.Tensor
+Matrix = tf.Tensor
+QubitDensityMatrix = Matrix
+QubitStateOrDM = Union[QubitState, QubitDensityMatrix]
 
 # TESTS
 # TODO: make unitary testes on all new matrices/layers

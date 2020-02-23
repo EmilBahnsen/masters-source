@@ -2,7 +2,7 @@ import os
 
 import datetime
 import tensorflow as tf
-from tf_qc.losses import Mean1mFidelity
+from tf_qc.losses import Mean1mFidelity, Mean1mTraceDistance
 from tf_qc.models import OneDiamondQFT
 from tf_qc.utils import random_pure_states
 from tf_qc import complex_type
@@ -22,7 +22,7 @@ output = input
 lr = 0.01
 print('Learning rate:', lr)
 optimizer = tf.optimizers.Adam(lr)
-loss = Mean1mFidelity()
+loss = Mean1mTraceDistance()
 
 for _ in range(100):
     # Model

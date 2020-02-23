@@ -3,10 +3,9 @@ import tensorflow as tf
 import math
 import numpy as np
 from tf_qc import complex_type, float_type
-from tf_qc.qc import tensor, intlog2, append_zeros
+from tf_qc.qc import append_zeros, partial_trace_v2
 
 π = np.pi
-
 
 
 # Random number of the unit disk
@@ -49,16 +48,16 @@ def random_simplex(shape, seed=None):
     return x[..., 1:] - x[..., :-1]
 
 
-def random_pure_states(shape, post_zeros: int = None, seed=None):
+def random_pure_states(shape, post_zeros: int = 0, seed=None):
     _shape = shape[:-1] if shape[-1] == 1 else shape
-    if post_zeros:
+    if post_zeros != 0:
         _shape = _shape[:-1] + (_shape[-1]//2**post_zeros,)  # Don't make the states for zero
     s = random_simplex(_shape, seed)
     angles = tf.cast(tf.concat([tf.fill((*_shape[:-1], 1), 0.),
                                 tf.random.uniform((*_shape[:-1], _shape[-1]-1), 0, 2*π, seed=seed)], -1),
                      complex_type)
     result = tf.cast(tf.sqrt(s), complex_type) * tf.exp(1j * angles)
-    if post_zeros:
+    if post_zeros != 0:
         # result = tf.reshape(result, [result.shape[0], -1, 1])
         result = tf.expand_dims(result, -1)
         result = append_zeros(result, post_zeros)
@@ -66,68 +65,9 @@ def random_pure_states(shape, post_zeros: int = None, seed=None):
     return result
 
 
-def outer_product(a: tf.Tensor, b: tf.Tensor):
-    return tf.matmul(a, b, adjoint_b=True)
-
-
-def density_matrix(states: tf.Tensor):
-    assert states.shape[-1] == 1, 'Must be state vectors'
-    return outer_product(states, states)
-
-
-def partial_trace_v1(states: tf.Tensor, subsystem: Union[int, List[int]]):
-    """
-    Partial trace
-    :param states: States in vector or density matrix from to trace
-    :param subsystem: Subsystem to trace away
-    :return: Remaining states
-    """
-    if isinstance(subsystem, int):
-        subsystem = [subsystem]
-    # Convert to density matrices
-    if states.shape[-1] == 1:
-        states = density_matrix(states)
-    n_qubits = intlog2(states.shape[-1])
-    # Construct Einstein sum-equation, inspired by:
-    # https://github.com/rigetti/quantumflow/blob/bf965f0ca70cd69b387f9ca8407ab38da955e925/quantumflow/qubits.py#L201
-    import string
-    # EINSTEIN_SUBSCRIPTS = string.ascii_lowercase
-    subscripts = list(string.ascii_lowercase)[0:n_qubits*2]
-    # Make a copy of the same index n_qubits later to trace out that entry
-    for i in subsystem:
-        subscripts[n_qubits + i] = subscripts[i]
-    subscript_str = ''.join(subscripts)
-    batch_shape = states.shape[:-2]
-    states_reshaped = tf.reshape(states, batch_shape + [2]*2*n_qubits)
-    print('subscript_str', 'z' + subscript_str)
-    result = tf.einsum('z' + subscript_str, states_reshaped)  # FIXME: einsum in tf only supports up to rank 6!
-    return tf.reshape(result, batch_shape + [2**n_qubits, 2**n_qubits])
-
-
-def partial_trace(states: tf.Tensor, subsystem: Union[int, List[int]], n_qubits: int):
-    if isinstance(subsystem, int):
-        subsystem = [subsystem]
-    # Convert to density matrices
-    if states.shape[-1] == 1:
-        states = density_matrix(states)
-    # Flatten the tensor to one batch dimension, and then a series of 2d indexes
-    # that represent the states on the from
-    # C_n1..._m1... = <n1...|C|m1...>
-    states = tf.reshape(states, [-1, *([2] * 2 * n_qubits)])
-    # Transpose the the indices of the subsystem we will trace away to the end of the tensor
-    subsystem_idx = list(map(lambda i:i+1, subsystem))  # Must account for the batch index at the beginning
-    static_indices = list(filter(lambda i: not ((i in subsystem_idx) or (i-n_qubits in subsystem_idx)), range(1, 2*n_qubits+1)))
-    subsys_indices = tf.reshape([[i, i+n_qubits] for i in subsystem_idx], [-1])
-    perm_indices = tf.concat([[0], static_indices, subsys_indices], axis=-1)
-    # Do the transpose
-    # with tf.device('cpu'):
-    states = tf.transpose(states, perm=perm_indices)
-    # Now trace over the len(subsystem_idx) number of pars of dimensions in the states
-    for _ in range(len(subsystem_idx)):
-        states = tf.linalg.trace(states)
-    # Now we have fewer qubits!
-    n_qubits_new = n_qubits - len(subsystem_idx)
-    return tf.reshape(states, [-1, 2**n_qubits_new, 2**n_qubits_new])
+def convert2sparse(tensor: tf.Tensor):
+    idx = tf.where(tf.abs(tensor) < 1e-5)
+    return tf.SparseTensor(idx, tf.gather_nd(tensor, idx), tf.shape(tensor))
 
 
 def partial_trace__(states: tf.Tensor, subsystem: Union[int, List[int]]):
@@ -150,6 +90,10 @@ def partial_trace__(states: tf.Tensor, subsystem: Union[int, List[int]]):
     # n_qubits_new = n_qubits - len(subsystem)
     # return tf.reshape(result, batch_shape + [2**n_qubits_new, 2**n_qubits_new])
     pass
+
+
+def partial_trace(states: tf.Tensor, subsystem: Union[int, List[int]], n_qubits: int):
+    return partial_trace_v2(states, subsystem, n_qubits)
 
 
 if __name__ == '__main__':

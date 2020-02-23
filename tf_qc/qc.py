@@ -1,8 +1,11 @@
 import math
+from typing import Union, List
+
+import opt_einsum as oe
 import tensorflow as tf
 from tensorflow import linalg as la
 from typing import *
-from tf_qc import complex_type, float_type
+from tf_qc import complex_type, float_type, QubitState, QubitDensityMatrix, QubitStateOrDM, Matrix
 import qutip as qt
 from functools import reduce
 
@@ -56,6 +59,109 @@ def tensor(tensors: List[tf.Tensor]):
 
 def product(tensors: List[tf.Tensor]):
     return reduce(lambda U1, U2: U1 @ U2, tensors)
+
+
+def inner_product(a: QubitState, b: QubitState):
+    return tf.squeeze(tf.matmul(a, b, adjoint_a=True))
+
+
+def outer_product(a: tf.Tensor, b: tf.Tensor):
+    return tf.matmul(a, b, adjoint_b=True)
+
+
+def density_matrix(states: QubitStateOrDM, subsystem: List[int] = None):
+    if states.shape[-1] != 1:
+        return states
+    if subsystem is not None:
+        return density_matrix_trace_from_state(states, subsystem)
+    return outer_product(states, states)
+
+
+def purity(a: QubitStateOrDM):
+    rho = a
+    if isinstance(a, QubitState):
+        rho = density_matrix(a)
+    return tf.linalg.trace(rho**2)
+
+
+def trace(matrices: Matrix,
+          subsystem: List[int] = None):
+    n_qubits = intlog2(matrices.shape[-1])
+    if subsystem is None:
+        return tf.linalg.trace(matrices)
+    # If we trace over the last qubits in the sequence it quite straight forward
+    elif max(subsystem) == n_qubits-1 and \
+            min(subsystem) == n_qubits - len(subsystem) and \
+            sum(subsystem) == sum(range(min(subsystem), n_qubits)):
+        # If it's a partial trace then we divide the system into [batch_dims, static, trace_sys, static, trace_sys]
+        # and then do the trace over 'zabcb' with an Einstein sum, and then reshape into the old shape
+        n_qubits2trace = len(subsystem)
+        n_static = n_qubits - n_qubits2trace
+        shape = matrices.shape
+        matrices = tf.reshape(matrices, [-1, 2**n_static, 2**n_qubits2trace, 2**n_static, 2**n_qubits2trace])
+        trace_result = tf.reshape(tf.einsum('zabcb', matrices), shape)
+        return trace_result
+    else:
+        raise NotImplementedError('No partial trace over non-last qubits.')
+
+
+def density_matrix_trace_from_state(states: QubitState, subsystem: List[int] = None):
+    # If we trace over the last qubits in the sequence it quite straight forward
+    n_qubits = intlog2(states.shape[-2])
+    subsystem2trace = list(set(range(n_qubits)).difference(set(subsystem)))
+    n_qubits2trace = len(subsystem2trace)
+    n_qubits_static = n_qubits - n_qubits2trace
+    subsys_is_last = max(subsystem2trace) == n_qubits - 1 and \
+                     min(subsystem2trace) == n_qubits - len(subsystem2trace) and \
+                     sum(subsystem2trace) == sum(range(min(subsystem2trace), n_qubits))
+    if subsystem2trace and subsys_is_last:
+        matrix_size = 2**n_qubits_static
+        shape = (*states.shape[:-2], matrix_size, matrix_size)
+        result = tf.zeros(shape, complex_type)
+        # Do the trace over the last elements
+        new_ket_shape = [-1, 2 ** n_qubits_static, 2 ** n_qubits2trace, 1]
+        ket = tf.reshape(states, new_ket_shape)
+        new_bra_shape = [-1, 1, 2 ** n_qubits_static, 2 ** n_qubits2trace]
+        bra = tf.reshape(tf.linalg.adjoint(ket), new_bra_shape)
+        for n in range(2**n_qubits2trace):
+            result += ket[:, :, n, :] @ bra[:, :, :, n]
+        return result
+    else:
+        raise NotImplementedError('Must have subsystem at the end.')
+
+
+def fidelity(a: QubitState,
+             b: QubitState,
+             subsystem: List[int] = None,
+             a_subsys_is_pure=False,
+             b_subsys_is_pure=False) -> tf.Tensor:
+    """
+    Fidelity of qubit states. https://en.wikipedia.org/wiki/Fidelity_of_quantum_states#Definition
+    :param a:
+    :param b:
+    :param subsystem:
+    :param a_subsys_is_pure:
+    :param b_subsys_is_pure:
+    :return:
+    """
+    det = tf.linalg.det
+    if subsystem is None or (a_subsys_is_pure and b_subsys_is_pure):
+        res = tf.abs(inner_product(a, b))**2
+    elif a_subsys_is_pure:
+        dm_b = density_matrix(b)
+        res = inner_product(a, dm_b @ a)
+    elif b_subsys_is_pure:
+        dm_a = density_matrix(a)
+        res = inner_product(b, dm_a @ b)
+    else:
+        # We're dealing with qubits so we use the reduced formula from wiki
+        dm_a = density_matrix(a, subsystem)
+        dm_b = density_matrix(b, subsystem)
+        trace_part = trace(dm_a @ dm_b)
+        det_part = 2*tf.sqrt(det(dm_a)*det(dm_b))
+        del dm_a, dm_b  # We don't need these anymore
+        res = trace_part + det_part
+    return tf.cast(res, float_type)
 
 
 # Also QuTiP
@@ -119,7 +225,15 @@ def gates_expand_toN(U: Union[List[tf.Tensor], tf.Tensor], N: int, targets: Unio
 
 
 def append_zeros(states: tf.Tensor, n: int):
-    return tensor([states] + [s0] * n)
+    # idx = tf.meshgrid(tf.range(states.shape[0]))
+    # print(idx)
+    result = tensor([states] + [s0] * n)
+    # idx = tf.where(tf.abs(result) < 1e-4)
+    # # result = tf.gather_nd(result, idx)
+    # out_shape = tf.cast(result.shape, tf.int64)
+    # sparse_data = tf.gather_nd(result, idx)
+    # result = tf.SparseTensor(idx, sparse_data, out_shape)
+    return result
 
 
 def intlog2(x: int):
@@ -284,3 +398,69 @@ def U3(t_xyz: Union[tf.Tensor, tf.Variable], *args) -> tf.Tensor:
         return tensor([gate, U3(*args)])
 
 
+def partial_trace_v1(states: tf.Tensor, subsystem: Union[int, List[int]], n_qubits: int):
+    """
+    Partial trace
+    :param states: States in vector or density matrix from to trace
+    :param subsystem: Subsystem to trace away
+    :return: Remaining states
+    """
+    if isinstance(subsystem, int):
+        subsystem = [subsystem]
+    # Convert to density matrices
+    if states.shape[-1] == 1:
+        states = density_matrix(states)
+    n_qubits = intlog2(states.shape[-1])
+    # Construct Einstein sum-equation, inspired by:
+    # https://github.com/rigetti/quantumflow/blob/bf965f0ca70cd69b387f9ca8407ab38da955e925/quantumflow/qubits.py#L201
+    import string
+    # EINSTEIN_SUBSCRIPTS = string.ascii_lowercase
+    subscripts = list(string.ascii_lowercase)[0:n_qubits*2]
+    # Make a copy of the same index n_qubits later to trace out that entry
+    for i in subsystem:
+        subscripts[n_qubits + i] = subscripts[i]
+    subscript_str = 'z' + ''.join(subscripts)
+    batch_shape = states.shape[:-2]
+    states_reshaped = tf.reshape(states, batch_shape + [2]*2*n_qubits)
+    expr = oe.contract_expression(subscript_str, tf.shape(states_reshaped))
+    result = expr(states_reshaped, backend='tensorflow')
+    result = tf.einsum(subscript_str, states_reshaped)  # FIXME: einsum in tf only supports up to rank 6!
+    return tf.reshape(result, batch_shape + [2**n_qubits, 2**n_qubits])
+
+
+def partial_trace_v2(states: tf.Tensor, subsystem: Union[int, List[int]], n_qubits: int):
+    if isinstance(subsystem, int):
+        subsystem = [subsystem]
+    # Convert to density matrices
+    if states.shape[-1] == 1:
+        states = density_matrix(states)
+    # Flatten the tensor to one batch dimension, and then a series of 2d indexes
+    # that represent the states on the from
+    # C_n1..._m1... = <n1...|C|m1...>
+    states = tf.reshape(states, [-1, *([2] * 2 * n_qubits)])
+    # Transpose the the indices of the subsystem we will trace away to the end of the tensor
+    subsystem_idx = list(map(lambda i:i+1, subsystem))  # Must account for the batch index at the beginning
+    static_indices = list(filter(lambda i: not ((i in subsystem_idx) or (i-n_qubits in subsystem_idx)), range(1, 2*n_qubits+1)))
+    subsys_indices = tf.reshape([[i, i+n_qubits] for i in subsystem_idx], [-1])
+    perm_indices = tf.concat([[0], static_indices, subsys_indices], axis=-1)
+    # Do the transpose
+    # with tf.device('cpu'):
+    states = tf.transpose(states, perm=perm_indices)
+    # Now trace over the len(subsystem_idx) number of pars of dimensions in the states
+    for _ in range(len(subsystem_idx)):
+        states = tf.linalg.trace(states)
+    # Now we have fewer qubits!
+    n_qubits_new = n_qubits - len(subsystem_idx)
+    return tf.reshape(states, [-1, 2**n_qubits_new, 2**n_qubits_new])
+
+
+def partial_trace_last(states: tf.Tensor, n_qubits2trace: int, n_qubits: int):
+    # Convert to density matrices
+    if states.shape[-1] == 1:
+        states = density_matrix(states)
+    subscripts = 'xyaza'
+    # Reshape to the form of subscripts
+    n_static = n_qubits - n_qubits2trace
+    states = tf.reshape(states, [-1, 2**n_static, 2**n_qubits2trace, 2**n_static, 2**n_qubits2trace])
+    expr = oe.contract_expression(subscripts, tf.shape(states))
+    return expr(states, backend='tensorflow')
