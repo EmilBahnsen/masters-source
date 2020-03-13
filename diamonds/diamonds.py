@@ -1,3 +1,5 @@
+from qutip.qip.operations import swap
+
 from diamond import *
 from qutip import *
 from math import *
@@ -78,7 +80,7 @@ print('Missing patterns:')
 for i in range(N):
     for j in range(i):
         index = 2**i + 2**j
-        patdiff -burtern = index2label(index, N)
+        pattern = index2label(index, N)
         if not containsSolutionFor(pattern):
             print(pattern)
 

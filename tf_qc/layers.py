@@ -22,6 +22,8 @@ class QCLayer(tf.keras.layers.Layer, metaclass=ABCMeta):
         pass
 
     def build(self, input_shape):
+        if input_shape == None:
+            raise TypeError('input_shape is None')
         self.n_qubits = tf_qc.qc.intlog2(input_shape[-2])
 
 
@@ -159,13 +161,7 @@ class SWAPLayer(QCLayer):
 
     def build(self, input_shape):
         super().build(input_shape)
-        i_swap = tf.convert_to_tensor([
-            [1,  0,  0, 0],
-            [0,  0, 1, 0],
-            [0, 1,  0, 0],
-            [0,  0,  0, 1]
-        ], complex_type)
-        self._matrix = gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
+        self._matrix = qc.SWAP(self.n_qubits, self.targets[0], self.targets[1])
 
     def call(self, inputs, **kwargs):
         return self._matrix @ inputs
@@ -175,23 +171,26 @@ class SWAPLayer(QCLayer):
 
 
 class ULayer(QCLayer):
-    def __init__(self, targets: Union[List[int], List[List[int]], None] = None):
+    def __init__(self, targets: Optional[List[int]] = None):
         super(ULayer, self).__init__()
         self.thetas: tf.Variable
         self.n_qubits: int
         if targets:
             if targets != sorted(targets):
                 raise Exception('ULayer targets must be sorted')
-            if type(targets[0]) == int:  # Pad with list if other syntax is used
-                targets = [targets]
         self.targets = targets
 
     def build(self, input_shape: tf.TensorShape):
         super().build(input_shape)
-        n_thetas = len(self.targets) if self.targets else self.n_qubits//4
+        n_thetas = len(self.targets)//4 if self.targets else self.n_qubits//4
         self.thetas = tf.Variable(initial_value=_uniform_theta(shape=(n_thetas,), dtype=float_type),
                                   trainable=True,
                                   dtype=float_type)
+        if self.targets:
+            pre_identity_qubits = self.targets[0]
+            post_identity_qubits = self.n_qubits-1 - self.targets[-1]
+            self.pre_identity = tf.eye(2**pre_identity_qubits, dtype=complex_type)
+            self.post_identity = tf.eye(2**post_identity_qubits, dtype=complex_type)
 
     def call(self, inputs, **kwargs):
         return self.matrix() @ inputs
@@ -201,17 +200,7 @@ class ULayer(QCLayer):
         for i in range(self.thetas.shape[0]):
             Us.append(qc.U(self.thetas[i]))
         if self.targets:
-            tensor_list = []
-            def add_eye(n):
-                if n != 0:
-                    tensor_list.append(tf.eye(2**n, dtype=complex_type))
-            add_eye(self.targets[0][0])
-            tensor_list.append(Us[0])
-            for i, (lt, rt) in enumerate(zip(self.targets, self.targets[1:])):
-                add_eye(rt[0] - lt[-1] - 1)
-                tensor_list.append(Us[i+1])
-            add_eye(self.n_qubits-1 - self.targets[-1][-1])
-            return tensor(tensor_list)
+            return tensor([self.pre_identity, *Us, self.post_identity])
         else:
             return tensor(Us)
 
@@ -228,7 +217,7 @@ class QFTLayer(QCLayer):
         return qft(self.n_qubits, inputs)
 
     def matrix(self):
-        return qft(self.n_qubits, I4)
+        return qft(self.n_qubits, tf.eye(2**self.n_qubits, dtype=complex_type))
 
 
 class QFTCrossSwapLayer(QCLayer):
@@ -239,8 +228,8 @@ class QFTCrossSwapLayer(QCLayer):
     def build(self, input_shape):
         super().build(input_shape)
         n_targets = len(self.targets) if self.targets is not None else self.n_qubits
-        self._matrix = reduce(lambda a,b: a@b, [qc.SWAP[n_targets][n][(n_targets - 1) - n]
-                                                for n in range(n_targets//2)])
+        swap_matrices = [qc.SWAP(n_targets, n, (n_targets - 1) - n) for n in range(n_targets//2)]
+        self._matrix = reduce(lambda a, b: a@b, swap_matrices)
         self._matrix = gate_expand_toN(tf.cast(self._matrix, complex_type), self.n_qubits, self.targets)
 
     def call(self, inputs, **kwargs):
@@ -250,29 +239,60 @@ class QFTCrossSwapLayer(QCLayer):
         return self._matrix
 
 
+qft_cross_iswap_layers = lambda targets: [ISWAPLayer([targets[n], targets[(len(targets)-1) - n]]) for n in range(len(targets)//2)]
+qft_cross_swap_layers = lambda targets: [SWAPLayer([targets[n], targets[(len(targets)-1) - n]]) for n in range(len(targets)//2)]
+
+
 class IQFTLayer(QCLayer):
     def __init__(self, targets: List[int] = None):
         super(IQFTLayer, self).__init__()
         self.targets = targets
+        self._matrix = None
 
     def build(self, input_shape):
         super().build(input_shape)
         # if no target specified, then just act on all qubits
         if not self.targets:
             self.targets = list(range(self.n_qubits))
+        n_qft = len(self.targets)
+        I = tf.eye(2**n_qft, dtype=complex_type)
+        self._matrix = gate_expand_toN(iqft(n_qft, I), self.n_qubits, self.targets)
 
     def call(self, inputs, **kwargs):
         return self.matrix() @ inputs
 
     def matrix(self):
-        n_qft = len(self.targets)
-        I = tf.eye(2**n_qft, dtype=complex_type)
-        return gate_expand_toN(iqft(n_qft, I), self.n_qubits, self.targets)
+        return self._matrix
+
+
+class CPLayer(QCLayer):
+    def __init__(self, control: int, target: int, phase: float):
+        super(CPLayer, self).__init__()
+        self.control = control
+        self.target = target
+        self.phase = phase
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = gate_expand_2toN(tf.convert_to_tensor([[1, 0, 0, 0],
+                                        [0, 1, 0, 0],
+                                        [0, 0, 1, 0],
+                                        [0, 0, 0, tf.exp(-1j * self.phase)]], dtype=complex_type),
+                                        self.n_qubits,
+                                        self.control,
+                                        self.target)
+
+    def call(self, inputs, **kwargs):
+        return self.matrix() @ inputs
+
+    def matrix(self):
+        return self._matrix
 
 
 class ILayer(QCLayer):
     def __init__(self):
         super(ILayer, self).__init__()
+        self._matrix = None
 
     def build(self, input_shape):
         self._matrix = tf.eye(input_shape[-2], dtype=complex_type)

@@ -2,31 +2,35 @@ import os
 
 import datetime
 import tensorflow as tf
-from tf_qc.losses import Mean1mFidelity, Mean1mTraceDistance
+from tf_qc.losses import Mean1mFidelity, MeanTraceDistance
 from tf_qc.models import OneDiamondQFT
 from tf_qc.utils import random_pure_states
 from tf_qc import complex_type
 
+device = 'cpu'
+
 N = 4
 
 # Random normalized vectors
-n_datapoints = 1000000
+n_datapoints = 100000
 
 # vectors = random_state_vectors(n_datapoints, N, 0)
-vectors = random_pure_states((n_datapoints, 2**N, 1))
+with tf.device(device):
+    vectors = random_pure_states((n_datapoints, 2**N, 1))
 
 input = tf.cast(vectors, complex_type)
 output = input
 
 # Optimizer and loss
-lr = 0.01
+lr = 0.02
 print('Learning rate:', lr)
 optimizer = tf.optimizers.Adam(lr)
-loss = Mean1mTraceDistance()
+# loss = lambda y_true, y_pred: Mean1mFidelity()(y_true, y_pred) + MeanTraceDistance()(y_true, y_pred)
+loss = Mean1mFidelity()
 
 for _ in range(100):
     # Model
-    model = OneDiamondQFT()
+    model = OneDiamondQFT(model_name='model_a_swap')
     model.compile(optimizer, loss=loss)
 
     # Fitting
@@ -35,5 +39,5 @@ for _ in range(100):
     log_path = ['./logs', filename]
 
     from tf_qc.training import train  # Reimport so that we don't have to reset the run
-    # with tf.device('cpu'):
-    train(model, input, output, optimizer, loss, log_path, epochs=10000, batch_size=2048)
+    with tf.device(device):
+        train(model, input, output, optimizer, loss, log_path, epochs=10000, batch_size=6)

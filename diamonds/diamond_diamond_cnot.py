@@ -1,3 +1,5 @@
+from qutip.qip.operations import iswap
+
 from diamond import *
 import sys
 
@@ -74,5 +76,5 @@ opers = [
 
 for i, oper in enumerate(opers):
     print('Operation:',oper[0])
-    apply_to_basis(oper[1], four_diamond_basis, print_non_changed=True, print_states=False)
+    apply_to_basis(oper[1], four_diamond_basis, print_non_changed=True, print_states=True)
     print()

@@ -37,6 +37,35 @@ class OneDiamondQFT(ApproxUsingInverse):
         super(OneDiamondQFT, self).__init__(model, target)
 
 
+model_a2:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+            HLayer(0),
+            ULayer(),
+            HLayer(0),
+            ULayer(),
+            HLayer(1),
+            ULayer(),
+            HLayer(1),
+            ULayer(),
+            HLayer(2),
+            ULayer(),
+            HLayer(2),
+            ULayer(),
+            HLayer(3),
+            ULayer(),
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target, 'model_a2')
+
+
 model_b (swap what pair of qubits that shonud couple in each instance):
 class OneDiamondQFT(ApproxUsingInverse):
     def __init__(self):
@@ -201,3 +230,43 @@ class OneDiamondQFT(ApproxUsingInverse):
             IQFTLayer()
         ])
         super(OneDiamondQFT, self).__init__(model, target)
+
+
+model_g:
+class OneDiamondQFT(ApproxUsingInverse):
+    def __init__(self):
+        model = QCModel(layers=[
+            U3Layer(),
+
+            HLayer(0),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+
+            HLayer(1),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+
+            HLayer(2),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+            ULayer(),
+            U3Layer(),
+
+            HLayer(3),
+            U3Layer(),
+            QFTCrossSwapLayer()
+        ])
+        target = QCModel(layers=[
+            IQFTLayer()
+        ])
+        super(OneDiamondQFT, self).__init__(model, target, 'model_g')

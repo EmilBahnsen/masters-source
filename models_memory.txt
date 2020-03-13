@@ -40,8 +40,8 @@ class OneMemoryDiamondQFT(ApproxUsingInverse):
 class OneMemoryDiamondQFT(ApproxUsingInverse):
     def __init__(self):
         targets = [0, 1, 2, 3]  # These are the qubits of the diamond
-        ancilla_swap0 = lambda: ISWAPLayer([0, 4])
-        ancilla_swap1 = lambda: ISWAPLayer([1, 5])
+        ancilla_swap0 = lambda: ISWAPLayer([0, 4], parameterized=True)
+        ancilla_swap1 = lambda: ISWAPLayer([1, 5], parameterized=True)
         ancilla_U3 = lambda: U3Layer([4, 5])
         model = QCModel(layers=[
             InputLayer((2**6, 1), dtype=complex_type, name='input_state'),

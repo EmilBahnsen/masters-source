@@ -1,3 +1,5 @@
+from qutip.qip.circuit import QubitCircuit, Gate, hadamard_transform
+
 from diamond.definitions import *
 from qutip.qip.circuit_latex import _latex_compile
 from functools import reduce
@@ -61,7 +63,6 @@ class ReducibleCircuit(QubitCircuit):
         for g in self.gates:
             result[g.name] += 1
         return result
-
 
 
 # --- Circuit ---

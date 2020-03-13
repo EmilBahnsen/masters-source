@@ -1,10 +1,11 @@
 import tensorflow as tf
 import math
 from typing import *
+import warnings
 
 from tf_qc import float_type, complex_type
 from tf_qc.utils import partial_trace, random_pure_states
-from tf_qc.qc import intlog2, density_matrix, partial_trace_last
+from tf_qc.qc import intlog2, density_matrix, partial_trace_last, fidelity
 from tf_qc.models import ApproxUsingInverse, QCModel, U3Layer, ILayer, OneMemoryDiamondQFT
 
 
@@ -23,17 +24,25 @@ class MeanTraceDistance(tf.losses.Loss):
     https://en.wikipedia.org/wiki/Trace_distance
     or in Nielsen and Chuang
     """
+    def __init__(self, subsystem: List[int] = None):
+        super(MeanTraceDistance, self).__init__()
+        self.subsystem = subsystem
+
     def call(self, y_true, y_pred):
-        delta = density_matrix(y_true) - density_matrix(y_pred)
+        delta = density_matrix(y_true, self.subsystem) - density_matrix(y_pred, self.subsystem)
         result = tf.linalg.trace(tf.linalg.sqrtm(tf.linalg.adjoint(delta) @ delta))/2
-        return tf.reduce_mean(result)
+        return tf.cast(tf.reduce_mean(result), float_type)
 
 
 class Mean1mFidelity(tf.losses.Loss):
+    def __init__(self, subsystem=None, true_is_pure_on_sub=False, pred_is_pure_on_sub=False):
+        super(Mean1mFidelity, self).__init__()
+        self.subsystem = subsystem
+        self.true_is_pure_on_sub = true_is_pure_on_sub
+        self.pred_is_pure_on_sub = pred_is_pure_on_sub
+
     def call(self, y_true, y_pred):
-        outer_product = tf.matmul(y_true, y_pred, adjoint_a=True)
-        # tf.transpose(y_true, perm=[0, 2, 1]) @ tf.math.conj(y_pred)
-        fidelities = tf.abs(outer_product)**2
+        fidelities = fidelity(y_true, y_pred, self.subsystem, self.true_is_pure_on_sub, self.pred_is_pure_on_sub)
         meanFilelity = tf.reduce_mean(fidelities)
         return 1 - meanFilelity
 
@@ -47,6 +56,7 @@ class Mean1mUhlmannFidelity(tf.losses.Loss):
         Mean of 1 - Uhlmann fidelity of states
         :param subsystem: The subsystem to measure the fidelity of
         """
+        warnings.warn('Mean1mUhlmannFidelity is just the same as Mean1mFidelity now.', PendingDeprecationWarning)
         super(Mean1mUhlmannFidelity, self).__init__()
         self.subsystem = subsystem
         self.subsys_to_trace = [i for i in range(n_qubits) if i not in self.subsystem]

@@ -7,6 +7,7 @@ from tensorflow import linalg as la
 from typing import *
 from tf_qc import complex_type, float_type, QubitState, QubitDensityMatrix, QubitStateOrDM, Matrix
 import qutip as qt
+from qutip.qip.operations import swap as qt_swap
 from functools import reduce
 
 # Basic QC-definitions (including that for the diamond)
@@ -30,16 +31,31 @@ sigmaz = tf.convert_to_tensor(qt.sigmaz().full(), dtype=complex_type)
 
 # SWAP matrices: SWAP[N][target1][target2]
 # TODO: Don't use these, make swaps from scratch in SWAPLayer
-SWAP = []
-for N in range(10):
-    if N < 2:
-        SWAP.append(None)
-        continue
-    SWAP.append([])
-    for i in range(N):
-        SWAP[N].append([])
-        for j in range(N):
-            SWAP[N][i].append(tf.convert_to_tensor(qt.swap(N, [i, j]).full()) if i != j else None)
+# SWAP = []
+# for N in range(13):
+#     if N < 2:
+#         SWAP.append(None)
+#         continue
+#     SWAP.append([])
+#     for i in range(N):
+#         SWAP[N].append([])
+#         for j in range(N):
+#             SWAP[N][i].append(tf.convert_to_tensor(qt.swap(N, [i, j]).full(), complex_type) if i != j else None)
+
+
+def SWAP(N: int, i: int, j: int):
+    # Swap them if i > j
+    if i > j:
+        i, j = j, i
+    if j - i == 1:
+        swap_tensor = tf.convert_to_tensor([
+            [1, 0, 0, 0],
+            [0, 0, 1, 0],
+            [0, 1, 0, 0],
+            [0, 0, 0, 1],
+        ], complex_type)
+        return tensor([tf.eye(2**i, dtype=complex_type), swap_tensor, tf.eye(2**(N-1-j), dtype=complex_type)])
+    return SWAP(N, i, j-1) @ SWAP(N, j-1, j) @ SWAP(N, i, j-1)
 
 
 # Kronecker product, takes a list af tensors like QuTiP
@@ -55,6 +71,10 @@ def tensor(tensors: List[tf.Tensor]):
             [-1, a.shape[-2] * b.shape[-2], a.shape[-1] * b.shape[-1]]
         )
     return tensor(tensors + [result]) if len(tensors) > 0 else result
+
+
+def commutator(a: tf.Tensor, b: tf.Tensor):
+    return a@b - b@a
 
 
 def product(tensors: List[tf.Tensor]):
@@ -97,10 +117,10 @@ def trace(matrices: Matrix,
         # and then do the trace over 'zabcb' with an Einstein sum, and then reshape into the old shape
         n_qubits2trace = len(subsystem)
         n_static = n_qubits - n_qubits2trace
-        shape = matrices.shape
+        batch_shape = matrices.shape[:-2]
         matrices = tf.reshape(matrices, [-1, 2**n_static, 2**n_qubits2trace, 2**n_static, 2**n_qubits2trace])
-        trace_result = tf.reshape(tf.einsum('zabcb', matrices), shape)
-        return trace_result
+        trace_result = tf.einsum('...bab', matrices)  # Watch the alphabetic order of subscripts!
+        return tf.reshape(trace_result, [*batch_shape, 2**n_static, 2**n_static])
     else:
         raise NotImplementedError('No partial trace over non-last qubits.')
 
@@ -116,8 +136,7 @@ def density_matrix_trace_from_state(states: QubitState, subsystem: List[int] = N
                      sum(subsystem2trace) == sum(range(min(subsystem2trace), n_qubits))
     if subsystem2trace and subsys_is_last:
         matrix_size = 2**n_qubits_static
-        shape = (*states.shape[:-2], matrix_size, matrix_size)
-        result = tf.zeros(shape, complex_type)
+        result = 0.0  # tf.zeros(shape, complex_type)
         # Do the trace over the last elements
         new_ket_shape = [-1, 2 ** n_qubits_static, 2 ** n_qubits2trace, 1]
         ket = tf.reshape(states, new_ket_shape)
@@ -144,7 +163,7 @@ def fidelity(a: QubitState,
     :param b_subsys_is_pure:
     :return:
     """
-    det = tf.linalg.det
+    sqrtm = tf.linalg.sqrtm
     if subsystem is None or (a_subsys_is_pure and b_subsys_is_pure):
         res = tf.abs(inner_product(a, b))**2
     elif a_subsys_is_pure:
@@ -154,13 +173,9 @@ def fidelity(a: QubitState,
         dm_a = density_matrix(a)
         res = inner_product(b, dm_a @ b)
     else:
-        # We're dealing with qubits so we use the reduced formula from wiki
         dm_a = density_matrix(a, subsystem)
         dm_b = density_matrix(b, subsystem)
-        trace_part = trace(dm_a @ dm_b)
-        det_part = 2*tf.sqrt(det(dm_a)*det(dm_b))
-        del dm_a, dm_b  # We don't need these anymore
-        res = trace_part + det_part
+        res = trace(sqrtm(sqrtm(dm_a) @ dm_b @ sqrtm(dm_a))) ** 2
     return tf.cast(res, float_type)
 
 
@@ -189,10 +204,21 @@ def gate_expand_2toN(U: tf.Tensor, N: int, control: int = None, target: int = No
 
     # Make the gate work on 0 and 1 as control and target, and then swap with real control and target
     gate = tensor([U] + [I1] * (N - 2))
-    if control is not None and control is not 0:
-        gate = SWAP[N][0][control] @ gate @ SWAP[N][0][control]
-    if target is not None and target is not 1:
-        gate = SWAP[N][1][target] @ gate @ SWAP[N][1][target]
+    # If control and/or target must take place of target and/or control
+    must_swap_control_and_or_target = (control == 1 or target == 0)
+    if must_swap_control_and_or_target:
+        gate = SWAP(N, 0, 1) @ gate @ SWAP(N, 0, 1)
+        # Now c = 1 and t = 0
+        if control != 1:
+            gate = SWAP(N, 1, control) @ gate @ SWAP(N, 1, control)
+        if target != 0:
+            gate = SWAP(N, 0, target) @ gate @ SWAP(N, 0, target)
+    # Control and target does not mix
+    else:
+        if control != 0:
+            gate = SWAP(N, 0, control) @ gate @ SWAP(N, 0, control)
+        if target != 1:
+            gate = SWAP(N, 1, target) @ gate @ SWAP(N, 1, target)
     return gate
 
 
@@ -312,7 +338,7 @@ def make_gate(N: int,
     if type(gate) is str:
         name = gate.lower()
         if name == 'swap':
-            gate = SWAP[N][targets[0]][targets[1]]
+            gate = SWAP(N, targets[0], targets[1])
         elif name == 'h':
             gate = H
         else:
@@ -372,7 +398,7 @@ def qft(N: int, oper: tf.Tensor) -> tf.Tensor:
 def iqft(N: int, oper: tf.Tensor) -> tf.Tensor:
     # Final swaps (first)
     for n in range(N//2):
-        oper = make_gate(N, 'swap', [n, (N-1)-n]) @ oper
+        oper = SWAP(N, n, (N-1)-n) @ oper
     # Execute inverse QFT
     for i in reversed(range(N)):
         for n_j, j in enumerate(range(i+1, N)):
