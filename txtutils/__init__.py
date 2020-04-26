@@ -44,7 +44,7 @@ def ndtotext(A, w=None, h=None):
         elif imag == 0:
             return clean(str(real))
         else:
-            return clean(str(real + imag))
+            return clean("{:g}".format(real + imag))
 
     if A.ndim == 1:
         if w is None:

@@ -1,5 +1,4 @@
 import tensorflow as tf
-from tensorflow_core.python.keras.metrics import MeanMetricWrapper
 
 from tf_qc import float_type
 from tf_qc.qc import fidelity

@@ -25,14 +25,13 @@ def random_unifrom_complex(shape: Any,
     return tf.complex(x, y, name=name)
 
 
-
 def normalize_state_vectors(state_vectors: tf.Tensor):
     '''
     Normalize state vectors
     :param state_vectors with shape (n_vectors, length, 1)
     :return:
     '''
-    root_sum_norm_squares = tf.sqrt(tf.reduce_sum(tf.square(tf.abs(state_vectors)), axis=1, keepdims=True))
+    root_sum_norm_squares = tf.sqrt(tf.reduce_sum(tf.square(tf.abs(state_vectors)), axis=-2, keepdims=True))
     return tf.math.xdivy(state_vectors, tf.cast(root_sum_norm_squares, state_vectors.dtype))
 
 

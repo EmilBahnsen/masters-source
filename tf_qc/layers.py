@@ -10,6 +10,8 @@ from tf_qc.qc import H, U, qft_U, I4, π, U3, iqft, qft, gate_expand_1toN, gate_
 
 _uniform_theta = tf.random_uniform_initializer(0, 2*π)
 _normal_theta = tf.random_normal_initializer(0, π/4)
+_normal_0_1 = tf.random_normal_initializer()
+_uniform_0_1 = tf.random_uniform_initializer(0, 1)
 
 
 class QCLayer(tf.keras.layers.Layer, metaclass=ABCMeta):
@@ -63,20 +65,31 @@ class QFTULayer(QCLayer):
 
 
 class HLayer(QCLayer):
-    def __init__(self, target: int):
+    def __init__(self, target: int, cached=True):
         super(HLayer, self).__init__()
         self.target = target
         self._matrix = None
+        self.cached = cached
 
     def build(self, input_shape: tf.TensorShape):
         super().build(input_shape)
-        self._matrix = gate_expand_1toN(H, self.n_qubits, self.target)
+        if self.cached:
+            self._matrix = gate_expand_1toN(H, self.n_qubits, self.target)
 
     def call(self, inputs, **kwargs):
-        return self._matrix @ inputs
+        return self.matrix() @ inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
-        return self._matrix
+        if self.cached:
+            return self._matrix
+        else:
+            return gate_expand_1toN(H, self.n_qubits, self.target)
+
+    def get_config(self):
+        return {
+            'target': self.target,
+            'cached': self.cached
+        }
 
 
 class U3Layer(QCLayer):
@@ -108,6 +121,15 @@ class U3Layer(QCLayer):
         else:
             return U3(*self.thetas)
 
+    @staticmethod
+    def matrix_static(*ts):
+        return U3(*ts)
+
+    def get_config(self):
+        return {
+            'targets': self.targets
+        }
+
 
 class ISWAPLayer(QCLayer):
     number = 0
@@ -118,6 +140,7 @@ class ISWAPLayer(QCLayer):
         self.targets = targets
         self._matrix = None
         self.parameterized = parameterized
+        self.i_swap = None
 
     def build(self, input_shape):
         super().build(input_shape)
@@ -127,13 +150,13 @@ class ISWAPLayer(QCLayer):
                                  trainable=True,
                                  dtype=float_type)
         else:
-            i_swap = tf.convert_to_tensor([
+            self.i_swap = tf.convert_to_tensor([
                 [1,  0,  0, 0],
                 [0,  0, mi, 0],
                 [0, mi,  0, 0],
                 [0,  0,  0, 1]
             ], complex_type)
-            self._matrix = gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
+            self._matrix = gate_expand_2toN(self.i_swap, self.n_qubits, targets=self.targets)
 
     def call(self, inputs, **kwargs):
         return self.matrix() @ inputs
@@ -151,6 +174,23 @@ class ISWAPLayer(QCLayer):
             return gate_expand_2toN(i_swap, self.n_qubits, targets=self.targets)
         else:
             return self._matrix
+
+    def get_config(self):
+        return {
+            'targets': self.targets,
+            'parameterized': self.parameterized
+        }
+
+    @staticmethod
+    def matrix_static(N, targets, t):
+        mi = tf.complex(0., -1.)
+        i_swap = tf.convert_to_tensor([
+            [1, 0, 0, 0],
+            [0, tf.cos(t), mi * tf.cast(tf.sin(t), tf.complex64), 0],
+            [0, mi * tf.cast(tf.sin(t), tf.complex64), tf.cos(t), 0],
+            [0, 0, 0, 1]
+        ], complex_type)
+        return gate_expand_2toN(i_swap, N, targets=targets)
 
 
 class SWAPLayer(QCLayer):
@@ -203,6 +243,11 @@ class ULayer(QCLayer):
             return tensor([self.pre_identity, *Us, self.post_identity])
         else:
             return tensor(Us)
+
+    def get_config(self):
+        return {
+            'targets': self.targets
+        }
 
 
 class QFTLayer(QCLayer):

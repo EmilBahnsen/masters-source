@@ -230,7 +230,7 @@ class FourDiamondCircuit(DiamondCircuit):
             k = arg_value
             theta = math.pi/2**k
             super().add_gate('RZ', controls, arg_value=theta, arg_label=r'\pi/2^{}'.format(k))
-            self.add_gate('CNOT',targets,controls)
+            self.add_gate('CNOT',targets, controls)
             super().add_gate('RZ', targets, arg_value=-theta, arg_label=r'\pi/2^{}'.format(k))
             self.add_gate('CNOT', targets, controls)
             super().add_gate('RZ', targets, arg_value=theta, arg_label=r'\pi/2^{}'.format(k))

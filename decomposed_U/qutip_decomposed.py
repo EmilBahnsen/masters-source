@@ -1,4 +1,5 @@
 from qutip import *
+from qutip.qip.circuit import QubitCircuit
 from diamond.DiamondCircuit import save_circuit
 import numpy as np
 

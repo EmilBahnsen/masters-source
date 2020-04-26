@@ -11,8 +11,8 @@ from typing import *
 #     tf.config.set_soft_device_placement(True)
 #     os.environ['TF_SET'] = 'true'
 
-physical_devices = tf.config.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(physical_devices[0], True)
+# physical_devices = tf.config.list_physical_devices('GPU')
+# tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 float_type = tf.float32
 complex_type = tf.complex64

@@ -1,10 +1,11 @@
 from unittest import TestCase
-from tf_qc.qc import append_zeros, tensor, s0, density_matrix, fidelity, density_matrix_trace_from_state, trace, \
+from tf_qc.qc import append_zeros, tensor, s0, s1, density_matrix, fidelity, density_matrix_trace_from_state, trace, \
     partial_trace_last, inner_product, gate_expand_2toN, SWAP, I1
 from tf_qc.utils import random_pure_states
 import tensorflow as tf
 from tf_qc import float_type
 from txtutils import ndtotext_print
+import numpy as np
 
 
 def almost_equal(a: tf.Tensor, b: tf.Tensor, threshold=1e-5):
@@ -91,6 +92,19 @@ class TestDensityMatrixTraceFromState(TestCase):
             self.assertTrue(almost_equal(dm1[0], dm1_0, 1e-3), 'density_matrix mixes states!')
             self.assertTrue(almost_equal(dm2[0], dm2_0, 1e-3), 'trace->density_matrix mixes states!')
             self.assertTrue(almost_equal(dm1, dm2, 1e-3))
+
+    def test_non_last_qubits_trace(self):
+        # Test trace for two conseg. non-last qubits
+        state1 = tensor([s0, s1])
+        state2 = tensor([(s0 + s1)/np.sqrt(2), (s0 - s1)/np.sqrt(2)])
+        state = tensor([state1, state2])
+        dm1 = trace(density_matrix(state), [0, 1])
+        self.assertTrue(almost_equal(dm1, density_matrix(state2)))
+
+        # Test trace for two separated non-last qubits
+        state_test = tensor([s0, (s0 + s1)/np.sqrt(2)])
+        dm2 = trace(density_matrix(state), [1, 3])
+        self.assertTrue(almost_equal(dm2, density_matrix(state_test)))
 
 
 class TestUtils(TestCase):

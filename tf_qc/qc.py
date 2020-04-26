@@ -8,6 +8,7 @@ from typing import *
 from tf_qc import complex_type, float_type, QubitState, QubitDensityMatrix, QubitStateOrDM, Matrix
 import qutip as qt
 from qutip.qip.operations import swap as qt_swap
+from qutip.qip.operations import iswap as qt_iswap
 from functools import reduce
 
 # Basic QC-definitions (including that for the diamond)
@@ -44,24 +45,44 @@ sigmaz = tf.convert_to_tensor(qt.sigmaz().full(), dtype=complex_type)
 
 
 def SWAP(N: int, i: int, j: int):
-    # Swap them if i > j
-    if i > j:
-        i, j = j, i
-    if j - i == 1:
-        swap_tensor = tf.convert_to_tensor([
-            [1, 0, 0, 0],
-            [0, 0, 1, 0],
-            [0, 1, 0, 0],
-            [0, 0, 0, 1],
-        ], complex_type)
-        return tensor([tf.eye(2**i, dtype=complex_type), swap_tensor, tf.eye(2**(N-1-j), dtype=complex_type)])
-    return SWAP(N, i, j-1) @ SWAP(N, j-1, j) @ SWAP(N, i, j-1)
+    def make_swap(N: int, i: int, j: int):
+        # Swap them if i > j
+        if i > j:
+            i, j = j, i
+        if j - i == 1:
+            swap_tensor = tf.convert_to_tensor([
+                [1, 0, 0, 0],
+                [0, 0, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1],
+            ], tf.int32)
+            # Squeeze it as 'tensor' returns an extra batch dim.
+            return tf.squeeze(tensor([tf.eye(2**i, dtype=tf.int32), swap_tensor, tf.eye(2**(N-1-j), dtype=tf.int32)]))
+        side_swap = make_swap(N, i, j-1)
+        adjacent_swap = make_swap(N, j-1, j)
+        return tf.matmul(
+            tf.matmul(side_swap, adjacent_swap, a_is_sparse=True, b_is_sparse=True),
+            side_swap, a_is_sparse=True, b_is_sparse=True)
+    return tf.cast(make_swap(N, i, j), complex_type)
+
+
+def iSWAP(t):
+    mi = tf.complex(0., -1.)
+    return tf.convert_to_tensor([
+        [1, 0, 0, 0],
+        [0, tf.cos(t), mi * tf.cast(tf.sin(t), tf.complex64), 0],
+        [0, mi * tf.cast(tf.sin(t), tf.complex64), tf.cos(t), 0],
+        [0, 0, 0, 1]
+    ], complex_type)
 
 
 # Kronecker product, takes a list af tensors like QuTiP
-def tensor(tensors: List[tf.Tensor]):
+def tensor(tensors: List[tf.Tensor], outshape: Optional[Tuple] = None):
     if len(tensors) == 1:
-        return tensors.pop()
+        if outshape is None:
+            return tensors.pop()
+        else:
+            return tf.reshape(tensors.pop(), outshape)
     b = tensors.pop()
     a = tensors.pop()
     result = \
@@ -70,7 +91,7 @@ def tensor(tensors: List[tf.Tensor]):
             tf.reshape(b, [-1, 1, b.shape[-2], 1, b.shape[-1]]),
             [-1, a.shape[-2] * b.shape[-2], a.shape[-1] * b.shape[-1]]
         )
-    return tensor(tensors + [result]) if len(tensors) > 0 else result
+    return tensor(tensors + [result], outshape)
 
 
 def commutator(a: tf.Tensor, b: tf.Tensor):
@@ -109,12 +130,17 @@ def trace(matrices: Matrix,
     n_qubits = intlog2(matrices.shape[-1])
     if subsystem is None:
         return tf.linalg.trace(matrices)
-    # If we trace over the last qubits in the sequence it quite straight forward
-    elif max(subsystem) == n_qubits-1 and \
-            min(subsystem) == n_qubits - len(subsystem) and \
-            sum(subsystem) == sum(range(min(subsystem), n_qubits)):
-        # If it's a partial trace then we divide the system into [batch_dims, static, trace_sys, static, trace_sys]
-        # and then do the trace over 'zabcb' with an Einstein sum, and then reshape into the old shape
+    else:
+        # Make sure it's sorted
+        subsystem = sorted(subsystem)
+    # If we trace over the last qubits in the sequence it's quite straight forward
+    trace_is_over_last_qubits = max(subsystem) == n_qubits-1 and \
+                                min(subsystem) == n_qubits - len(subsystem) and \
+                                sum(subsystem) == sum(range(min(subsystem), n_qubits))
+    if trace_is_over_last_qubits:
+        # If it's a partial trace (over last qubits) then we divide
+        # the system into [batch_dims, static, trace_sys, static, trace_sys]
+        # and then do the trace over '...bab' with an Einstein sum, and then reshape into the old shape
         n_qubits2trace = len(subsystem)
         n_static = n_qubits - n_qubits2trace
         batch_shape = matrices.shape[:-2]
@@ -122,10 +148,46 @@ def trace(matrices: Matrix,
         trace_result = tf.einsum('...bab', matrices)  # Watch the alphabetic order of subscripts!
         return tf.reshape(trace_result, [*batch_shape, 2**n_static, 2**n_static])
     else:
-        raise NotImplementedError('No partial trace over non-last qubits.')
+        # Now this is done in more steps... as TF doesn't support einsum with rank > 6
+        # We divide the system into [batch_dims, static1, trace_sys, static2, static1, trace_sys, static2],
+        # where 'static1 + static2' accounts of all the static entries on either side of the last
+        # consecutive block of qubits that is to be traced. That is, we do the partial trace over the
+        # last consecutive qubits to be traced and then recursively the rest.
+
+        # First we find the last consecutive block to trace away
+        block_end = subsystem[-1]
+        block_start = block_end
+        for idx in reversed(subsystem):
+            if block_start - idx <= 1:
+                block_start = idx
+            else:
+                break
+        n_static1 = block_start  # First part of static qubits
+        n_static2 = (n_qubits - 1) - block_end  # Second part of static qubits
+        n_static = n_static1 + n_static2
+        n_qubits2trace = block_end - block_start + 1  # Qubits to trace away
+        batch_shape = matrices.shape[:-2]
+        # This shape is what we wound have used, but this has rank 7
+        # new_shape = [-1, 2**n_static1, 2**n_qubits2trace, 2**n_static2, 2**n_static1, 2**n_qubits2trace, 2**n_static2]
+        new_shape = [-1, 2**n_qubits2trace, 2**n_static2, 2**n_static1, 2**n_qubits2trace, 2**n_static2]
+        matrices = tf.reshape(matrices, new_shape)
+        trace_result = tf.einsum('...abcad', matrices)  # Watch the alphabetic order of subscripts!
+        reshaped_result = tf.reshape(trace_result, [*batch_shape, 2**n_static, 2**n_static])
+        # We must now recursively to the same to the lest of the subsystems
+        idx_of_start = subsystem.index(block_start)
+        new_subsystem = subsystem[:idx_of_start]
+        return trace(reshaped_result, new_subsystem) if len(new_subsystem) > 0 else reshaped_result
 
 
 def density_matrix_trace_from_state(states: QubitState, subsystem: List[int] = None):
+    """
+    Take the (partial) trace of a density matrix calculated from the fiven state,
+    i.e. \rho_subsystem = Tr_subsystem^C(states @ states^\dag). Where ^C denotes
+    the 'complimentory' set.
+    :param states:
+    :param subsystem:
+    :return:
+    """
     # If we trace over the last qubits in the sequence it quite straight forward
     n_qubits = intlog2(states.shape[-2])
     subsystem2trace = list(set(range(n_qubits)).difference(set(subsystem)))
@@ -140,13 +202,41 @@ def density_matrix_trace_from_state(states: QubitState, subsystem: List[int] = N
         # Do the trace over the last elements
         new_ket_shape = [-1, 2 ** n_qubits_static, 2 ** n_qubits2trace, 1]
         ket = tf.reshape(states, new_ket_shape)
-        new_bra_shape = [-1, 1, 2 ** n_qubits_static, 2 ** n_qubits2trace]
-        bra = tf.reshape(tf.linalg.adjoint(ket), new_bra_shape)
+        # new_bra_shape = [-1, 1, 2 ** n_qubits_static, 2 ** n_qubits2trace]
+        # bra = tf.reshape(tf.linalg.adjoint(ket), new_bra_shape)
         for n in range(2**n_qubits2trace):
-            result += ket[:, :, n, :] @ bra[:, :, :, n]
+            new_bra_idx_shape = [-1, 1, 2 ** n_qubits_static]
+            ket_idx = ket[:, :, n, :]
+            bra_idx = tf.reshape(tf.linalg.adjoint(ket_idx), new_bra_idx_shape)
+            result += ket_idx @ bra_idx
+            # result += ket[:, :, n, :] @ bra[:, :, :, n]
         return result
     else:
-        raise NotImplementedError('Must have subsystem at the end.')
+        print(Warning('Not optimized not to trace away last qubits.'))
+        return trace(density_matrix(states), subsystem2trace)
+
+
+def measure(states: QubitState, subsystem: List[int] = None):
+    """
+    Get the probabilities for each outcome, maybe on a subsystem
+    :param states:
+    :param subsystem:
+    :return:
+    """
+    probs = states * tf.math.conj(states)
+    if subsystem is None:
+        return probs
+    # We must trace away qubits that does not influence the probabilities
+    subsystem = sorted(subsystem)
+    n_qubits = intlog2(probs.shape[-2])
+    # batch_shape = tf.shape(probs)[-2]
+    probs_new = tf.reshape(probs, [-1, *([2]*n_qubits)])
+    subsys_2_trace = list(set(range(n_qubits)).difference(set(subsystem)))
+    subsys_2_trace_axis = list(map(lambda x:x+1, subsys_2_trace))  # Skip the batch axis
+    trace_result = tf.reduce_sum(probs_new, axis=subsys_2_trace_axis)
+    return tf.reshape(trace_result, [-1, 2**len(subsystem)])
+
+
 
 
 def fidelity(a: QubitState,
@@ -330,6 +420,9 @@ from qutip import Qobj
 # Not precicely the same!
 #assert U_qutip(π/16) == Qobj(U(π/16).numpy(), dims=[[2, 2, 2, 2], [2, 2, 2, 2]]), 'TF U is not the same as QuTiP U. diff: {}' + ndtotext((U_qutip(π/16) - Qobj(U(π/16).numpy(), dims=[[2, 2, 2, 2], [2, 2, 2, 2]])).full())
 
+# Extra states
+s0000 = tensor([s00, s00])
+
 
 def make_gate(N: int,
               gate: Union[str, tf.Tensor],
@@ -412,16 +505,44 @@ def iqft(N: int, oper: tf.Tensor) -> tf.Tensor:
 
 
 # https://quantumcomputing.stackexchange.com/questions/6236/how-to-quickly-calculate-the-custom-u3-gate-parameters-theta-phi-and-lamb
+# NOT THE SAME AS ZXZ ROTATION: https://qiskit.org/documentation/stubs/qiskit.extensions.U3Gate.html
+# THIS IS WHAT U3 REALLY IS ZYZ-transfrom: https://arxiv.org/pdf/1707.03429.pdf
 def U3(t_xyz: Union[tf.Tensor, tf.Variable], *args) -> tf.Tensor:
     t_xyz = tf.cast(t_xyz, complex_type)
     gate = tf.convert_to_tensor([
-        [tf.cos(t_xyz[0]/2), -tf.exp(1j * t_xyz[2]) * tf.sin(t_xyz[0]/2)],
-        [tf.exp(1j * t_xyz[1]) * tf.sin(t_xyz[0]/2), tf.exp(1j * (t_xyz[1]+t_xyz[2])) * tf.cos(t_xyz[0]/2)]
+        [tf.cos(t_xyz[..., 0]/2), -tf.exp(1j * t_xyz[..., 2]) * tf.sin(t_xyz[..., 0]/2)],
+        [tf.exp(1j * t_xyz[..., 1]) * tf.sin(t_xyz[..., 0]/2), tf.exp(1j * (t_xyz[..., 1]+t_xyz[..., 2])) * tf.cos(t_xyz[..., 0]/2)]
     ], dtype=complex_type)
     if len(args) == 0:
         return gate
     else:
         return tensor([gate, U3(*args)])
+
+# https://www.researchgate.net/figure/Example-universal-set-of-quantum-gates-consisting-of-three-single-qubit-rotation-gates_fig3_327671865
+# NIelsen and Chuang p. 174
+def RX(angle):
+    angle = tf.cast(angle, complex_type)
+    return tf.convert_to_tensor([
+        [tf.cos(angle/2), -1j*tf.sin(angle/2)],
+        [-1j*tf.sin(angle/2), tf.cos(angle/2)],
+    ])
+
+def RY(angle):
+    angle = tf.cast(angle, complex_type)
+    return tf.convert_to_tensor([
+        [tf.cos(angle/2), -tf.sin(angle/2)],
+        [tf.sin(angle/2), tf.cos(angle/2)],
+    ])
+
+def RZ(angle):
+    angle = tf.cast(angle, complex_type)
+    return tf.convert_to_tensor([
+        [tf.exp(-1j*angle/2), 0],
+        [0, tf.exp(1j*angle/2)],
+    ])
+
+def RXZX(x1, z, x2):
+    return RX(x2) @ RZ(z) @ RX(x1)  # Slow but works (TODO: write explicitly)
 
 
 def partial_trace_v1(states: tf.Tensor, subsystem: Union[int, List[int]], n_qubits: int):
@@ -490,3 +611,10 @@ def partial_trace_last(states: tf.Tensor, n_qubits2trace: int, n_qubits: int):
     states = tf.reshape(states, [-1, 2**n_static, 2**n_qubits2trace, 2**n_static, 2**n_qubits2trace])
     expr = oe.contract_expression(subscripts, tf.shape(states))
     return expr(states, backend='tensorflow')
+
+
+def apply_operators2state(operators: List[tf.Tensor], state: tf.Tensor):
+    final_state = state
+    for i in range(len(operators)):
+        final_state = operators.pop(0) @ final_state
+    return final_state

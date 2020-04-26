@@ -23,18 +23,18 @@ input_states = tf.cast(vectors, complex_type)
 output_states = input_states
 
 # Optimizer and loss
-lr = 0.01
+lr = 0.05
 print('Learning rate:', lr)
 optimizer = tf.optimizers.Adam(lr)
 # loss = Mean1mUhlmannFidelity([0, 1, 2, 3], N)
-subsystem = [0, 1, 2, 3]
+subsystem = [0, 1, 2, 3, 4, 5, 6, 7]
 # loss = Mean1mFidelity(subsystem, true_is_pure_on_sub=True)
 loss = Mean1mFidelity(subsystem, true_is_pure_on_sub=True)
 
 with tf.device(device):
     for _ in range(100):
         # Model
-        model = TwoMemoryDiamondQFT('model_1_a_ref')
+        model = TwoMemoryDiamondQFT('model_b')
 
         # Fitting
         filename = os.path.basename(__file__).rstrip('.py')
@@ -47,4 +47,4 @@ with tf.device(device):
         metrics = [state_fid_metric, state_std_fid_metric]
 
         from tf_qc.training import train  # Reimport so that we don't have to reset the run
-        train(model, input_states, output_states, optimizer, loss, log_path, epochs=100, batch_size=12, metrics=metrics)
+        train(model, input_states, output_states, optimizer, loss, log_path, epochs=100, batch_size=5, metrics=metrics)

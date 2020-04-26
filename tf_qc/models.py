@@ -8,6 +8,7 @@ from tensorflow.keras.layers import InputLayer
 from abc import abstractmethod
 from tf_qc import complex_type
 
+
 class QCModel(tf.keras.Sequential):
     def matrix(self):
         # Either 'a' is a layer OR it's the tensor from the previous eval
@@ -230,19 +231,43 @@ class OneDiamondQFT(ApproxUsingInverse):
                 U3Layer(),
                 QFTCrossSwapLayer()
             ],
+            'model_e10': [
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                ULayer(),
+                U3Layer(),
+                QFTCrossSwapLayer()
+            ],
             'model_f': [
-            U3Layer(),
-            *self.all_swaps(),
-            ULayer(),
-            U3Layer(),
-            *self.all_swaps(),
-            ULayer(),
-            U3Layer(),
-            *self.all_swaps(),
-            ULayer(),
-            U3Layer(),
-            QFTCrossSwapLayer()
-        ],
+                U3Layer(),
+                *self.all_swaps(),
+                ULayer(),
+                U3Layer(),
+                *self.all_swaps(),
+                ULayer(),
+                U3Layer(),
+                *self.all_swaps(),
+                ULayer(),
+                U3Layer(),
+                QFTCrossSwapLayer()
+            ],
             'model_g': [
                 U3Layer(),
 
@@ -649,9 +674,19 @@ class OneMemoryDiamondQFT(ApproxUsingInverse):
 
 
 class TwoMemoryDiamondQFT(ApproxUsingInverse):
+    """
+     8      10
+     |      |
+     0      4
+    2 3 -- 6 7
+     1      5
+     |      |
+     9      11
+    """
     @property
     def model_layers(self):
         targets = self.targets  # These are the qubits of the diamond
+        cross_swap = lambda: ISWAPLayer([3, 6], parameterized=True)
         return {
             'model_1_a_ref': [
                 InputLayer((2 ** 12, 1), dtype=complex_type, name='input_state'),
@@ -686,13 +721,48 @@ class TwoMemoryDiamondQFT(ApproxUsingInverse):
                 HLayer(7),
                 U3Layer(targets),
                 *qft_cross_swap_layers(targets)
-            ],  # fid =  (lr = 0.05, bs = 120)
+            ],  # fid = BAD (lr = 0.001, bs = 25)
+            'model_b': [
+                InputLayer((2**12, 1), dtype=complex_type, name='input_state'),
+                U3Layer(targets),
+                HLayer(0, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(1, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(2, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(3, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(4, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(5, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(6, cached=False),
+                cross_swap(),
+                ULayer(targets),
+                cross_swap(),
+                HLayer(7, cached=False),
+                U3Layer(targets),
+                *qft_cross_swap_layers(targets)
+            ],  # fid =  (lr = 0.05, bs = 25)
         }
 
     def __init__(self, model_name):
         self.targets = [0, 1, 2, 3, 4, 5, 6, 7]
         model = QCModel(layers=self.model_layers[model_name])
         target = QCModel(layers=[
-            IQFTLayer([0, 1, 2, 3])
+            IQFTLayer(self.targets)
         ])
         super(TwoMemoryDiamondQFT, self).__init__(model, target, model_name)

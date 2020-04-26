@@ -16,7 +16,7 @@ def almost_zero(a: tf.Tensor, threshold=1e-5):
 
 class TestSWAPLayer(TestCase):
     def test_swap(self):
-        N = 5
+        N = 10
         for i in range(5):
             for j in range(5):
                 if i == j: continue
@@ -24,7 +24,7 @@ class TestSWAPLayer(TestCase):
                 data = random_pure_states((2, 2**N, 1))
                 l = SWAPLayer(targets)
                 l(data)
-                self.assertTrue(almost_equal(l.matrix()[0], qt_swap(N, targets).full()), f'N = {N}, [{i},{j}]')
+                self.assertTrue(almost_equal(l.matrix(), qt_swap(N, targets).full()), f'N = {N}, [{i},{j}]')
 
     def test_N5_0_3(self):
         N = 5
@@ -32,6 +32,6 @@ class TestSWAPLayer(TestCase):
         data = random_pure_states((2, 2 ** N, 1))
         l = SWAPLayer(targets)
         l(data)
-        m1 = l.matrix()[0]
+        m1 = l.matrix()
         m2 = qt_swap(N, targets).full()
         self.assertTrue(almost_equal(m1, m2))
