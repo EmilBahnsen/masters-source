@@ -55,6 +55,39 @@ class ApproxUsingInverse(QCModel):
         self.target_inv.summary(line_length, positions, print_fn)
 
 
+class ApproxUsingTarget(QCModel):
+    def __init__(self, model: QCModel, target_model: QCModel, name=None):
+        super(ApproxUsingTarget, self).__init__(name=name)
+        self.model = model
+        self.target_model = target_model
+        self.add(self.model)
+        self._target_applied = False
+
+    def target_matrix(self):
+        return self.target_model.matrix()
+
+    def apply_target_to_states(self, states):
+        self._target_applied = True
+        return self.target_model(states)
+
+    def model_matrix(self):
+        return self.model.matrix()
+
+    def call(self, inputs, training=None, mask=None):
+        if not self._target_applied:
+            raise Exception('Target have not been applied to states, to generate output!')
+        return super().call(inputs, training, mask)
+
+    def summary(self, line_length=None, positions=None, print_fn=None):
+        if print_fn is None:
+            print_fn = print
+        print('--- ApproxUsingInverse ---')
+        print_fn('Model:')
+        self.model.summary(line_length, positions, print_fn)
+        print_fn('Target:')
+        self.target_model.summary(line_length, positions, print_fn)
+
+
 class PrePostQFTUIQFT(ApproxUsingInverse):
     def __init__(self):
         model = QCModel(layers=[

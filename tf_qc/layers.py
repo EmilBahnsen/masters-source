@@ -93,7 +93,7 @@ class HLayer(QCLayer):
 
 
 class U3Layer(QCLayer):
-    def __init__(self, targets: Optional[List[Union[List[int], int]]] = None):
+    def __init__(self, targets: Optional[List[Union[List[int], int]]] = None, initializer=_uniform_theta):
         super(U3Layer, self).__init__()
         self.U3 = None
         self.thetas = None
@@ -101,11 +101,12 @@ class U3Layer(QCLayer):
         self.targets = targets
         if self.targets is not None:
             self.targets = list(map(lambda t: [t] if isinstance(t, int) else t, self.targets))
+        self.initializer = initializer
 
     def build(self, input_shape: tf.TensorShape):
         super().build(input_shape)
         n_thetas = len(self.targets) if self.targets is not None else self.n_qubits
-        self.thetas = [tf.Variable(initial_value=_uniform_theta(shape=(3,), dtype=float_type),
+        self.thetas = [tf.Variable(initial_value=self.initializer(shape=(3,), dtype=float_type),
                                    trainable=True,
                                    dtype=float_type,
                                    name=f'var_{j}') for j in range(n_thetas)]
@@ -165,6 +166,7 @@ class ISWAPLayer(QCLayer):
         if self.parameterized:
             t = self.t[0]
             mi = tf.complex(0., -1.)
+            # iSWAP defn. er fra ingenør-artikel
             i_swap = tf.convert_to_tensor([
                 [1, 0, 0, 0],
                 [0, tf.cos(t), mi * tf.cast(tf.sin(t), tf.complex64), 0],
@@ -211,7 +213,7 @@ class SWAPLayer(QCLayer):
 
 
 class ULayer(QCLayer):
-    def __init__(self, targets: Optional[List[int]] = None):
+    def __init__(self, targets: Optional[List[int]] = None, initializer = _uniform_theta):
         super(ULayer, self).__init__()
         self.thetas: tf.Variable
         self.n_qubits: int
@@ -219,11 +221,12 @@ class ULayer(QCLayer):
             if targets != sorted(targets):
                 raise Exception('ULayer targets must be sorted')
         self.targets = targets
+        self.initializer = initializer
 
     def build(self, input_shape: tf.TensorShape):
         super().build(input_shape)
         n_thetas = len(self.targets)//4 if self.targets else self.n_qubits//4
-        self.thetas = tf.Variable(initial_value=_uniform_theta(shape=(n_thetas,), dtype=float_type),
+        self.thetas = tf.Variable(initial_value=self.initializer(shape=(n_thetas,), dtype=float_type),
                                   trainable=True,
                                   dtype=float_type)
         if self.targets:
@@ -344,6 +347,111 @@ class ILayer(QCLayer):
 
     def call(self, inputs, **kwargs):
         return inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class XGateLayer(QCLayer):
+    def __init__(self, target):
+        super(XGateLayer, self).__init__()
+        self._matrix = None
+        self.target = target
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = gate_expand_1toN(qc.RX(π), self.n_qubits, self.target)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class YGateLayer(QCLayer):
+    def __init__(self, target):
+        super(YGateLayer, self).__init__()
+        self._matrix = None
+        self.target = target
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = gate_expand_1toN(qc.RY(π), self.n_qubits, self.target)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class ZGateLayer(QCLayer):
+    def __init__(self, target):
+        super(ZGateLayer, self).__init__()
+        self._matrix = None
+        self.target = target
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = gate_expand_1toN(qc.RZ(π), self.n_qubits, self.target)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class CNOTGateLayer(QCLayer):
+    def __init__(self, control, target):
+        super(CNOTGateLayer, self).__init__()
+        self._matrix = None
+        self.control = control
+        self.target = target
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = qc.make_gate(self.n_qubits, 'cnot', self.target, self.control)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class ToffoliGateLayer(QCLayer):
+    def __init__(self, controls, target):
+        super(ToffoliGateLayer, self).__init__()
+        self._matrix = None
+        self.controls = controls
+        self.target = target
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = qc.make_gate(self.n_qubits, 'toffoli', self.target, self.controls)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
+
+    def matrix(self, **kwargs) -> tf.Tensor:
+        return self._matrix
+
+
+class FredkinGateLayer(QCLayer):
+    def __init__(self, control, targets):
+        super(FredkinGateLayer, self).__init__()
+        self._matrix = None
+        self.control = control
+        self.targets = targets
+
+    def build(self, input_shape):
+        super().build(input_shape)
+        self._matrix = qc.make_gate(self.n_qubits, 'fredkin', self.targets, self.control)
+
+    def call(self, inputs, **kwargs):
+        return self._matrix @ inputs
 
     def matrix(self, **kwargs) -> tf.Tensor:
         return self._matrix

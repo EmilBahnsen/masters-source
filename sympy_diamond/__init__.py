@@ -26,40 +26,47 @@ opp = TensorProduct(_sp, Dagger(_sp))
 omm = TensorProduct(_sm, Dagger(_sm))
 I = sp.I
 
-def U(t):
-    U00 = sp.Matrix([
+
+def U00(t):
+    return sp.Matrix([
         [1, 0, 0, 0],
         [0, (sp.exp(-I*t) + 1) / 2, (sp.exp(-I*t) - 1) / 2, 0],
         [0, (sp.exp(-I*t) - 1) / 2, (sp.exp(-I*t) + 1) / 2, 0],
         [0, 0, 0, sp.exp(-I*t)]
     ])
-    U11 = sp.Matrix([
+def U11(t):
+    return sp.Matrix([
         [sp.exp(I*t), 0, 0, 0],
         [0, (sp.exp(I*t) + 1) / 2, (sp.exp(I*t) - 1) / 2, 0],
         [0, (sp.exp(I*t) - 1) / 2, (sp.exp(I*t) + 1) / 2, 0],
         [0, 0, 0, 1]
     ])
-    Up = sp.Matrix([
+def Up(t):
+    return sp.Matrix([
         [sp.exp(I*t), 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, sp.exp(-I*t)]
     ])
-    Um = sp.Matrix([
+def Um(t):
+    return sp.Matrix([
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ])
-    # U00 = HermitianOperator('U^{00}_T', t)
-    # U11 = HermitianOperator('U^{11}_T', t)
-    # Up = HermitianOperator('U^{\psi^+}_T', t)
-    # Um = HermitianOperator('U^{\psi^-}_T', t)
 
-    return TensorProduct(o0000, U00) + \
-           TensorProduct(o1111, U11) + \
-           TensorProduct(opp, Up) + \
-           TensorProduct(omm, Um)
+
+def U(t):
+    U00_t = U00(t)
+    U11_t = U11(t)
+    Up_t = Up(t)
+    Um_t = Um(t)
+
+    return TensorProduct(o0000, U00_t) + \
+           TensorProduct(o1111, U11_t) + \
+           TensorProduct(opp, Up_t) + \
+           TensorProduct(omm, Um_t)
 
 
 def state(n_qubits:int, symbol:str):
@@ -107,14 +114,54 @@ def RZ(angle):
 def RXZX(x1, z, x2):
     return RX(x2) @ RZ(z) @ RX(x1)  # Slow but works (TODO: write explicitly)
 
-
-iSWAP = lambda t: sp.ImmutableDenseMatrix([
+# Defn. from cirq
+SWAP = lambda t: sp.ImmutableDenseMatrix([
     [1, 0, 0, 0],
-    [0, sp.cos(t), I * sp.sin(t), 0],
-    [0, I * sp.sin(t), sp.cos(t), 0],
+    [0, sp.exp(I*t) * sp.cos(t), -I * sp.exp(I*t) * sp.sin(t), 0],
+    [0, -I * sp.exp(I*t) * sp.sin(t), sp.exp(I*t) * sp.cos(t), 0],
     [0, 0, 0, 1]
 ])
 
+iSWAP = lambda t: sp.ImmutableDenseMatrix([
+    [1, 0, 0, 0],
+    [0, sp.cos(t), -I * sp.sin(t), 0],
+    [0, -I * sp.sin(t), sp.cos(t), 0],
+    [0, 0, 0, 1]
+])
+
+CNOT = sp.ImmutableDenseMatrix([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 1],
+    [0, 0, 1, 0]
+])
+
+X = sp.ImmutableDenseMatrix([
+    [0, 1],
+    [1, 0]
+])
+
+Y = sp.ImmutableDenseMatrix([
+    [0, -I],
+    [I, 0]
+])
+
+Z = sp.ImmutableDenseMatrix([
+    [1, 0],
+    [0, -1]
+])
+
+CZ = lambda t: sp.ImmutableDenseMatrix([
+    [1,0,0,0],
+    [0,1,0,0],
+    [0,0,1,0],
+    [0,0,0,sp.exp(I*t)]
+])
+
+H = sp.ImmutableDenseMatrix([
+    [1/sp.sqrt(2), 1/sp.sqrt(2)],
+    [1/sp.sqrt(2), -1/sp.sqrt(2)]
+])
 
 def partial_trace(dm, n_qubits, subsystem):
     # This is the same calc. as for the tf_qc/qc.trace
@@ -182,3 +229,24 @@ def int2bin(x, n=0):
     str
     """
     return format(x, 'b').zfill(n)
+
+
+# --- Helpers ---
+def hadamard_division(A: sp.Matrix, B: sp.Matrix) -> sp.Matrix:
+    assert A.shape == B.shape, f'Rank must be the same got {A.rank()} and {B.rank()}'
+    rows, cols = A.shape
+    C = sp.MutableMatrix.zeros(rows, cols)
+    for row in range(rows):
+        for col in range(cols):
+            C[row,col] = A[row,col] / B[row,col]
+    return C
+
+# --- Helpers ---
+def hadamard_product(A: sp.Matrix, B: sp.Matrix):
+    assert A.shape == B.shape, f'Rank must be the same got {A.rank()} and {B.rank()}'
+    rows, cols = A.shape
+    C = sp.MutableMatrix.zeros(rows, cols)
+    for row in range(rows):
+        for col in range(cols):
+            C[row,col] = A[row,col] * B[row,col]
+    return C

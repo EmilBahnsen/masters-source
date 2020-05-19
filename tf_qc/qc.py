@@ -181,7 +181,7 @@ def trace(matrices: Matrix,
 
 def density_matrix_trace_from_state(states: QubitState, subsystem: List[int] = None):
     """
-    Take the (partial) trace of a density matrix calculated from the fiven state,
+    Take the (partial) trace of a density matrix calculated from the given state,
     i.e. \rho_subsystem = Tr_subsystem^C(states @ states^\dag). Where ^C denotes
     the 'complimentory' set.
     :param states:
@@ -434,6 +434,12 @@ def make_gate(N: int,
             gate = SWAP(N, targets[0], targets[1])
         elif name == 'h':
             gate = H
+        elif name == 'cnot':
+            gate = tf.convert_to_tensor(qt.qip.operations.cnot(N, controls, targets), dtype=complex_type)
+        elif name == 'toffoli':
+            gate = tf.convert_to_tensor(qt.qip.operations.toffoli(N, controls, targets), dtype=complex_type)
+        elif name == 'fredkin':
+            gate = tf.convert_to_tensor(qt.qip.operations.fredkin(N, controls, targets), dtype=complex_type)
         else:
             raise NotImplementedError('Gate not implemented')
     size = gate.shape[0]

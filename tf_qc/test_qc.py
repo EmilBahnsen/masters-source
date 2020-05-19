@@ -6,6 +6,7 @@ import tensorflow as tf
 from tf_qc import float_type
 from txtutils import ndtotext_print
 import numpy as np
+import time
 
 
 def almost_equal(a: tf.Tensor, b: tf.Tensor, threshold=1e-5):
@@ -105,6 +106,19 @@ class TestDensityMatrixTraceFromState(TestCase):
         state_test = tensor([s0, (s0 + s1)/np.sqrt(2)])
         dm2 = trace(density_matrix(state), [1, 3])
         self.assertTrue(almost_equal(dm2, density_matrix(state_test)))
+
+    def test_equivalence_with_manual_dm_then_trace(self):
+        with tf.device('cpu'):
+            states = random_pure_states((1000, 2**8, 1))
+            t_start1 = time.time()
+            dms1 = trace(density_matrix(states), [4, 5, 6, 7]) # Trace 2 and 3
+            t_start2 = time.time()
+            dms2 = density_matrix(states, [0, 1, 2, 3])        # Get the dm of 0 and 1
+            t_end = time.time()
+            self.assertTrue(almost_equal(dms1, dms2))
+            print('Method 1:', t_end - t_start1)
+            print('Method 2:', t_end - t_start2)
+            print('Abount 10x faster')
 
 
 class TestUtils(TestCase):

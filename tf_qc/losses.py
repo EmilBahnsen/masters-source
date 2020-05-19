@@ -42,6 +42,8 @@ class Mean1mFidelity(tf.losses.Loss):
         self.pred_is_pure_on_sub = pred_is_pure_on_sub
 
     def call(self, y_true, y_pred):
+        # tf.print('y_true.shape', y_true.shape)
+        # tf.print('y_pred.shape', y_pred.shape)
         fidelities = fidelity(y_true, y_pred, self.subsystem, self.true_is_pure_on_sub, self.pred_is_pure_on_sub)
         meanFilelity = tf.reduce_mean(fidelities)
         return 1 - meanFilelity
