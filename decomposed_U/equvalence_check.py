@@ -10,10 +10,14 @@ from txtutils import ndtotext_print
 # t = sp.Symbol('t', real=True)
 t = 1  # Just to test equality
 
+def print_latex(qc):
+    latex = cirq.contrib.qcircuit.circuit_to_latex_using_qcircuit(qc)
+    print(latex)
 
 
 def A2B_basis(qc, q1, q2):
-    qc.append(cirq.XX.on(q1, q2))
+    qc.append(cirq.X.on(q1))
+    qc.append(cirq.X.on(q2))
     qc.append(cirq.CNOT.on(q2, q1))
     qc.append(cirq.H.on(q2).controlled_by(q1))
     qc.append(cirq.CNOT.on(q1, q2))
@@ -25,7 +29,8 @@ def B2A_basis(qc, q1, q2):
     qc.append(cirq.CNOT.on(q1, q2))
     qc.append(cirq.H.on(q2).controlled_by(q1))
     qc.append(cirq.CNOT.on(q2, q1))
-    qc.append(cirq.XX.on(q1, q2))
+    qc.append(cirq.X.on(q1))
+    qc.append(cirq.X.on(q2))
     return qc
 
 def X_on_all(circuit, qubits):
@@ -36,6 +41,8 @@ def X_on_all(circuit, qubits):
 qc = cirq.Circuit()
 q1, q2 = cirq.LineQubit.range(2)
 qc = A2B_basis(qc, q1, q2)
+print_latex(qc)
+ndtotext_print(qc.unitary())
 qc = B2A_basis(qc, q1, q2)
 print(qc)
 ndtotext_print(qc.unitary())
@@ -116,6 +123,12 @@ def A2B_XX_B2A_after_CCCZ(qc, q1, q2):
     qc.append(cirq.X.on(q1).controlled_by(q2))
     qc.append(cirq.X(q2))
 
+def A2B_XX_B2A_before_CCCZ(qc, q1, q2):
+    qc.append(cirq.X(q2))
+    qc.append(cirq.X.on(q1).controlled_by(q2))
+    qc.append(cirq.H.on(q2))
+    qc.append(cirq.X.on(q1).controlled_by(q2))
+
 def A2B_XX_B2A_after_CCCZ_swapped(qc, q1, q2):
     A2B_XX_B2A_after_CCCZ(qc, q2, q1)
 
@@ -123,21 +136,20 @@ def A2B_XX_B2A_after_CCCZ_swapped(qc, q1, q2):
 qc_simple.append(cirq.X(T1))
 qc_simple.append(cirq.X(T2))
 qc_simple.append(cirq.ZPowGate().on(T2).controlled_by(C1, C2, T1)**(t/π)) # NOTICE: Cancel out π
-qc_simple.append(cirq.X(T1))
-qc_simple.append(cirq.X(T2))
-
-qc_simple.append(cirq.X(C1))
-qc_simple.append(cirq.X(C2))
-qc_simple.append(cirq.ZPowGate().on(C1).controlled_by(C2, T1, T2)**(-t/π))
 # --- First one end ---
 # --- Last two ---
-A2B_XX_B2A_after_CCCZ(qc_simple, C1, C2)  # These shall be called [XX]_B
-A2B_XX_B2A(qc_simple, T1, T2)
+A2B_XX_B2A(qc_simple, C1, C2)  # These shall be called [XX]_B
+A2B_XX_B2A_after_CCCZ(qc_simple, T1, T2)
 qc_simple.append(cirq.ISwapPowGate().on(T1, T2).controlled_by(C1, C2)**(-2*t/π))  # NOTICE: Swapped signs and cancel out π/2
 qc_simple.append(cirq.ISwapPowGate().on(C1, C2).controlled_by(T1, T2)**(2*t/π))
-A2B_XX_B2A(qc_simple, C1, C2)
+A2B_XX_B2A_before_CCCZ(qc_simple, C1, C2)
 A2B_XX_B2A(qc_simple, T1, T2)
 # --- Last two end ---
+# --- First one (moved) --- #
+qc_simple.append(cirq.ZPowGate().on(C1).controlled_by(C2, T1, T2)**(-t/π))
+qc_simple.append(cirq.X(C1))
+qc_simple.append(cirq.X(C2))
+# --- First one (moved) end --- #
 print(qc_simple)
 # ndtotext_print(qc_simple.unitary())
 
@@ -193,7 +205,7 @@ qc2.append(cirq.SwapPowGate().on(C1, C2).controlled_by(T1, T2)**(-t/π))
 
 A2B_XX_B2A_swapped(qc2, C1, C2)  # This is to do the oper |11> <-> |+>, |00> <-> |-> (i.e. go back)
 # --- All 3 end ---
-print(qc2)
+# print(qc2)
 equal = (qc2.unitary() - qc_true.unitary() < 1e-5).all()
 print(f'New swapped circuit equal U: {equal}')
 assert equal
@@ -217,7 +229,7 @@ qc2.append(cirq.SwapPowGate().on(C1, C2).controlled_by(T1, T2)**(-t/π))
 
 A2B_XX_B2A_swapped(qc2, C1, C2)  # This is to do the oper |11> <-> |+>, |00> <-> |-> (i.e. go back)
 # --- All 3 end ---
-print(qc2)
+# print(qc2)
 equal = (qc2.unitary() - qc_true.unitary() < 1e-5).all()
 print(f'New swapped circuit equal U: {equal}')
 assert equal

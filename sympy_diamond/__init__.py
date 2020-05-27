@@ -3,7 +3,7 @@ from sympy.physics.quantum import TensorProduct, Dagger
 from functools import reduce
 from typing import *
 from sympy import tensorcontraction
-
+import qutip as qt
 
 # Construction of U
 # Basis states
@@ -128,6 +128,14 @@ iSWAP = lambda t: sp.ImmutableDenseMatrix([
     [0, -I * sp.sin(t), sp.cos(t), 0],
     [0, 0, 0, 1]
 ])
+
+# iSWAP(pi/2)
+def iSWAP_N_pi_2(N, targets):
+    return sp.ImmutableDenseMatrix(qt.iswap(N, targets)).subs(1.0, 1).subs(I, -I)
+
+# iSWAP(pi/2 + pi) = iSWAP(3*pi/2)
+def iSWAP_N_3pi_2(N, targets):
+    return sp.ImmutableDenseMatrix(qt.iswap(N, targets)).subs(1.0, 1)
 
 CNOT = sp.ImmutableDenseMatrix([
     [1, 0, 0, 0],
