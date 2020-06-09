@@ -33,7 +33,7 @@ loss = Mean1mFidelity(subsystem, true_is_pure_on_sub=True)
 
 for _ in range(100):
     # Model
-    model = OneMemoryDiamondQFT('model_e3')
+    model = OneMemoryDiamondQFT('model_e4')
 
     # Fitting
     filename = os.path.basename(__file__).rstrip('.py')
@@ -47,4 +47,4 @@ for _ in range(100):
 
     from tf_qc.training import train  # Reimport so that we don't have to reset the run
     with tf.device(device):
-        train(model, input_states, output_states, optimizer, loss, log_path, epochs=100, batch_size=120, metrics=metrics)
+        train(model, input_states, output_states, optimizer, loss, log_path, epochs=100, batch_size=10000, metrics=metrics)

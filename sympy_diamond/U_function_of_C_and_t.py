@@ -66,6 +66,7 @@ U_DB = basis_change(Ut, AA, DB)
 
 print('U (U_AA)')
 pprint(Ut)
+print(latex(Ut))
 
 print('U_CC')
 pprint(U_CC)

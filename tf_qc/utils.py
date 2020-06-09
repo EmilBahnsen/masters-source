@@ -51,7 +51,8 @@ def random_pure_states(shape, post_zeros: int = 0, seed=None):
     _shape = shape[:-1] if shape[-1] == 1 else shape
     if post_zeros != 0:
         _shape = _shape[:-1] + (_shape[-1]//2**post_zeros,)  # Don't make the states for zero
-    s = random_simplex(_shape, seed)
+    s = random_simplex(_shape, seed)  # Here we must be carefol to sample the simplex at random
+    # BUt the angles are just uniformly sampled
     angles = tf.cast(tf.concat([tf.fill((*_shape[:-1], 1), 0.),
                                 tf.random.uniform((*_shape[:-1], _shape[-1]-1), 0, 2*π, seed=seed)], -1),
                      complex_type)

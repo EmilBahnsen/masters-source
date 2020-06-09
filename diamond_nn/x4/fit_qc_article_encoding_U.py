@@ -59,6 +59,7 @@ class U3_U(tf.keras.Sequential):
                 # Make a linearcombi. of the output probabilities
                 # we measure all of them as combine them in linear combi. + bias and then apply sigmoid
                 Ps = tf.cast(measure(outputs, [0, 1, 2, 3]), float_type)
+                tf.print(Ps)
                 return Ps
 
         super(U3_U, self).__init__(layers=[

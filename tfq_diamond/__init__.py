@@ -43,7 +43,7 @@ class U(cirq.Gate):
         t = self.t
         U00 = np.array([
             [1, 0, 0, 0],
-            [0, (np.exp(-1j * t) + 1) / 2, (np.expm1(-1j * t)) / 2, 0],
+            [0, (np.exp(-1j * t) + 1) / 2, np.expm1(-1j * t) / 2, 0],
             [0, np.expm1(-1j * t) / 2, (np.exp(-1j * t) + 1) / 2, 0],
             [0, 0, 0, np.exp(-1j * t)]
         ])

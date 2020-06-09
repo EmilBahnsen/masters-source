@@ -3,6 +3,8 @@ import os
 import datetime
 import tensorflow as tf
 # Force to use the CPU
+from tf_qc.metrics import OperatorFidelity, FidelityMetric, StdFidelityMetric
+
 tf.config.experimental.set_visible_devices([], 'GPU')
 from tf_qc.losses import Mean1mFidelity, MeanTraceDistance
 from tf_qc.models import OneDiamondQFT, QCModel, ApproxUsingTarget
@@ -127,5 +129,11 @@ filename = os.path.basename(__file__).rstrip('.py')
 info = '_use012_only_'  # random_pure_states((n_datapoints, 2**N, 1), post_zeros=1) AND Mean1mFidelity([0, 1, 2])
 log_path = ['./logs', filename, info]
 
+# Metrics
+oper_fid_metric = OperatorFidelity(model)
+state_fid_metric = FidelityMetric()
+state_std_fid_metric = StdFidelityMetric()
+metrics = [state_fid_metric, state_std_fid_metric]
+
 # from tf_qc.training import train  # Reimport so that we don't have to reset the run
-train_ApproxUsingTarget(model, input, output, optimizer, loss, log_path, epochs=100, batch_size=250)
+train_ApproxUsingTarget(model, input, output, optimizer, loss, log_path, epochs=100, batch_size=250, metrics=metrics)

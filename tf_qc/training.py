@@ -11,6 +11,7 @@ import datetime
 import sys
 import signal
 from txtutils import ndtotext_print
+import numpy as np
 
 def train(model: ApproxUsingInverse,
           input,
@@ -88,6 +89,8 @@ def train(model: ApproxUsingInverse,
         eye = iqft_layer.matrix() @ model_matrix
         print('Eye:')
         ndtotext_print(eye)
+        print('Eye norm:')
+        ndtotext_print(np.abs(eye))
         if exit:
             sys.exit(0)
 

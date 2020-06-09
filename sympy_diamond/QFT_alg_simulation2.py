@@ -63,29 +63,48 @@ def post_qft_cross_swap(qc, qubits):
 
 def CRn(qc, n, *, ctrl, targ, ctrl_opp, targ_opp):
     qc.append(cirq.X(ctrl_opp))  # Must have |1> opposite to ctrl
-    qc.append(U_pi.on(targ, targ_opp, ctrl, ctrl_opp))
+    qc.append(U_pi.on(ctrl, ctrl_opp, targ, targ_opp))
     qc.append(Rn(n).on(targ_opp))
-    qc.append(U_pi.on(targ, targ_opp, ctrl, ctrl_opp))
+    qc.append(U_pi.on(ctrl, ctrl_opp, targ, targ_opp))
     qc.append(cirq.X(ctrl_opp))  # ... rm that again
 
 def dQFT(qc: cirq.Circuit, A: List[cirq.GridQubit], B: List[cirq.GridQubit]):
     # For every input qubit...
     for i in range(len(A)):
-        print('i', i)
         # Make Rn on the qubits above, starting from this qubit up
-        n = 2
+        # n = 2
         for j in reversed(range(i)):
-            print('j', j)
+            n = i - j + 1
             CRn(qc, n, ctrl=A[j+1], targ=A[j], ctrl_opp=B[j], targ_opp=B[j+1])
-            n += 1
             if j != 0:  # Don't need to iswap with the first input qubit
                 qc.append(iswap_1.on(A[j+1], A[j]))
+            # n += 1
         # Make the swap back of A[i] to its correct place (through the qubits it did in the first place)
         for j in range(1,i):
             qc.append(iswap_2.on(A[j], A[j+1]))
         # Do the H on this qubit
         qc.append(cirq.H.on(A[i]))
     post_qft_cross_swap(qc, A)
+
+
+def dQFT_forward(qc: cirq.Circuit, A: List[cirq.GridQubit], B: List[cirq.GridQubit]):
+    # For every input qubit...
+    N = len(A)
+    for i in range(N):
+        qc.append(cirq.H.on(A[i]))
+        # print(f'H A{i}')
+        for j in range(i+1, N):
+            n = j - i + 1
+            CRn(qc, n, ctrl=A[j], targ=A[j-1], ctrl_opp=B[j-1], targ_opp=B[j])
+            # print(f'CR{n} A{j}, A{j-1}, B{j-1}, B{j}')
+            if j != N-1:
+                qc.append(iswap_1.on(A[j-1], A[j]))
+                # print(f'iSWAPπ A{j-1} A{j}')
+        for j in reversed(range(i+1,N-1)):  # range(N-2, i+1)
+            qc.append(iswap_2.on(A[j-1], A[j]))
+            # print(f'iSWAP3π/2 A{j-1} A{j}')
+    post_qft_cross_swap(qc, A)
+
 
 # Do QFT
 dQFT(qc, A, B)

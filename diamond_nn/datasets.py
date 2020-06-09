@@ -1,6 +1,6 @@
 import pickle
 
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -166,6 +166,14 @@ def plot_article_result_from_files(python_files, weights_files):
         print('plotting', file_path)
         ax = plt.subplot(3, 3, i + 1)
         plt.minorticks_on()
+        if i == 0 or i == 3 or i == 6:
+            plt.ylabel('$x_2$')
+        if i == 6 or i == 7 or i == 8:
+            plt.xlabel('$x_1$')
+        if i < 6:
+            plt.setp(ax.get_xticklabels(), visible=False)
+        if i == 1 or i == 2 or i == 4 or i == 5 or i == 7 or i == 8:
+            plt.setp(ax.get_yticklabels(), visible=False)
         # import model
         path, file = os.path.split(file_path)
         sys.path.append(path)
@@ -236,9 +244,9 @@ def shuffle_data(*args):
 
 if __name__ == '__main__':
     def plot_article_data():
-        plt.figure(figsize=(5, 5))
+        f = plt.figure(figsize=(5, 5))
         for i in range(9):
-            plt.subplot(3, 3, i+1)
+            ax = plt.subplot(3, 3, i+1)
             plt.minorticks_on()
             plt.xticks([0, .5, 1], ['0.0', '0.5', '1.0'] if i == 6 or i == 7 or i == 8 else [])
             plt.yticks([0, .5, 1], ['0.0', '0.5', '1.0'] if i == 0 or i == 3 or i == 6 else [])
@@ -248,7 +256,10 @@ if __name__ == '__main__':
         plt.show()
 
     def plot_article_data_fit(base_path, rest_paths, title) -> plt.Figure:
+        plt.rc('figure', titlesize=20)
+        plt.rc('axes', labelsize=16)
         fig = plt.figure(figsize=(10, 10))
+        fig.tight_layout()
         st = fig.suptitle(title)#, fontsize="x-large")
         py_files = [os.path.join(base_path, rest_path, 'fit_qc_article.py') for rest_path in rest_paths]
         w_files = [os.path.join(base_path, rest_path, 'weights.pickle') for rest_path in rest_paths]
@@ -311,7 +322,7 @@ if __name__ == '__main__':
             'encoding_U3_U_data6/2020-04-21T15:09:23.374249',
             'encoding_U3_U_data7/2020-04-21T15:10:17.180348',
             'encoding_U3_U_data8/2020-04-22T22:37:56.536299'
-        ], 'encoding -> U3 -> U')
+        ], 'Diamond Assisted Binary Classification')
         fig.savefig('x4_result/encoding_U3_U.pdf')
 
     plot_article_result_encoding_U3_U()

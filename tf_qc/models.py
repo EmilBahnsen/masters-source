@@ -113,6 +113,14 @@ class OneDiamondQFT(ApproxUsingInverse):
     @property
     def model_layers(self):
         return {
+            'model_z': [
+                U3Layer(),
+                QFTCrossSwapLayer()
+            ],  # fid = 0.5984(773)
+            'model_z1': [
+                U3Layer(),
+                QFTCrossSwapLayer()
+            ],  # fid =
             'model_a': [
                 U3Layer(),
                 HLayer(0),
@@ -124,7 +132,7 @@ class OneDiamondQFT(ApproxUsingInverse):
                 HLayer(3),
                 U3Layer(),
                 QFTCrossSwapLayer()
-            ],  # fid = 0.6069
+            ],  # fid = 0.62...
             'model_a_swap': [
                 U3Layer(),
                 HLayer(0),
@@ -136,7 +144,22 @@ class OneDiamondQFT(ApproxUsingInverse):
                 HLayer(3),
                 U3Layer(),
                 QFTCrossSwapLayer()
-            ],  # fid = 0.6125
+            ],  # fid = 0.7415(496) (bs=10000, n=10000)
+            'model_a_swapU': [
+                U3Layer(),
+                HLayer(0),
+                ISWAPLayer([0, 1], parameterized=True),
+                ISWAPLayer([2, 3], parameterized=True),
+                HLayer(1),
+                ISWAPLayer([0, 1], parameterized=True),
+                ISWAPLayer([2, 3], parameterized=True),
+                HLayer(2),
+                ISWAPLayer([0, 1], parameterized=True),
+                ISWAPLayer([2, 3], parameterized=True),
+                HLayer(3),
+                U3Layer(),
+                QFTCrossSwapLayer()
+            ],  # fid = 0.651(73)
             'model_a0': [
                 HLayer(0),
                 ULayer(),
@@ -186,7 +209,7 @@ class OneDiamondQFT(ApproxUsingInverse):
                 HLayer(3),
                 U3Layer(),
                 QFTCrossSwapLayer()
-            ],
+            ], # 0.6727(729) (bs=10000, n=10000)
             'model_c': [
                 U3Layer(),
                 HLayer(0),
@@ -694,7 +717,169 @@ class OneMemoryDiamondQFT(ApproxUsingInverse):
                 HLayer(3),
                 U3Layer(targets),
                 *qft_cross_swap_layers(targets)
-            ]  # fid = 0.9756(46) (lr = 0.1, bs = 120)
+            ],  # fid = 0.9756(46) (lr = 0.1, bs = 120) ???
+            'model_e3_noU': [
+                U3Layer(targets),
+                HLayer(0),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+
+                HLayer(1),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+
+                HLayer(2),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                # ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),  # Not strictly needed
+
+                HLayer(3),
+                U3Layer(targets),
+                *qft_cross_swap_layers(targets)
+            ], # 0.62
+            'model_e4': [
+                U3Layer(targets),
+                HLayer(0),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+
+                HLayer(1),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+
+                HLayer(2),
+
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),
+                *CT_swap_02_13(),
+                *ancilla_swap_both(),
+                ULayer(targets),
+                *ancilla_swap_both(),
+                *CT_swap_02_13(),
+                ancilla_U3(),  # Not strictly needed
+
+                HLayer(3),
+                U3Layer(targets),
+                *qft_cross_swap_layers(targets)
+            ],
         }
 
     def __init__(self, model_name):

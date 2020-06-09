@@ -28,7 +28,7 @@ import sys
 
 class U3_U(tf.keras.Sequential):
     def __init__(self):
-        input_dense = tf.keras.layers.Dense(2, name='input_dense')
+        input_dense = tf.keras.layers.Dense(2, name='input_dense',)
         # output_dense = tf.keras.layers.Dense(1, activation='sigmoid', name='output_linear_combi')
         # MNIST
         output_dense = tf.keras.layers.Dense(1, name='output_dense', activation='sigmoid')
@@ -124,12 +124,14 @@ class U3_U(tf.keras.Sequential):
 
                 # Make a linearcombi. of the output probabilities
                 # we measure all of them as combine them in linear combi. + bias and then apply sigmoid
+                # print(outputs)
                 Ps = tf.cast(measure(outputs, [0, 1, 2, 3]), float_type)
+                # print(Ps)
                 return Ps
 
         super(U3_U, self).__init__(layers=[
-            input_dense,
-            QC(),  # This works as an activation function
+            # input_dense,
+            QC(),  # Thils works as an activation function
             output_dense
         ])
 
