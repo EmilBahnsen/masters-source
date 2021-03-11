@@ -9,7 +9,7 @@ if __name__ == '__main__':
         fit_qc_article.main(2) # Difficult
         # fit_qc_article.main(3)
         # fit_qc_article.main(4) # Difficult
-        fit_qc_article.main(5) # Difficult
-        # # fit_qc_article.main(6)
-        fit_qc_article.main(7) # Difficult
-        fit_qc_article.main(8) # Difficult
+        # fit_qc_article.main(5) # Difficult
+        # fit_qc_article.main(6)
+        # fit_qc_article.main(7) # Difficult
+        # fit_qc_article.main(8) # Difficult

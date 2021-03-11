@@ -51,30 +51,15 @@ class U3_U(tf.keras.Sequential):
                 self.wXY_4 = tf.Variable(init((8,), dtype=float_type),
                                          trainable=True,
                                          dtype=float_type, name='wXY_4')
-                # self.wU3_1 = tf.Variable(init((12,), dtype=float_type),
-                #                          trainable=True,
-                #                          dtype=float_type, name='wU3_1')
-                # self.wU3_2 = tf.Variable(init((12,), dtype=float_type),
-                #                          trainable=True,
-                #                          dtype=float_type, name='wU3_2')
-                # self.wU3_3 = tf.Variable(init((12,), dtype=float_type),
-                #                          trainable=True,
-                #                          dtype=float_type, name='wU3_3')
-                # self.w3 = tf.Variable(init((11,), dtype=float_type),
-                #                       trainable=True,
-                #                       dtype=float_type)
-                # self.w4 = tf.Variable(init((11,), dtype=float_type),
-                #                       trainable=True,
-                #                       dtype=float_type)
-                # self.w3 = tf.Variable(init((13,), dtype=float_type),
-                #                       trainable=True,
-                #                       dtype=float_type)
-                # self.w4 = tf.Variable(init((13,), dtype=float_type),
-                #                       trainable=True,
-                #                       dtype=float_type)
-                # self.w5 = tf.Variable(init((13,), dtype=float_type),
-                #                       trainable=True,
-                #                       dtype=float_type)
+                self.wU3_1 = tf.Variable(init((12,), dtype=float_type),
+                                         trainable=True,
+                                         dtype=float_type, name='wU3_1')
+                self.wU3_2 = tf.Variable(init((12,), dtype=float_type),
+                                         trainable=True,
+                                         dtype=float_type, name='wU3_2')
+                self.wU3_3 = tf.Variable(init((12,), dtype=float_type),
+                                         trainable=True,
+                                         dtype=float_type, name='wU3_3')
                 self.w_U_iswap = tf.Variable(init((4,), dtype=float_type),
                                       trainable=True,
                                       dtype=float_type, name='w_U_iswap')
@@ -105,36 +90,24 @@ class U3_U(tf.keras.Sequential):
                     RX(self.wXY_4[4]) @ RZ(self.wXY_4[5]),
                     RX(self.wXY_4[6]) @ RZ(self.wXY_4[7])
                 ])
-                # u3_1 = tensor([
-                #     U3(self.wU3_1[0:3]),
-                #     U3(self.wU3_1[3:6]),
-                #     U3(self.wU3_1[6:9]),
-                #     U3(self.wU3_1[9:12])
-                # ])
-                # u3_2 = tensor([
-                #     U3(self.wU3_2[0:3]),
-                #     U3(self.wU3_2[3:6]),
-                #     U3(self.wU3_2[6:9]),
-                #     U3(self.wU3_2[9:12])
-                # ])
-                # u3_3 = tensor([
-                #     U3(self.wU3_3[0:3]),
-                #     U3(self.wU3_3[3:6]),
-                #     U3(self.wU3_3[6:9]),
-                #     U3(self.wU3_3[9:12])
-                # ])
-                # u3_4 = tensor([
-                #     U3(self.w4[0:3]),
-                #     U3(self.w4[3:6]),
-                #     U3(self.w4[6:9]),
-                #     U3(self.w4[9:12])
-                # ])
-                # u3_5 = tensor([
-                #     U3(self.w5[0:3]),
-                #     U3(self.w5[3:6]),
-                #     U3(self.w5[6:9]),
-                #     U3(self.w5[9:12])
-                # ])
+                u3_1 = tensor([
+                    U3(self.wU3_1[0:3]),
+                    U3(self.wU3_1[3:6]),
+                    U3(self.wU3_1[6:9]),
+                    U3(self.wU3_1[9:12])
+                ])
+                u3_2 = tensor([
+                    U3(self.wU3_2[0:3]),
+                    U3(self.wU3_2[3:6]),
+                    U3(self.wU3_2[6:9]),
+                    U3(self.wU3_2[9:12])
+                ])
+                u3_3 = tensor([
+                    U3(self.wU3_3[0:3]),
+                    U3(self.wU3_3[3:6]),
+                    U3(self.wU3_3[6:9]),
+                    U3(self.wU3_3[9:12])
+                ])
                 u_1 = qc.U(self.w_U_iswap[0])
                 u_2 = qc.U(self.w_U_iswap[1])
                 u_3 = qc.U(self.w_U_iswap[2])
@@ -153,12 +126,12 @@ class U3_U(tf.keras.Sequential):
                         RX(data[0]) @ RY(π/4) @ RZ(π/4),
                         RX(data[1]) @ RY(π/4) @ RZ(π/4)
                     ]))
-                    opers.append(uXY_1)
+                    opers.append(u3_1)
                     opers.append(u_1)
-                    # opers.append(uXY_2)
-                    # opers.append(u_2)
-                    # opers.append(uXY_3)
-                    # opers.append(u_3)
+                    opers.append(u3_2)
+                    opers.append(u_2)
+                    opers.append(u3_3)
+                    opers.append(u_3)
                     # opers.append(uXY_4)
                     # opers.append(u_4)
                     return apply_operators2state(opers, s0000)
@@ -206,10 +179,10 @@ def main(*args):
     time = datetime.datetime.now().isoformat()
     data_idx = int(args[0])
     # data_idx = 6
-    description = f'encoding_UXY_U_measure0_data{data_idx}'
+    description = f'encoding_U3_U_U3_U_U3_U_measure0_data{data_idx}'
     # description = 'TEST'
     logger = Logger(log_dir=os.path.join(file_name, description, time))
-    logger.log_file(__file__)
+    # logger.log_file(__file__)
     print('log_dir', logger.log_dir)
 
     with open(__file__) as this_file:

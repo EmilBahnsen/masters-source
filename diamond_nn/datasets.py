@@ -325,7 +325,113 @@ if __name__ == '__main__':
         ], 'Diamond Assisted Binary Classification')
         fig.savefig('x4_result/encoding_U3_U.pdf')
 
-    plot_article_result_encoding_U3_U()
+    # --- FOR MY ARTICLE ---
+    _ = [
+        'encoding_UXY_U_measure0_data0/2020-10-05T21:51:08.873049',
+        'encoding_UXY_U_measure0_data1/2020-10-05T15:54:23.293032',
+    ]
+    result_layer1 = [
+        'encoding_U3_U_measure0_data0/',
+        'encoding_U3_U_measure0_data1/',
+        'encoding_U3_U_measure0_data2/',
+        'encoding_U3_U_measure0_data3/',
+        'encoding_U3_U_measure0_data4/',
+        'encoding_U3_U_measure0_data5/',
+        'encoding_U3_U_measure0_data6/',
+        'encoding_U3_U_measure0_data7/',
+        'encoding_U3_U_measure0_data8/'
+    ]
+    result_layer2 = [
+        'encoding_U3_U_U3_U_measure0_data0/',
+        'encoding_U3_U_U3_U_measure0_data1/',
+        'encoding_U3_U_U3_U_measure0_data2/',
+        'encoding_U3_U_U3_U_measure0_data3/',
+        'encoding_U3_U_U3_U_measure0_data4/',
+        'encoding_U3_U_U3_U_measure0_data5/',
+        'encoding_U3_U_U3_U_measure0_data6/',
+        'encoding_U3_U_U3_U_measure0_data7/',
+        'encoding_U3_U_U3_U_measure0_data8/'
+    ]
+    result_layer3 = [
+        'encoding_U3_U_U3_U_U3_U_measure0_data0/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data1/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data2/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data3/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data4/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data5/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data6/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data7/',
+        'encoding_U3_U_U3_U_U3_U_measure0_data8/'
+    ]
+
+    def get_run_with_max_acc_across_runs(path) -> str:
+        max_acc = 0
+        max_path = None
+        for item in os.listdir(path):
+            result_path = os.path.join(path, item)
+            if os.path.isdir(result_path):
+                hist_file = os.path.join(result_path, 'history.pickle')
+                try:
+                    with open(hist_file, 'rb') as f:
+                        hist = pickle.load(f)
+                        this_max = max(hist['accuracy'])
+                        if this_max > max_acc:
+                            max_acc = this_max
+                            max_path = result_path
+                except:
+                    continue
+        print(max_path)
+        return max_path
+
+    def plot_results_1_layer():
+        fig = plot_article_data_fit('/home/emil/pycharm_project/diamond_nn/x4/fit_qc_article/',
+                                    result_layer1, 'Fit using 1 diamond layer')
+        fig.savefig('x4_result/one_layer.pdf')
+
+    def plot_acc_across_layers(base_path, rest_paths_s, title):
+        plt.rc('text', usetex=True)
+        plt.rc('font', family='serif', size=15)
+        fig = plt.figure()
+        plt.xlim([.9, 4])
+        plt.ylim([.65, 1.01])
+        plt.xticks([1,2,3])
+        plt.yticks([.7,.8,.9,1])
+        plt.xlabel('Layers', fontsize=15)
+        plt.ylabel('Accuracy', fontsize=15)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+        plt.title(title)
+        max_acc = np.zeros((3,9))
+        for n_layer, rest_paths in enumerate(rest_paths_s):
+            hist_files = [os.path.join(
+                get_run_with_max_acc_across_runs(os.path.join(base_path, rest_path)),
+                'history.pickle') for rest_path in rest_paths]
+            for n_dataset, hist_file in enumerate(hist_files):
+                with open(hist_file, 'rb') as f:
+                    hist = pickle.load(f)
+                    max_acc[n_layer, n_dataset] = max(hist['accuracy'])
+            # Make the collage of results
+            # result_end_paths = [os.sep.join(hist_file.rsplit(r"/")[-3:-1]) for hist_file in hist_files]
+            # fig = plot_article_data_fit('/home/emil/pycharm_project/diamond_nn/x4/fit_qc_article/',
+            #                             result_end_paths,
+            #                             'Fit using ' + str(n_layer) + ' diamond layer' + ('s' if n_layer > 1 else ''))
+            # fig.savefig('x4_result/layer' + str(n_layer) + '.pdf')
+        x_layers = [1,2,3]
+        plt.plot(x_layers, max_acc[:,0], label='1', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,1], label='2', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,2], label='3', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,3], label='4', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,4], label='5', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,5], label='6', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,6], label='7', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,7], label='8', markersize=5, marker='o')
+        plt.plot(x_layers, max_acc[:,8], label='9', markersize=5, marker='o')
+        plt.legend()
+        fig.savefig('acc_layers_plot.pdf')
+
+    # print(get_run_with_max_acc_across_runs('/home/emil/pycharm_project/diamond_nn/x4/fit_qc_article/encoding_UXY_U_measure0_data0'))
+    plot_acc_across_layers('/home/emil/pycharm_project/diamond_nn/x4/fit_qc_article',
+                           [result_layer1, result_layer2, result_layer3], 'Accuracy accross datasets')
 
     # plt.figure()
     # plt.scatter(plain_x[:, 0]**2 + plain_x[:, 1]**2, plain_x[:, 1], c=plain_labels, cmap=plt.get_cmap('bwr'))
